@@ -178,6 +178,7 @@ const LineupBuilder: React.FC = () => {
           </label>
           <select value={strategy} onChange={(e) => setStrategy(e.target.value as OptimizationStrategy)} className="filter-select" style={{ width: '100%' }}>
             <option value="overall">Highest Overall (綜合最佳)</option>
+            <option value="team_signature">Team Signature (隊伍專屬球風)</option>
             <option value="power">Maximize Power (極致力量)</option>
             <option value="contact">Maximize Contact (機關槍安打)</option>
             <option value="speed">Maximize Speed (極速狂奔)</option>

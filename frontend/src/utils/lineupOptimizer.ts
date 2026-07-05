@@ -1,4 +1,4 @@
-export type OptimizationStrategy = 'overall' | 'power' | 'contact' | 'speed' | 'defense';
+export type OptimizationStrategy = 'overall' | 'power' | 'contact' | 'speed' | 'defense' | 'team_signature';
 
 export const POSITIONS = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH', 'SP'];
 
@@ -28,8 +28,18 @@ const getScore = (player: any, strategy: OptimizationStrategy): number => {
 export const autoPickLineup = (players: any[], teamName: string, strategy: OptimizationStrategy): Lineup => {
   const teamPlayers = players.filter(p => p.team === teamName);
   
+  let appliedStrategy = strategy;
+  if (strategy === 'team_signature' && teamPlayers.length > 0) {
+    const strength = teamPlayers[0].teamStrength || '';
+    if (strength.includes('Power')) appliedStrategy = 'power';
+    else if (strength.includes('Contact')) appliedStrategy = 'contact';
+    else if (strength.includes('Speed')) appliedStrategy = 'speed';
+    else if (strength.includes('Defensive')) appliedStrategy = 'defense';
+    else appliedStrategy = 'overall';
+  }
+  
   // Sort players by score
-  const sortedPlayers = [...teamPlayers].sort((a, b) => getScore(b, strategy) - getScore(a, strategy));
+  const sortedPlayers = [...teamPlayers].sort((a, b) => getScore(b, appliedStrategy as OptimizationStrategy) - getScore(a, appliedStrategy as OptimizationStrategy));
   
   const lineup: Lineup = {
     C: null, '1B': null, '2B': null, '3B': null, SS: null, 
