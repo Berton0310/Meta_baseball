@@ -1,0 +1,119 @@
+
+特徵系統會隨著團隊的化學效應被影響，
+在團隊情報會看到隊伍中的球員，化學性質有哪些，
+可以看球員的化學特質，當同一個化學特質越多，能力就越強，
+以下是我自己翻譯的名稱和介紹，
+有些名稱是為了好記才取的，
+如果有翻譯錯誤的地方，可以留言提點，感謝，
+希望有幫到各位
+
+打者
+正面特徵
+競爭 Competitive
+雷射肩 Cannon Arm – 在傳球時以最大力量投擲時增加傳球速度
+耐用 Durable – 減少受傷的機會，減緩因過度運動而導致的健康下降
+首球殺手 First Pitch Slayer – 在0-0的局數上增加力量和打擊（升級取決於球隊化學效應）
+短跑手 Sprinter -從打擊區跑出時增加奔跑速度
+堅韌 Tough Out– 在2好球的情況下增加打擊能力
+精神 Sprited
+關鍵時刻 Clutch– 在壓力加大時所有技能都會增加。當壓力極大時，效果加倍
+打擊vs左投 CON vs LHP – 在對左投手打擊時增加打擊
+打擊vs右投 CON vs RHP – 在對右投手打擊時增加打擊
+撲接高手 Dive Wizard – 縮短飛撲接球動作
+力量vs左投 POW vs LHP– 在對左投手打擊時增加力量
+力量vs右投 POW vs RHP – 在對右投手打擊時增加力量
+拉力啟動者 Rally Starter – 當分數落後並壘上無人時增加打擊
+RBI英雄 RBI Hero– 在2B或3B有跑者時打擊時增加力量和打擊
+紀律 Disciplined
+繞壘高手 Base Rounder – 在繞壘時增加奔跑速度
+持續 Consistent –在比賽之間精神力(Mojo)的變化速度緩慢
+快速球擊打手 Fastball Hitter – 在擊打四縫線(4F)，二縫線(2F)或卡特球(CF)時，力量和打擊會增加
+高球 High Pitch – 瞄準好球帶上半部分時，力量和打擊會增加
+內角球 Inside Pitch – 瞄準好球帶的內角時，力量和打擊會增加
+低球 Low Pitch – 瞄準好球帶下半部分時，力量和打擊會增加
+魔法手 Magic Hands – 跳躍，飛撲或滑接時減少漏接的機會
+變化球打者 Off-Speed Hitter – 在擊打CB，SL，CH，SB或FK投球時，力量和打擊會增加
+外角球 Outside Pitch– 瞄準好球帶的外角時，力量和打擊會增加
+易變 Volatile – 在比賽之間精神力(Mojo)的變化速度快
+完美代打 Pinch Perfect – 在代打出場時增加力量和打擊
+學術 Scholarly
+王牌殺手 Ace Exterminator – 在對戰A-級投手或更高水平的投手打擊時增加力量和打擊
+揮大棒 Big Hack – 在2-0，3-0和3-1的球數情況下增加力量和減少打擊
+短打好手 Bunter – 可以輕易短打到界內
+揮小棒 Little Hack – 在0-1，0-2和1-2的局數中減少力量和增加打擊
+工具人 Utility – 在次要守位上時，防守能力不會降低
+狡猾 Crafty
+關鍵時刻 Clutch – 在壓力增加時，所有技能都會增加。當壓力極大時效果加倍
+壞球打者 Bad Ball Hitter – 當打擊好球帶角落或壞球時，減少打擊速度懲罰
+干擾者 Distractor – 當在1B或2B上，且下一個壘包無人時，對手投手的控球會降低
+心理玩家 Mind Gamer – 當打擊時，對方投手的控球會降低
+偷暗號 Sign Stealer – 增加接收快速球或變速球的聲音和視覺提示的機會
+盜壘手 Stealer – 在嘗試盜壘時增加奔跑速度
+刺激 Stimulated – 在最後2局到最後半局精神力(Mojo)變成活躍(Juiced)的機率增加
+負面特徵
+競爭 Competitive
+首投乞討者 First Pitch Prayer – 0-0的球數上力量和打擊降低
+容易受傷 Injury Prone – 在比賽中受傷的機會增加，因過度運動而導致的健康下降加速
+弱肩 Noodle Arm – 在傳球時小於最大力量投擲時減少傳球速度
+遲緩 Slow Poke – 從打擊區跑出時減少奔跑速度
+揮空 Whiffer – 在2好球的情況下打擊下降
+精神 Spirited
+窒息 choker– 壓力加大時所有技能都會減少。當壓力極大時，效果加倍
+RBI零 RBI Zero – 在2B或3B有跑者時打擊時減少力量和打擊
+紀律 Disciplined
+壘包慢跑 Base Jogger – 繞壘時減少奔跑速度
+手滑 Butter Fingers – 跳躍，飛撲或滑動時失誤機會增加
+學術 Scholarly
+非投手沒有負面特徵
+狡猾 Crafty
+差勁跑躍  Bad Jumps – 嘗試盜壘時速度減慢
+容易針對 Easy Target– 在擊球時，對手的控球會增加
+暴走傳球者 Wild Thrower – 不管傳球的結果如何，增加傳球失誤或災難性傳球
+
+投手
+正面特徵
+競爭 Competitive
+耐用 Durable – 減少受傷的機會，減緩因過度運動而導致的健康下降
+三振收藏家 K Collector – 在2好球投球時增加球速和控球
+工作馬 Workhorse – 體力下降的速度較慢
+精神 Sprited
+拉鋸終結者 Rally Stopper – 在至少有兩名跑者在壘上投球時，增加球速、體力和控球
+二刀流(捕手) Two Way (C)– 當打捕手時，減少防守和傳球懲罰
+二刀流(內野) Two Way (IF) – 當打內野手時，減少防守和傳球懲罰
+二刀流(外野) Two Way (OF) – 當打外野手時，減少防守和傳球懲罰
+紀律 Disciplined
+鎮定 Composed – 在3壞球時控球增加
+一致 Consistent– 從遊戲到遊戲，精神力(Mojo)的變化速度緩慢（非投手也適用）
+金屬頭 Metal Head – 從受到頭部反擊到立即恢復的機率增加
+易變 Volatile – 精神力(Mojo)的變化速度從遊戲到遊戲快速（非投手也適用）
+學術 Scholarly
+菁英四縫線 Elite 4F – 投擲4-Seam快速球時增加投球速度
+菁英曲球 Elite CB – 投擲曲球時增加折線數
+菁英變速 Elite CH – 投擲變速球時減少投球速度和增加折線數
+菁英指叉 Elite FK – 投擲指叉球時減少投球速度和增加折線數
+菁英滑球 Elite SL – 投擲滑球時增加投球速度和折線數
+好彩頭 Gets Ahead – 在0-0的球數情況控球能力增加
+狡猾 Crafty
+牽制警長 Pick Officer – 投球時，對方跑壘者在嘗試盜壘時奔跑速度降低
+反向分裂 Reverse Splits – 與投手反慣用手的打者減少力量和打擊
+精通 Specialist – 與投手同慣用手打者減少力量和打擊
+刺激 Stimulated – 在最後2局到最後半局精神力(Mojo)變成活躍(Juiced)機率增加
+負面特徵
+競爭 Competitive
+三振疏忽 K Neglecter – 在2好球時球速和控球降低
+容易受傷 Injury Prone – 在比賽中受傷的機會增加，因過度運動而導致的健康下降加速
+精神 Sprited
+壓力大 Choker – 壓力加大時所有技能都會減少。當壓力極大時，效果加倍
+崩潰 Meltdown – 連續四名打者未出局的情況下，該局投球的控球降低
+包圍 Surrounded– 壘上有兩名跑壘者以上時，球速、體力和控球減少
+暴走球員 Wild Thing – 用力投球時，投球位置的錯誤機率增加
+紀律 Disciplined
+BB連發 BB Prone – 在3壞球時控球下降
+學術 Scholarly
+迷惑 Crossed Up – 捕手接球時，增加掉球或捕逸的機會
+落後 Falls Behind – 在0-0的球數上控球降低
+狡猾 Crafty
+易盜 Easy Jumps – 投球時，對手跑壘者嘗試盜壘時速度增加
+
+
+參考圖片"C:\Users\berto\Desktop\mega baseball\6a5af162248422e01148bd9290f0ae5c.jpg"
