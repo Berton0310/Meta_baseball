@@ -165,7 +165,7 @@ const TeamRadar: React.FC<TeamRadarProps> = ({ team }) => {
       {/* Team Header */}
       <div style={{ textAlign: 'center', marginBottom: '10px' }}>
         <img 
-          src={`/logos/${team.team}.png`} 
+          src={`${import.meta.env.BASE_URL}logos/${team.team}.png`} 
           alt={team.team} 
           style={{ width: '80px', height: '80px', objectFit: 'contain', marginBottom: '8px' }}
           onError={(e) => {

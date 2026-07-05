@@ -220,7 +220,7 @@ const LineupBuilder: React.FC = () => {
       <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: '24px' }}>
         
         {/* Field View */}
-        <div className="glass-panel" style={{ flex: '2.5', minWidth: '400px', position: 'relative', height: '700px', backgroundImage: 'url(/field_bg.png)', backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden' }}>
+        <div className="glass-panel" style={{ flex: '2.5', minWidth: '400px', position: 'relative', height: '700px', backgroundImage: `url(${import.meta.env.BASE_URL}field_bg.png)`, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden' }}>
           
           <svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 1 }}>
             <defs>

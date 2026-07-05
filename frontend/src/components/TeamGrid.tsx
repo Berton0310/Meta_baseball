@@ -228,7 +228,7 @@ const TeamGrid: React.FC<TeamGridProps> = ({
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <img 
-                      src={`/logos/${teamData.team}.png`} 
+                      src={`${import.meta.env.BASE_URL}logos/${teamData.team}.png`} 
                       alt={teamData.team} 
                       style={{ width: '40px', height: '40px', objectFit: 'contain' }}
                       onError={(e) => {

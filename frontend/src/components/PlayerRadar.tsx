@@ -78,7 +78,8 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player }) => {
     maintainAspectRatio: false
   };
 
-  const imagePath = (playerImageMap as any)[`${player.team}-${player.name}`];
+  const rawImagePath = (playerImageMap as any)[`${player.team}-${player.name}`];
+  const imagePath = rawImagePath ? `${import.meta.env.BASE_URL}${rawImagePath.replace(/^\//, '')}` : null;
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
