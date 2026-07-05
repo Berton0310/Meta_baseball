@@ -93,7 +93,31 @@ const TeamGrid: React.FC<TeamGridProps> = ({
   }
 
   const uniqueConfs = Array.from(new Set(teams.map(t => t.conference))).filter(Boolean);
-  const uniqueDivs = Array.from(new Set(teams.map(t => t.division))).filter(Boolean);
+  const uniqueDivs = Array.from(new Set(teams.filter(t => !filterConf || t.conference === filterConf).map(t => t.division))).filter(Boolean);
+
+  const avgTotals = processedTeams.reduce((acc, team) => {
+    acc.power += team.avgStats.power || 0;
+    acc.contact += team.avgStats.contact || 0;
+    acc.speed += team.avgStats.speed || 0;
+    acc.fielding += team.avgStats.fielding || 0;
+    acc.arm += team.avgStats.arm || 0;
+    acc.velocity += team.avgStats.velocity || 0;
+    acc.junk += team.avgStats.junk || 0;
+    acc.accuracy += team.avgStats.accuracy || 0;
+    return acc;
+  }, { power: 0, contact: 0, speed: 0, fielding: 0, arm: 0, velocity: 0, junk: 0, accuracy: 0 });
+
+  const numTeams = processedTeams.length || 1;
+  const averages = {
+    power: Math.round(avgTotals.power / numTeams),
+    contact: Math.round(avgTotals.contact / numTeams),
+    speed: Math.round(avgTotals.speed / numTeams),
+    fielding: Math.round(avgTotals.fielding / numTeams),
+    arm: Math.round(avgTotals.arm / numTeams),
+    velocity: Math.round(avgTotals.velocity / numTeams),
+    junk: Math.round(avgTotals.junk / numTeams),
+    accuracy: Math.round(avgTotals.accuracy / numTeams)
+  };
 
   const [showColPicker, setShowColPicker] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
@@ -260,6 +284,26 @@ const TeamGrid: React.FC<TeamGridProps> = ({
               </tr>
             ))}
           </tbody>
+          <tfoot style={{ position: 'sticky', bottom: 0, background: 'var(--panel-bg)', zIndex: 10, boxShadow: '0 -2px 10px rgba(0,0,0,0.5)' }}>
+            <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
+              <td style={{ padding: '12px 16px' }}>
+                <div style={{ fontWeight: 800, color: 'var(--primary-accent)' }}>{t('info.average') || '平均值'}</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>{processedTeams.length} {t('info.teamsCount') || '支隊伍'}</div>
+              </td>
+              {visibleCols.includes('teamStrength') && <td>-</td>}
+              {visibleCols.includes('totalSalary') && <td>-</td>}
+              {visibleCols.includes('avgSalary') && <td>-</td>}
+              {visibleCols.includes('avgAge') && <td>-</td>}
+              {visibleCols.includes('power') && <td>{renderStat(averages.power)}</td>}
+              {visibleCols.includes('contact') && <td>{renderStat(averages.contact)}</td>}
+              {visibleCols.includes('speed') && <td>{renderStat(averages.speed)}</td>}
+              {visibleCols.includes('fielding') && <td>{renderStat(averages.fielding)}</td>}
+              {visibleCols.includes('arm') && <td>{renderStat(averages.arm)}</td>}
+              {visibleCols.includes('velocity') && <td>{renderStat(averages.velocity)}</td>}
+              {visibleCols.includes('junk') && <td>{renderStat(averages.junk)}</td>}
+              {visibleCols.includes('accuracy') && <td>{renderStat(averages.accuracy)}</td>}
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>

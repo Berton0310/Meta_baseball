@@ -1,6 +1,7 @@
 import React from 'react';
 import { Radar } from 'react-chartjs-2';
 import { useLanguage } from '../context/LanguageContext';
+import { renderPositionBadge } from './PlayerGrid';
 import traitsData from '../data/traits_info.json';
 import playerImageMap from '../data/playerImageMap.json';
 
@@ -91,7 +92,14 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player }) => {
             style={{ width: '120px', height: '120px', objectFit: 'contain', margin: '0 auto 12px', display: 'block', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} 
           />
         )}
-        <h2 style={{ margin: '0 0 10px 0', fontSize: '2rem' }}>{player.name}</h2>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+          <h2 style={{ margin: 0, fontSize: '2rem' }}>{player.name}</h2>
+          {player.rating && (
+            <span className={`rating-badge rating-${player.rating.replace('+', 'plus').replace('-', 'minus')}`} style={{ fontSize: '1.2rem', padding: '4px 12px' }}>
+              {player.rating}
+            </span>
+          )}
+        </div>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', justifyContent: 'center' }}>
           <span style={{ padding: '2px 8px', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.1)', fontSize: '0.85rem' }}>{player.conference}</span>
           <span style={{ padding: '2px 8px', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.1)', fontSize: '0.85rem' }}>{player.division}</span>
@@ -110,9 +118,17 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player }) => {
       
 
       <div className="player-details">
-        <div className="stat-row">
+        <div className="stat-row" style={{ alignItems: 'center' }}>
           <span className="stat-label">{t('info.position')}</span>
-          <span>{player.primaryPosition} {player.secondaryPositions?.length > 0 ? `/ ${player.secondaryPositions.join(', ')}` : ''}</span>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            {renderPositionBadge(player.primaryPosition)}
+            {player.secondaryPositions?.length > 0 && (
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <span style={{ opacity: 0.5 }}>/</span>
+                {player.secondaryPositions.map((p: string) => <span key={p}>{renderPositionBadge(p)}</span>)}
+              </div>
+            )}
+          </div>
         </div>
         <div className="stat-row">
           <span className="stat-label">{t('info.age')} / {t('info.salary')}</span>

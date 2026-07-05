@@ -6,6 +6,7 @@ import type { OptimizationStrategy, Lineup, BattingStrategy } from '../utils/lin
 import { calculateTeamStats } from '../utils/teamStats';
 import TeamRadar from './TeamRadar';
 import PlayerRadar from './PlayerRadar';
+import { renderPositionBadge } from './PlayerGrid';
 import { Settings2, RefreshCw, UserPlus } from 'lucide-react';
 
 const TEAM_NAMES = Array.from(new Set(playersData.map(p => p.team))).filter(Boolean).sort();
@@ -472,8 +473,15 @@ const LineupBuilder: React.FC = () => {
                   >
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: '16px' }}>
-                        <div style={{ fontWeight: 'bold' }}>{p.name} <span style={{ fontSize: '10px', padding: '2px 4px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', color: 'var(--text-muted)' }}>{p.primaryPosition}</span></div>
-                        <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--primary-accent)', background: 'rgba(56, 189, 248, 0.1)', padding: '2px 6px', borderRadius: '4px' }}>{p.rating}</div>
+                        <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          {p.name} 
+                          {renderPositionBadge(p.primaryPosition)}
+                        </div>
+                        {p.rating && (
+                          <div className={`rating-badge rating-${p.rating.replace('+', 'plus').replace('-', 'minus')}`}>
+                            {p.rating}
+                          </div>
+                        )}
                       </div>
                       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                          {renderProgressBar(p.isPitcher ? 'VEL' : 'POW', (p.isPitcher ? p.stats.velocity : p.stats.power) ?? 0, '#ef4444')}

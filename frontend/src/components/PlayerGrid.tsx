@@ -24,6 +24,36 @@ const renderStat = (val: number | string | undefined | null) => {
   );
 };
 
+export const renderPositionBadge = (pos: string) => {
+  if (!pos) return '-';
+  
+  let bg = 'rgba(255,255,255,0.1)';
+  let color = '#fff';
+  let border = 'rgba(255,255,255,0.2)';
+  
+  if (pos === 'C') { bg = 'rgba(245, 158, 11, 0.15)'; color = '#fcd34d'; border = '#f59e0b'; }
+  else if (['1B', '2B', '3B', 'SS', 'IF'].includes(pos)) { bg = 'rgba(239, 68, 68, 0.15)'; color = '#fca5a5'; border = '#ef4444'; }
+  else if (['LF', 'CF', 'RF', 'OF'].includes(pos)) { bg = 'rgba(59, 130, 246, 0.15)'; color = '#93c5fd'; border = '#3b82f6'; }
+  else if (['SP', 'RP', 'CP'].includes(pos)) { bg = 'rgba(16, 185, 129, 0.15)'; color = '#a7f3d0'; border = '#10b981'; }
+  
+  return (
+    <span style={{ 
+      display: 'inline-block', 
+      background: bg, 
+      color: color,
+      border: `1px solid ${border}`,
+      padding: '2px 8px', 
+      borderRadius: '6px', 
+      fontSize: '0.85rem',
+      fontWeight: 700,
+      textAlign: 'center',
+      minWidth: '40px'
+    }}>
+      {pos}
+    </span>
+  );
+};
+
 interface PlayerGridProps {
   players: any[];
   selectedPlayer: any;
@@ -61,7 +91,6 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
 }) => {
   const { t } = useLanguage();
 
-  const teams = Array.from(new Set(players.map(p => p.team))).filter(Boolean).sort();
   const positions = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'IF', 'OF', 'SP', 'RP', 'CP'];
 
   const handleSort = (key: string) => {
@@ -76,7 +105,8 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
   };
 
   const uniqueConfs = Array.from(new Set(players.map(p => p.conference))).filter(Boolean);
-  const uniqueDivs = Array.from(new Set(players.map(p => p.division))).filter(Boolean);
+  const uniqueDivs = Array.from(new Set(players.filter(p => !filterConf || p.conference === filterConf).map(p => p.division))).filter(Boolean);
+  const teams = Array.from(new Set(players.filter(p => (!filterConf || p.conference === filterConf) && (!filterDiv || p.division === filterDiv)).map(p => p.team))).filter(Boolean).sort();
 
   const [showColPicker, setShowColPicker] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
@@ -231,7 +261,7 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
                   <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>{player.team}</div>
                 </td>
                 {visibleCols.includes('rating') && <td><span className={`rating-badge rating-${player.rating?.replace('+', 'plus').replace('-', 'minus') || 'none'}`}>{player.rating}</span></td>}
-                {visibleCols.includes('pos') && <td>{player.primaryPosition}</td>}
+                {visibleCols.includes('pos') && <td>{renderPositionBadge(player.primaryPosition)}</td>}
                 {visibleCols.includes('age') && <td>{player.age}</td>}
                 {visibleCols.includes('salary') && <td>{player.salary}</td>}
                 {visibleCols.includes('power') && <td title="Power: Indicates hitting distance and home run probability">{renderStat(player.stats.power)}</td>}
