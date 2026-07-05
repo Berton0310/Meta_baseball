@@ -104,6 +104,8 @@ const TeamRadar: React.FC<TeamRadarProps> = ({ team }) => {
   const options = {
     scales: {
       r: {
+        min: 0,
+        max: 100,
         angleLines: {
           color: 'rgba(255, 255, 255, 0.1)'
         },
@@ -119,8 +121,6 @@ const TeamRadar: React.FC<TeamRadarProps> = ({ team }) => {
         },
         ticks: {
           display: false,
-          min: 0,
-          max: 100,
           stepSize: 20
         }
       }

@@ -105,7 +105,7 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
     { id: 'junk', label: t('stats.junk') || 'Junk' },
     { id: 'accuracy', label: t('stats.accuracy') || 'Accuracy' }
   ];
-  const [visibleCols, setVisibleCols] = useState(allColumns.map(c => c.id));
+  const [visibleCols, setVisibleCols] = useState<string[]>(allColumns.map(c => c.id));
 
   const toggleCol = (id: string) => {
     setVisibleCols(prev => prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]);

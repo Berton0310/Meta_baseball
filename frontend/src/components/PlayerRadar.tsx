@@ -49,6 +49,8 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player }) => {
   const options = {
     scales: {
       r: {
+        min: 0,
+        max: 100,
         angleLines: {
           color: 'rgba(255, 255, 255, 0.3)'
         },
@@ -59,13 +61,11 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player }) => {
           color: '#f8fafc',
           font: {
             size: 13,
-            weight: 'bold'
+            weight: 'bold' as const
           }
         },
         ticks: {
           display: false,
-          min: 0,
-          max: 100,
           stepSize: 20
         }
       }
