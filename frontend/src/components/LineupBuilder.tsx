@@ -476,9 +476,9 @@ const LineupBuilder: React.FC = () => {
                         <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--primary-accent)', background: 'rgba(56, 189, 248, 0.1)', padding: '2px 6px', borderRadius: '4px' }}>{p.rating}</div>
                       </div>
                       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                         {renderProgressBar(p.isPitcher ? 'VEL' : 'POW', p.isPitcher ? p.stats.velocity : p.stats.power, '#ef4444')}
-                         {renderProgressBar(p.isPitcher ? 'JNK' : 'CON', p.isPitcher ? p.stats.junk : p.stats.contact, '#f97316')}
-                         {renderProgressBar(p.isPitcher ? 'ACC' : 'SPD', p.isPitcher ? p.stats.accuracy : p.stats.speed, '#3b82f6')}
+                         {renderProgressBar(p.isPitcher ? 'VEL' : 'POW', (p.isPitcher ? p.stats.velocity : p.stats.power) ?? 0, '#ef4444')}
+                         {renderProgressBar(p.isPitcher ? 'JNK' : 'CON', (p.isPitcher ? p.stats.junk : p.stats.contact) ?? 0, '#f97316')}
+                         {renderProgressBar(p.isPitcher ? 'ACC' : 'SPD', (p.isPitcher ? p.stats.accuracy : p.stats.speed) ?? 0, '#3b82f6')}
                          {renderProgressBar('FLD', p.stats.fielding, '#4ade80')}
                       </div>
                     </div>

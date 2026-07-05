@@ -122,7 +122,7 @@ const TeamGrid: React.FC<TeamGridProps> = ({
     { id: 'junk', label: t('stats.junk') || '變化' },
     { id: 'accuracy', label: t('stats.accuracy') || '控球' }
   ];
-  const [visibleCols, setVisibleCols] = useState(allColumns.map(c => c.id).filter(id => id !== 'totalSalary' && id !== 'avgSalary'));
+  const [visibleCols, setVisibleCols] = useState<string[]>(allColumns.map(c => c.id).filter(id => id !== 'totalSalary' && id !== 'avgSalary'));
 
   const toggleCol = (id: string) => {
     setVisibleCols(prev => prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]);
