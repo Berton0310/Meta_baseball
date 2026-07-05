@@ -164,6 +164,14 @@ const TeamRadar: React.FC<TeamRadarProps> = ({ team }) => {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
       {/* Team Header */}
       <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+        <img 
+          src={`/logos/${team.team}.png`} 
+          alt={team.team} 
+          style={{ width: '80px', height: '80px', objectFit: 'contain', marginBottom: '8px' }}
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = 'none';
+          }}
+        />
         <h2 style={{ fontSize: '2rem', margin: '0 0 10px 0', color: 'white' }}>{team.team}</h2>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', justifyContent: 'center' }}>
           <span style={{ padding: '4px 10px', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.1)', fontSize: '0.85rem' }}>{team.conference}</span>

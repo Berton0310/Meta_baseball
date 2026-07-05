@@ -122,7 +122,7 @@ const TeamGrid: React.FC<TeamGridProps> = ({
     { id: 'junk', label: t('stats.junk') || '變化' },
     { id: 'accuracy', label: t('stats.accuracy') || '控球' }
   ];
-  const [visibleCols, setVisibleCols] = useState(allColumns.map(c => c.id));
+  const [visibleCols, setVisibleCols] = useState(allColumns.map(c => c.id).filter(id => id !== 'totalSalary' && id !== 'avgSalary'));
 
   const toggleCol = (id: string) => {
     setVisibleCols(prev => prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]);
@@ -226,8 +226,20 @@ const TeamGrid: React.FC<TeamGridProps> = ({
                 className={selectedTeam?.team === teamData.team ? 'selected-row' : ''}
               >
                 <td>
-                  <div style={{ fontWeight: 600 }}>{teamData.team}</div>
-                  <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>{teamData.division} / {teamData.conference}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <img 
+                      src={`/logos/${teamData.team}.png`} 
+                      alt={teamData.team} 
+                      style={{ width: '40px', height: '40px', objectFit: 'contain' }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: '1.1rem' }}>{teamData.team}</div>
+                      <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>{teamData.division} / {teamData.conference}</div>
+                    </div>
+                  </div>
                 </td>
                 {visibleCols.includes('teamStrength') && <td>
                   <span style={{ padding: '2px 8px', borderRadius: '4px', background: 'rgba(255, 165, 0, 0.2)', color: 'orange', border: '1px solid rgba(255, 165, 0, 0.5)', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
