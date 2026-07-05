@@ -436,8 +436,8 @@
   },
   {
     "id": 297,
-    "nameEn": "Butterfingers",
-    "nameZh": "Butterfingers",
+    "nameEn": "Butter Fingers",
+    "nameZh": "手滑",
     "chemistry": "Disciplined",
     "goodBad": "",
     "isHitter": false,
@@ -571,8 +571,8 @@
   },
   {
     "id": 109,
-    "nameEn": "Off-speed Hitter",
-    "nameZh": "Off-speed Hitter",
+    "nameEn": "Off-Speed Hitter",
+    "nameZh": "變化球打者",
     "chemistry": "Disciplined",
     "goodBad": "Good",
     "isHitter": true,
@@ -601,8 +601,8 @@
   },
   {
     "id": 156,
-    "nameEn": "Pinch perfect",
-    "nameZh": "Pinch perfect",
+    "nameEn": "Pinch Perfect",
+    "nameZh": "完美代打",
     "chemistry": "Disciplined",
     "goodBad": "Good",
     "isHitter": true,
