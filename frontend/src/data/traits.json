@@ -10,7 +10,7 @@
     "level1": "Increased throw speed when throwing with maximum power",
     "level2": "2x effect",
     "level3": "4x effect",
-    "level1Zh": "增加 傳球跑速 當 傳球時 with maximum 力量",
+    "level1Zh": "在傳球時以最大力量投擲時增加傳球速度",
     "level2Zh": "2倍效果",
     "level3Zh": "4倍效果"
   },
@@ -25,7 +25,7 @@
     "level1": "Reduced chance of injury during play and slower Fitness decay from being overplayed",
     "level2": "2x effect",
     "level3": "4x effect",
-    "level1Zh": "Reduced chance of injury during play 且slower Fitness decay from being overplayed",
+    "level1Zh": "減少受傷的機會，減緩因過度運動而導致的健康下降",
     "level2Zh": "2倍效果",
     "level3Zh": "4倍效果"
   },
@@ -40,7 +40,7 @@
     "level1": "-20 Power, -30 Contact on 0-0 count",
     "level2": "-10 Power, -15 Contact",
     "level3": "-5 Power, -8 Contact",
-    "level1Zh": " - 20 力量, - 30 技巧 on 0好0壞球數",
+    "level1Zh": "0-0的球數上力量和打擊降低",
     "level2Zh": " - 10 力量, - 15 技巧",
     "level3Zh": " - 5 力量, - 8 技巧"
   },
@@ -55,7 +55,7 @@
     "level1": "5 Power and 5 Contact on 0-0 count",
     "level2": "10 Power, 15 Contact",
     "level3": "20 Power, 30 Contact",
-    "level1Zh": "5 力量 且5 技巧 on 0好0壞球數",
+    "level1Zh": "在0-0的局數上增加力量和打擊（升級取決於球隊化學效應）",
     "level2Zh": "10 力量, 15 技巧",
     "level3Zh": "20 力量, 30 技巧"
   },
@@ -70,7 +70,7 @@
     "level1": "Increased (4x effect) chance of injury during play and faster Fitness decay from being overplayed",
     "level2": "2x effect",
     "level3": "1x effect",
-    "level1Zh": "增加 (4倍效果) chance of injury during play 且faster Fitness decay from being overplayed",
+    "level1Zh": "在比賽中受傷的機會增加，因過度運動而導致的健康下降加速",
     "level2Zh": "2倍效果",
     "level3Zh": "1倍效果"
   },
@@ -85,7 +85,7 @@
     "level1": "+8 VEL +8 JNK with 2 strikes",
     "level2": "+15 VEL +15 JNK with 2 strikes",
     "level3": "+30 VEL +30 JNK with 2 strikes",
-    "level1Zh": "+8 VEL +8 JNK with 2 strikes",
+    "level1Zh": "在2好球投球時增加球速和控球",
     "level2Zh": "+15 VEL +15 JNK with 2 strikes",
     "level3Zh": "+30 VEL +30 JNK with 2 strikes"
   },
@@ -100,7 +100,7 @@
     "level1": "",
     "level2": "",
     "level3": "",
-    "level1Zh": "",
+    "level1Zh": "在2好球時球速和控球降低",
     "level2Zh": "",
     "level3Zh": ""
   },
@@ -115,7 +115,7 @@
     "level1": "Decreased throw speed (4x effect) when throwing with less than maximum power",
     "level2": "2x effect",
     "level3": "1x effect",
-    "level1Zh": "減少 傳球跑速 (4倍效果) 當 傳球時 with less than maximum 力量",
+    "level1Zh": "在傳球時小於最大力量投擲時減少傳球速度",
     "level2Zh": "2倍效果",
     "level3Zh": "1倍效果"
   },
@@ -130,7 +130,7 @@
     "level1": "Decreased (4x effect) running speed while running out of batter's box",
     "level2": "2x effect",
     "level3": "1x effect",
-    "level1Zh": "減少 (4倍效果) 跑速 while 跑速 out of batter's box",
+    "level1Zh": "從打擊區跑出時減少奔跑速度",
     "level2Zh": "2倍效果",
     "level3Zh": "1倍效果"
   },
@@ -145,7 +145,7 @@
     "level1": "Increased running speed while running out of batter's box",
     "level2": "2x effect",
     "level3": "4x effect",
-    "level1Zh": "增加 跑速 while 跑速 out of batter's box",
+    "level1Zh": "從打擊區跑出時增加奔跑速度",
     "level2Zh": "2倍效果",
     "level3Zh": "4倍效果"
   },
@@ -160,7 +160,7 @@
     "level1": "12 contact while batting on 2 strike count",
     "level2": "25 Contact",
     "level3": "30 Contact",
-    "level1Zh": "12 技巧 while batting on 2 strike count",
+    "level1Zh": "在2好球的情況下增加打擊能力",
     "level2Zh": "25 技巧",
     "level3Zh": "30 技巧"
   },
@@ -175,7 +175,7 @@
     "level1": "-50 Contact on 2 strike count",
     "level2": "-25 Contact",
     "level3": "-12 Contact",
-    "level1Zh": " - 50 技巧 on 2 strike count",
+    "level1Zh": "在2好球的情況下打擊下降",
     "level2Zh": " - 25 技巧",
     "level3Zh": " - 12 技巧"
   },
@@ -190,7 +190,7 @@
     "level1": "Stamina decreases at a 15% slower rate",
     "level2": "0.2",
     "level3": "0.3",
-    "level1Zh": "Stamina decreases at a 15% slower rate",
+    "level1Zh": "體力下降的速度較慢",
     "level2Zh": "0.2",
     "level3Zh": "0.3"
   },
@@ -205,7 +205,7 @@
     "level1": "Reduced batted ball speed penalty 1x when making contact with pitches on the corners or outside of the strike zone",
     "level2": "Reduced batted ball speed penalty 2x when making contact with pitches on the corners or outside of the strike zone",
     "level3": "Reduced batted ball speed penalty 4x when making contact with pitches on the corners or outside of the strike zone",
-    "level1Zh": "Reduced batted ball 跑速 penalty 1x 當 making 技巧 with 球種es on the corners 或 outside 的好球帶",
+    "level1Zh": "當打擊好球帶角落或壞球時，減少打擊速度懲罰",
     "level2Zh": "Reduced batted ball 跑速 penalty 2x 當 making 技巧 with 球種es on the corners 或 outside 的好球帶",
     "level3Zh": "Reduced batted ball 跑速 penalty 4x 當 making 技巧 with 球種es on the corners 或 outside 的好球帶"
   },
@@ -220,7 +220,7 @@
     "level1": "4x decreased running speed while attempting to steal a base",
     "level2": "2x",
     "level3": "1x",
-    "level1Zh": "4x 減少 跑速 嘗試盜壘時",
+    "level1Zh": "嘗試盜壘時速度減慢",
     "level2Zh": "2x",
     "level3Zh": "1x"
   },
@@ -235,7 +235,7 @@
     "level1": "While on 1B or 2B and the next base is open, the opposing pitcher suffers -10 accuracy",
     "level2": "-20 Accuracy",
     "level3": "-40 Accuracy",
-    "level1Zh": "While on 1B 或 2B 且the next base is open, the opposing 球種er suffers - 10 控球",
+    "level1Zh": "當在1B或2B上，且下一個壘包無人時，對手投手的控球會降低",
     "level2Zh": " - 20 控球",
     "level3Zh": " - 40 控球"
   },
@@ -250,7 +250,7 @@
     "level1": "While pitching, opposing baserunners gain increased (4x effect) running speed when attempting to steal a base",
     "level2": "2x effect",
     "level3": "1x effect",
-    "level1Zh": "While 球種ing, opposing baserunners gain 增加 (4倍效果) 跑速 當 attempting to steal a base",
+    "level1Zh": "投球時，對手跑壘者嘗試盜壘時速度增加",
     "level2Zh": "2倍效果",
     "level3Zh": "1倍效果"
   },
@@ -265,7 +265,7 @@
     "level1": "While batting, opposing pitcher gains +30 Accuracy",
     "level2": "15 Accuracy",
     "level3": "8 Accuracy",
-    "level1Zh": "While batting, opposing 球種er gains +30 控球",
+    "level1Zh": "在擊球時，對手的控球會增加",
     "level2Zh": "15 控球",
     "level3Zh": "8 控球"
   },
@@ -280,7 +280,7 @@
     "level1": "While batting, the opposing pitcher suffers -8 accuracy",
     "level2": "-15 Accuracy",
     "level3": "-30 Accuracy",
-    "level1Zh": "打擊時，對手投手受到 - 8 控球",
+    "level1Zh": "當打擊時，對方投手的控球會降低",
     "level2Zh": " - 15 控球",
     "level3Zh": " - 30 控球"
   },
@@ -295,7 +295,7 @@
     "level1": "While pitching, opposing baserunners suffer decreased running speed when attempting to steal a base",
     "level2": "2x effect",
     "level3": "4x effect",
-    "level1Zh": "While 球種ing, opposing baserunners suffer 減少 跑速 當 attempting to steal a base",
+    "level1Zh": "投球時，對方跑壘者在嘗試盜壘時奔跑速度降低",
     "level2Zh": "2倍效果",
     "level3Zh": "4倍效果"
   },
@@ -310,7 +310,7 @@
     "level1": "While pitching, opposite-handed opposing batters suffer -5 Power, -8 Contact",
     "level2": "-10 Power, -15 Contact",
     "level3": "-20 Power, -30 Contact",
-    "level1Zh": "While 球種ing, opposite - handed opposing batters suffer - 5 力量, - 8 技巧",
+    "level1Zh": "與投手反慣用手的打者減少力量和打擊",
     "level2Zh": " - 10 力量, - 15 技巧",
     "level3Zh": " - 20 力量, - 30 技巧"
   },
@@ -325,7 +325,7 @@
     "level1": "5% cahnce of receiving an audio/visual cue of whether a fastball or offspeed pitch is coming",
     "level2": "0.1",
     "level3": "0.2",
-    "level1Zh": "5% cahnce of receiving an audio/visual cue of whether a fastball 或 off跑速 球種 is coming",
+    "level1Zh": "增加接收快速球或變速球的聲音和視覺提示的機會",
     "level2Zh": "0.1",
     "level3Zh": "0.2"
   },
@@ -340,7 +340,7 @@
     "level1": "While pitching, same-handed opposing batters suffer -5 Power, -8 Contact",
     "level2": "-10 Power, -15 Contact",
     "level3": "-20 Power, -30 Contact",
-    "level1Zh": "While 球種ing, same - handed opposing batters suffer - 5 力量, - 8 技巧",
+    "level1Zh": "與投手同慣用手打者減少力量和打擊",
     "level2Zh": " - 10 力量, - 15 技巧",
     "level3Zh": " - 20 力量, - 30 技巧"
   },
@@ -355,7 +355,7 @@
     "level1": "Increased running speed while attempting to steal a base",
     "level2": "2x effect",
     "level3": "4x effect",
-    "level1Zh": "增加 跑速 嘗試盜壘時",
+    "level1Zh": "在嘗試盜壘時增加奔跑速度",
     "level2Zh": "2倍效果",
     "level3Zh": "4倍效果"
   },
@@ -370,7 +370,7 @@
     "level1": "5% chance of Mojo becoming Juiced for final 2.5 innings",
     "level2": "10% chance of Mojo becoming Juiced for final 2.5 innings",
     "level3": "20% chance of Mojo becoming Juiced for final 2.5 innings",
-    "level1Zh": "5% chance of Mojo becoming Juiced for final 2.5 innings",
+    "level1Zh": "在最後2局到最後半局精神力(Mojo)變成活躍(Juiced)機率增加",
     "level2Zh": "10% 機率 of Mojo becoming Juiced for final 2.5 innings",
     "level3Zh": "20% chance of Mojo becoming Juiced for final 2.5 innings"
   },
@@ -385,7 +385,7 @@
     "level1": "10% chance of committing an errant throw regardless of throwing minigame",
     "level2": "0.05",
     "level3": "0.025",
-    "level1Zh": "10% 機率 of committing an errant 傳球regardless of 傳球時 minigame",
+    "level1Zh": "不管傳球的結果如何，增加傳球失誤或災難性傳球",
     "level2Zh": "0.05",
     "level3Zh": "0.025"
   },
@@ -400,7 +400,7 @@
     "level1": "Minus 50 Accuracy when pitching with a 3-ball count",
     "level2": "Minus 25 Accuracy when pitching with a 3-ball count",
     "level3": "Minus 12 Accuracy when pitching with a 3-ball count",
-    "level1Zh": " - 50 控球 投球時 with a 3壞球數",
+    "level1Zh": "在3壞球時控球下降",
     "level2Zh": " - 25 控球 投球時 with a 3壞球數",
     "level3Zh": " - 12 控球 投球時 with a 3壞球數"
   },
@@ -415,7 +415,7 @@
     "level1": "Major 4x effect- Decreased running speed while rounding a base",
     "level2": "Minor 2x effect- Decreased running speed while rounding a base",
     "level3": "Small 1x effect- Decreased running speed while rounding a base",
-    "level1Zh": "大幅 4倍效果 - 減少 跑速 繞壘時",
+    "level1Zh": "繞壘時減少奔跑速度",
     "level2Zh": "輕微 2倍效果 - 減少 跑速 繞壘時",
     "level3Zh": "小幅 1倍效果 - 減少 跑速 繞壘時"
   },
@@ -430,7 +430,7 @@
     "level1": "Small 1x effect- Increased running speed while rounding bases",
     "level2": "Minor 2x effect- Increased running speed while rounding bases",
     "level3": "Major 4x effect- Increased running speed while rounding bases",
-    "level1Zh": "小幅 1倍效果 - 增加 跑速 繞壘時",
+    "level1Zh": "在繞壘時增加奔跑速度",
     "level2Zh": "輕微 2倍效果 - 增加 跑速 繞壘時",
     "level3Zh": "大幅 4倍效果 - 增加 跑速 繞壘時"
   },
@@ -445,7 +445,7 @@
     "level1": "",
     "level2": "",
     "level3": "",
-    "level1Zh": "",
+    "level1Zh": "跳躍，飛撲或滑動時失誤機會增加",
     "level2Zh": "",
     "level3Zh": ""
   },
@@ -460,7 +460,7 @@
     "level1": "Plus 12 Accuracy when pitching in a 3-ball count.",
     "level2": "Plus 25 Accuracy when pitching in a 3-ball count.",
     "level3": "Plus 50 Accuracy when pitching in a 3-ball count.",
-    "level1Zh": "+12 控球 投球時 in a 3壞球數.",
+    "level1Zh": "在3壞球時控球增加",
     "level2Zh": "+25 控球 投球時 in a 3壞球數.",
     "level3Zh": "+50 控球 投球時 in a 3壞球數."
   },
@@ -475,7 +475,7 @@
     "level1": "Mojo changes at 12.5% slower rate from play to play and game to game",
     "level2": "Mojo changes at 25% slower rate from play to play and game to game",
     "level3": "Mojo changes at 40% slower rate from play to play and game to game",
-    "level1Zh": "Mojo changes at 12.5% slower rate from play to play 且game to game",
+    "level1Zh": "從遊戲到遊戲，精神力(Mojo)的變化速度緩慢",
     "level2Zh": "Mojo changes at 25% slower rate from play to play 且game to game",
     "level3Zh": "Mojo changes at 40% slower rate from play to play 且game to game"
   },
@@ -490,7 +490,7 @@
     "level1": "Minor 1x Effect- Swing Power and contact improves when swinging at a 4F, 2F, or CF Pitch",
     "level2": "Major 2x Effect- Swing Power and contact improves when swinging at a 4F, 2F, or CF Pitch",
     "level3": "Huge 4x Effect- Swing Power and contact improves when swinging at a 4F, 2F, or CF Pitch",
-    "level1Zh": "小幅 1倍效果 - Swing 力量 且技巧 提升 當 揮擊四縫線、二縫線或切球時",
+    "level1Zh": "在擊打四縫線(4F)，二縫線(2F)或卡特球(CF)時，力量和打擊會增加",
     "level2Zh": "主要 2倍效果 - Swing 力量 且技巧 提升 當 揮擊四縫線、二縫線或切球時",
     "level3Zh": "Huge 4倍效果 - Swing 力量 且技巧 提升 當 揮擊四縫線、二縫線或切球時"
   },
@@ -505,7 +505,7 @@
     "level1": "Minor 1x effect- Swing Power and contact improves when targetting the upper half of the strike zone",
     "level2": "Major 2x effect- Swing Power and contact improves when targetting the upper half of the strike zone",
     "level3": "Huge 4x effect- Swing Power and contact improves when targetting the upper half of the strike zone",
-    "level1Zh": "小幅 1倍效果 - Swing 力量 且技巧 提升 當 瞄準好球帶上半部",
+    "level1Zh": "瞄準好球帶上半部分時，力量和打擊會增加",
     "level2Zh": "大幅 2倍效果 - Swing 力量 且技巧 提升 當 瞄準好球帶上半部",
     "level3Zh": "巨大 4x 效果 - Swing 力量 且技巧 提升 當 瞄準好球帶上半部"
   },
@@ -520,7 +520,7 @@
     "level1": "Minor 1x effect- Swing Power and contact improves when targetting the inside half of the strike zone",
     "level2": "Minor 1x effect- Swing Power and contact improves when targetting the inside half of the strike zone",
     "level3": "Huge 4x effect- Swing Power and contact improves when targetting the inside half of the strike zone",
-    "level1Zh": "小幅 1倍效果 - Swing 力量 且技巧 提升 當 瞄準 the 內側 的好球帶",
+    "level1Zh": "瞄準好球帶的內角時，力量和打擊會增加",
     "level2Zh": "小幅 1倍效果 - Swing 力量 且技巧 提升 當 瞄準 the 內側 的好球帶",
     "level3Zh": "巨大 4x 效果 - Swing 力量 且技巧 提升 當 瞄準 the 內側 的好球帶"
   },
@@ -535,7 +535,7 @@
     "level1": "Minor 1x effect- Swing Power and contact improves when targetting the lower half of the strike zone",
     "level2": "Major 2x effect- Swing Power and contact improves when targetting the lower half of the strike zone",
     "level3": "Huge 4x effect- Swing Power and contact improves when targetting the lower half of the strike zone",
-    "level1Zh": "小幅 1倍效果 - Swing 力量 且技巧 提升 當 瞄準好球帶下半部",
+    "level1Zh": "瞄準好球帶下半部分時，力量和打擊會增加",
     "level2Zh": "大幅 2倍效果 - Swing 力量 且技巧 提升 當 瞄準好球帶下半部",
     "level3Zh": "巨大 4x 效果 - Swing 力量 且技巧 提升 當 瞄準好球帶下半部"
   },
@@ -550,7 +550,7 @@
     "level1": "Minus 12.5% chance of a missed catch when jumping, diving, or sliding.",
     "level2": "Minus 25% chance of a missed catch when, jumping,diving, or sliding",
     "level3": "Minus 50% chance of a missed catch when jumping, diving, or sliding",
-    "level1Zh": " - 12.5% chance of a missed catch 當 jumping, diving, 或 sliding.",
+    "level1Zh": "跳躍，飛撲或滑接時減少漏接的機會",
     "level2Zh": " - 25% chance of a missed catch 當, jumping,diving, 或 sliding",
     "level3Zh": " - 50% chance of a missed catch 當 jumping, diving, 或 sliding"
   },
@@ -565,7 +565,7 @@
     "level1": "25% chance that of instantly recovering from a comebacker to the head",
     "level2": "50% chance that of instantly recovering from a comebacker to the head",
     "level3": "Always instantly recover from a comebacker to the head",
-    "level1Zh": "25% chance that of instantly recovering from a comebacker to the head",
+    "level1Zh": "從受到頭部反擊到立即恢復的機率增加",
     "level2Zh": "50% chance that of instantly recovering from a comebacker to the head",
     "level3Zh": "Always instantly recover from a comebacker to the head"
   },
@@ -580,7 +580,7 @@
     "level1": "Minor 1x effect- Swing power and contact improves when swinging at a CB, SL,CH,SB, or FK pitch.",
     "level2": "Major 2x effect- Swing power and contact improves when swinging at a CB, SL,CH,SB, or FK pitch.",
     "level3": "Huge 4x effect- Swing power and contact improves when swinging at a CB, SL,CH,SB, or FK pitch.",
-    "level1Zh": "小幅 1倍效果 - Swing 力量 且技巧 提升 當 揮擊 曲球, 滑球,變速球,螺旋球, 或 指叉球 球種.",
+    "level1Zh": "在擊打CB，SL，CH，SB或FK投球時，力量和打擊會增加",
     "level2Zh": "大幅 2倍效果 - Swing 力量 且技巧 提升 當 揮擊 曲球, 滑球,變速球,螺旋球, 或 指叉球 球種.",
     "level3Zh": "巨大 4x 效果 - Swing 力量 且技巧 提升 當 揮擊 曲球, 滑球,變速球,螺旋球, 或 指叉球 球種."
   },
@@ -595,7 +595,7 @@
     "level1": "Minor 1x effect- Swing power and contact improves when targetting the outside half of the strike zone",
     "level2": "Major 2x effect- Swing power and contact improves when targetting the outside half of the strike zone",
     "level3": "Huge 4x effect- Swing power and contact improves when targetting the outside half of the strike zone",
-    "level1Zh": "小幅 1倍效果 - Swing 力量 且技巧 提升 當 瞄準 the 外側 的好球帶",
+    "level1Zh": "瞄準好球帶的外角時，力量和打擊會增加",
     "level2Zh": "大幅 2倍效果 - Swing 力量 且技巧 提升 當 瞄準 the 外側 的好球帶",
     "level3Zh": "巨大 4x 效果 - Swing 力量 且技巧 提升 當 瞄準 the 外側 的好球帶"
   },
@@ -610,7 +610,7 @@
     "level1": "Plus 6 Power and Contact when pinch hitting",
     "level2": "Plus 12 Power and Contact when pinch hitting",
     "level3": "Plus 24 Power and Contact when pinch hitting",
-    "level1Zh": "+6 力量 且技巧 當 pinch hitting",
+    "level1Zh": "在代打出場時增加力量和打擊",
     "level2Zh": "+12 力量 且技巧 當 pinch hitting",
     "level3Zh": "+24 力量 且技巧 當 pinch hitting"
   },
@@ -625,7 +625,7 @@
     "level1": "Mojo changes at a 12.5% faster rate from play to play and game to game",
     "level2": "Mojo changes at a 25% faster rate from play to play and game to game",
     "level3": "Mojo changes at a 50% faster rate from play to play and game to game",
-    "level1Zh": "Mojo changes at a 12.5% faster rate from play to play 且game to game",
+    "level1Zh": "精神力(Mojo)的變化速度從遊戲到遊戲快速（非投手也適用）",
     "level2Zh": "Mojo changes at a 25% faster rate from play to play 且game to game",
     "level3Zh": "Mojo changes at a 50% faster rate from play to play 且game to game"
   },
@@ -640,7 +640,7 @@
     "level1": "10 Power, 3 Contact when batting against an A- pitcher or better",
     "level2": "20 Power, 5 Contact",
     "level3": "40 Power, 10 Contact",
-    "level1Zh": "10 力量, 3 技巧 當 面對 A - 或更高等級投手",
+    "level1Zh": "在對戰A-級投手或更高水平的投手打擊時增加力量和打擊",
     "level2Zh": "20 力量, 5 技巧",
     "level3Zh": "40 力量, 10 技巧"
   },
@@ -655,7 +655,7 @@
     "level1": "10 Power, -20 Contact when in 2-0, 3-0, and 3-1 counts",
     "level2": "20 Power, -10 Contact",
     "level3": "40 Power, -5 Contact",
-    "level1Zh": "10 力量, - 20 技巧 當 in 2 - 0, 3 - 0, 且3 - 1 counts",
+    "level1Zh": "在2-0，3-0和3-1的球數情況下增加力量和減少打擊",
     "level2Zh": "20 力量, - 10 技巧",
     "level3Zh": "40 力量, - 5 技巧"
   },
@@ -670,7 +670,7 @@
     "level1": "Bunting balls down the foul line is easier (Minor effect)",
     "level2": "Major effect",
     "level3": "Huge effect",
-    "level1Zh": "Bunting balls down the foul line is easier (輕微效果)",
+    "level1Zh": "可以輕易短打到界內",
     "level2Zh": "主要效果",
     "level3Zh": "巨大效果"
   },
@@ -685,7 +685,7 @@
     "level1": "Plus 6% chance of the catcher dropping or failing to cleanly catch the pitch",
     "level2": "Plus 3% chance of the catcher dropping or failing to cleanly catch the pitch",
     "level3": "Plus 1.5% chance of the catcher dropping or failing to cleanly catch the pitch",
-    "level1Zh": "+6% chance of the catcher dropping 或 failing to cleanly catch the 球種",
+    "level1Zh": "捕手接球時，增加掉球或捕逸的機會",
     "level2Zh": "+3% chance of the catcher dropping 或 failing to cleanly catch the 球種",
     "level3Zh": "+1.5% chance of the catcher dropping 或 failing to cleanly catch the 球種"
   },
@@ -700,7 +700,7 @@
     "level1": "Small 1x effect - Increased pitch speed and break with pitching a 2F",
     "level2": "Minor 2x effect - Increased pitch speed and break with pitching a 2F",
     "level3": "Major 4x effect - Increased pitch speed and break with pitching a 2F",
-    "level1Zh": "小幅 1倍效果 - 增加 球種 跑速 且變化幅度 with 投二縫線速球時",
+    "level1Zh": "投擲2-Seam快速球時增加投球速度與折線",
     "level2Zh": "輕微 2倍效果 - 增加 球種 跑速 且變化幅度 with 投二縫線速球時",
     "level3Zh": "大幅 4倍效果 - 增加 球種 跑速 且變化幅度 with 投二縫線速球時"
   },
@@ -715,7 +715,7 @@
     "level1": "Small 1x effect- Increased pitch speed when pitching a 4-seam fastball",
     "level2": "Minor 2x effect- Increased pitch speed when pitching a 4-seam fastball",
     "level3": "Major 4x effect- Increased pitch speed when pitching a 4-seam fastball",
-    "level1Zh": "小幅 1倍效果 - 增加 球種 跑速 投球時 a 4 - seam fastball",
+    "level1Zh": "投擲4-Seam快速球時增加投球速度",
     "level2Zh": "輕微 2倍效果 - 增加 球種 跑速 投球時 a 4 - seam fastball",
     "level3Zh": "大幅 4倍效果 - 增加 球種 跑速 投球時 a 4 - seam fastball"
   },
@@ -730,7 +730,7 @@
     "level1": "Small 1x effect- Increased break when pitching a CB",
     "level2": "Minor 2x effect- Increased break when pitching a CB",
     "level3": "Major 4x effect- Increased break when pitching a CB",
-    "level1Zh": "小幅 1倍效果 - 增加 變化幅度 投球時 a 曲球",
+    "level1Zh": "投擲曲球時增加折線數",
     "level2Zh": "輕微 2倍效果 - 增加 變化幅度 投球時 a 曲球",
     "level3Zh": "大幅 4倍效果 - 增加 變化幅度 投球時 a 曲球"
   },
@@ -745,7 +745,7 @@
     "level1": "Small 1x effect - Increased pitch speed and break with pitching a CF",
     "level2": "Minor 2x effect - Increased pitch speed and break with pitching a CF",
     "level3": "Major 4x effect - Increased pitch speed and break with pitching a CF",
-    "level1Zh": "小幅 1倍效果 - 增加 球種 跑速 且變化幅度 with 投出 卡特球",
+    "level1Zh": "投擲卡特球時增加折線數",
     "level2Zh": "輕微 2倍效果 - 增加 球種 跑速 且變化幅度 with 投出 卡特球",
     "level3Zh": "大幅 4倍效果 - 增加 球種 跑速 且變化幅度 with 投出 卡特球"
   },
@@ -760,7 +760,7 @@
     "level1": "Small 1x effect - Decreased pitch speed and increased break with pitching a CH",
     "level2": "Minor 2x effect - Decreased pitch speed and increased break with pitching a CH",
     "level3": "Major 4x effect - Decreased pitch speed and increased break with pitching a CH",
-    "level1Zh": "小幅 1倍效果 - 減少 球種 跑速 且增加 變化幅度 with 投出 變速球",
+    "level1Zh": "投擲變速球時減少投球速度和增加折線數",
     "level2Zh": "輕微 2倍效果 - 減少 球種 跑速 且增加 變化幅度 with 投出 變速球",
     "level3Zh": "大幅 4倍效果 - 減少 球種 跑速 且增加 變化幅度 with 投出 變速球"
   },
@@ -775,7 +775,7 @@
     "level1": "Small 1x effect - Increased pitch speed and break with pitching a FK",
     "level2": "Minor 2x effect - Increased pitch speed and break with pitching a FK",
     "level3": "Major 4x effect - Increased pitch speed and break with pitching a FK",
-    "level1Zh": "小幅 1倍效果 - 增加 球種 跑速 且變化幅度 with 投出 指叉球",
+    "level1Zh": "投擲指叉球時減少投球速度和增加折線數",
     "level2Zh": "輕微 2倍效果 - 增加 球種 跑速 且變化幅度 with 投出 指叉球",
     "level3Zh": "大幅 4倍效果 - 增加 球種 跑速 且變化幅度 with 投出 指叉球"
   },
@@ -790,7 +790,7 @@
     "level1": "Small 1x effect - Decreased pitch speed and increased break with pitching a SB",
     "level2": "Minor 2x effect - Decreased pitch speed and increased break with pitching a SB",
     "level3": "Major 4x effect - Decreased pitch speed and increased break with pitching a SB",
-    "level1Zh": "小幅 1倍效果 - 減少 球種 跑速 且增加 變化幅度 with 投出 螺旋球",
+    "level1Zh": "投擲螺旋球時減少投球速度和增加折線數",
     "level2Zh": "輕微 2倍效果 - 減少 球種 跑速 且增加 變化幅度 with 投出 螺旋球",
     "level3Zh": "大幅 4倍效果 - 減少 球種 跑速 且增加 變化幅度 with 投出 螺旋球"
   },
@@ -805,7 +805,7 @@
     "level1": "Small 1x effect - Increased pitch speed and break with pitching a SL",
     "level2": "Minor 2x effect - Increased pitch speed and break with pitching a SL",
     "level3": "Major 4x effect - Increased pitch speed and break with pitching a SL",
-    "level1Zh": "小幅 1倍效果 - 增加 球種 跑速 且變化幅度 with 投出 滑球",
+    "level1Zh": "投擲滑球時增加投球速度和折線數",
     "level2Zh": "輕微 2倍效果 - 增加 球種 跑速 且變化幅度 with 投出 滑球",
     "level3Zh": "大幅 4倍效果 - 增加 球種 跑速 且變化幅度 with 投出 滑球"
   },
@@ -820,7 +820,7 @@
     "level1": "Minus 50 Accuracy on a 0-0 count",
     "level2": "Minus 25 Accuracy on a 0-0 count",
     "level3": "Minus 12 Accuracy on a 0-0 count",
-    "level1Zh": " - 50 控球 on a 0好0壞球數",
+    "level1Zh": "在0-0的球數上控球降低",
     "level2Zh": " - 25 控球 on a 0好0壞球數",
     "level3Zh": " - 12 控球 on a 0好0壞球數"
   },
@@ -835,7 +835,7 @@
     "level1": "Plus 12 Accuracy on a 0-0 count.",
     "level2": "Plus 25 Accuracy on a 0-0 count.",
     "level3": "Plus 50 Accuracy on a 0-0 count.",
-    "level1Zh": "+12 控球 on a 0好0壞球數.",
+    "level1Zh": "在0-0的球數情況控球能力增加",
     "level2Zh": "+25 控球 on a 0好0壞球數.",
     "level3Zh": "+50 控球 on a 0好0壞球數."
   },
@@ -850,7 +850,7 @@
     "level1": "10 Contact, -20 Power when in 0-1, 0-2,  and 1-2 counts",
     "level2": "20 Contact, -10 Power",
     "level3": "40 Contact, -5 Power",
-    "level1Zh": "10 技巧, - 20 力量 當 in 0 - 1, 0 - 2, 且1 - 2 counts",
+    "level1Zh": "在0-1，0-2和1-2的局數中減少力量和增加打擊",
     "level2Zh": "20 技巧, - 10 力量",
     "level3Zh": "40 技巧, - 5 力量"
   },
@@ -865,7 +865,7 @@
     "level1": "Reduced fielding penalty by 25% when playing in secondary position",
     "level2": "0.5",
     "level3": "No Penalty",
-    "level1Zh": "Reduced 守備 penalty by 25% 當 playing in secondary position",
+    "level1Zh": "在次要守位上時，防守能力不會降低",
     "level2Zh": "0.5",
     "level3Zh": "No Penalty"
   },
@@ -880,7 +880,7 @@
     "level1": "Plus 5 Contact when batting vs. a left-handed pitcher.",
     "level2": "Plus 10 Contact when batting vs. a left-handed pitcher.",
     "level3": "Plus 20 Contact when batting vs. a left-handed pitcher.",
-    "level1Zh": "+5 技巧 打擊時 面對左投手.",
+    "level1Zh": "在對左投手打擊時增加打擊",
     "level2Zh": "+10 技巧 打擊時 面對左投手.",
     "level3Zh": "+20 技巧 打擊時 面對左投手."
   },
@@ -895,7 +895,7 @@
     "level1": "Plus 5 Contact when batting vs. a right-handed pitcher.",
     "level2": "Plus 10 Contact when batting vs. a right-handed pitcher.",
     "level3": "Plus 20 Contact when batting vs. a right-handed pitcher.",
-    "level1Zh": "+5 技巧 打擊時 面對右投手.",
+    "level1Zh": "在對右投手打擊時增加打擊",
     "level2Zh": "+10 技巧 打擊時 面對右投手.",
     "level3Zh": "+20 技巧 打擊時 面對右投手."
   },
@@ -910,7 +910,7 @@
     "level1": "Minus 10 to all Skills when Pressure is High. Effect is doubled when Pressure is Extreme",
     "level2": "Minus 5 to all skills when Pressure is High. The effect is doubled when Pressure is Extreme",
     "level3": "Minus 3 to all Skills when Pressure is High. The effect is doubled when Pressure is Extreme",
-    "level1Zh": " - 10 to all Skills 當壓力高時. Effect is doubled 當 壓力極高",
+    "level1Zh": "壓力加大時所有技能都會減少。當壓力極大時，效果加倍",
     "level2Zh": " - 5 to all skills 當壓力高時. 效果加倍 當 壓力極高",
     "level3Zh": " - 3 to all Skills 當壓力高時. 效果加倍 當 壓力極高"
   },
@@ -925,7 +925,7 @@
     "level1": "Plus 3 to all Skills when Pressure is High. The effect is doubled  when Pressure is Extreme",
     "level2": "Plus 5 to all Skills when Pressure is High. The effect is doubled when Pressure is Extreme",
     "level3": "Plus 10 to all Skills when Pressure is High. The effect is doubled when Pressure is Extreme",
-    "level1Zh": "+3 to all Skills 當壓力高時. 效果加倍 當 壓力極高",
+    "level1Zh": "在壓力增加時，所有技能都會增加。當壓力極大時效果加倍",
     "level2Zh": "+5 to all Skills 當壓力高時. 效果加倍 當 壓力極高",
     "level3Zh": "+10 to all Skills 當壓力高時. 效果加倍 當 壓力極高"
   },
@@ -940,7 +940,7 @@
     "level1": "Small effect- Faster recoveries from diving catches",
     "level2": "Minor effect- Faster recoveries from diving catches",
     "level3": "Major effect- Faster recoveries from diving catches",
-    "level1Zh": "小幅 effect - Faster recoveries from diving catches",
+    "level1Zh": "縮短飛撲接球動作",
     "level2Zh": "輕微效果 - Faster recoveries from diving catches",
     "level3Zh": "主要效果 - Faster recoveries from diving catches"
   },
@@ -955,7 +955,7 @@
     "level1": "Minus 100 Accuracy for the remainder of the inning after four consecutive batters reach base with no outs recorded",
     "level2": "Minus 50 Accuracy for the remainder of the inning after four consecutive batters reach base with no outs recorded",
     "level3": "Minus 25 Accuracy for the remainder of the inning after four consecutive batters reach base with no outs recorded",
-    "level1Zh": " - 100 控球 for the remainder of the inning after four consecutive batters reach base with no outs recorded",
+    "level1Zh": "連續四名打者未出局的情況下，該局投球的控球降低",
     "level2Zh": " - 50 控球 for the remainder of the inning after four consecutive batters reach base with no outs recorded",
     "level3Zh": " - 25 控球 for the remainder of the inning after four consecutive batters reach base with no outs recorded"
   },
@@ -970,7 +970,7 @@
     "level1": "+5 POW vs. LHP",
     "level2": "+10 POW vs. LHP",
     "level3": "+20 POW vs. LHP",
-    "level1Zh": "+5 POW vs. LHP",
+    "level1Zh": "在對左投手打擊時增加力量",
     "level2Zh": "+10 POW vs. LHP",
     "level3Zh": "+20 POW vs. LHP"
   },
@@ -985,7 +985,7 @@
     "level1": "Plus 5 Power when batting vs. a right-handed pitcher.",
     "level2": "Plus 10 Power when batting vs. a right-handed pitcher.",
     "level3": "Plus 20 Power when batting vs. a right-handed pitcher",
-    "level1Zh": "+5 力量 打擊時 面對右投手.",
+    "level1Zh": "在對右投手打擊時增加力量",
     "level2Zh": "+10 力量 打擊時 面對右投手.",
     "level3Zh": "+20 力量 打擊時 面對右投手"
   },
@@ -1000,7 +1000,7 @@
     "level1": "Plus 8 Power, 5 Contact when batting with a runner on 2B or 3B",
     "level2": "Plus 15 Power and 10 Contact when batting with a runner on 2B or 3B",
     "level3": "Plus 30 Power and 20 Contact when batting with a runner on 2B or 3B",
-    "level1Zh": "+8 力量, 5 技巧 打擊時 with a runner on 2B 或 3B",
+    "level1Zh": "在2B或3B有跑者時打擊時增加力量和打擊",
     "level2Zh": "+15 力量 且10 技巧 打擊時 with a runner on 2B 或 3B",
     "level3Zh": "+30 力量 且20 技巧 打擊時 with a runner on 2B 或 3B"
   },
@@ -1015,7 +1015,7 @@
     "level1": "Minus 30 Power and 20 Contact when batting with a runner on 2B or 3B",
     "level2": "Minus 15 Power and 10 Contact when batting with a runner on 2B or 3B",
     "level3": "Minus 8 Power and 5 Contact when batting with a runner on 2B or 3B.",
-    "level1Zh": " - 30 力量 且20 技巧 打擊時 with a runner on 2B 或 3B",
+    "level1Zh": "在2B或3B有跑者時打擊時減少力量和打擊",
     "level2Zh": " - 15 力量 且10 技巧 打擊時 with a runner on 2B 或 3B",
     "level3Zh": " - 8 力量 且5 技巧 打擊時 with a runner on 2B 或 3B."
   },
@@ -1030,7 +1030,7 @@
     "level1": "Plus 12 Contact when trailing and batting with bases empty.",
     "level2": "Plus 25 Contact when trailing and batting with bases empty",
     "level3": "Plus 50 Contact when trailing and batting with the bases empty",
-    "level1Zh": "+12 技巧 當落後且壘上無人時.",
+    "level1Zh": "當分數落後並壘上無人時增加打擊",
     "level2Zh": "+25 技巧 當落後且壘上無人時",
     "level3Zh": "+50 技巧 當 trailing 且batting with the bases empty"
   },
@@ -1045,7 +1045,7 @@
     "level1": "Plus 5 to all Pitching Skills when pitching with at least 2 runners on base",
     "level2": "Plus 10 to all pitching skills when pitching with at least two runners on base.",
     "level3": "Plus 20 to all pitching skills when pitching with at least two runners on base",
-    "level1Zh": "+5 to all 球種ing Skills 投球時 with at least 2 runners on base",
+    "level1Zh": "在至少有兩名跑者在壘上投球時，增加球速、體力和控球",
     "level2Zh": "+10 to all 球種ing skills 投球時 with at least two runners on base.",
     "level3Zh": "+20 to all 球種ing skills 投球時 with at least two runners on base"
   },
@@ -1060,7 +1060,7 @@
     "level1": "Minus 20 to all pitching skills when pitching with at least two runners on base",
     "level2": "Minus 10 to all pitching skills when pitching with at least two runners on base",
     "level3": "Minus 5 to all pitching skills when pitching with at least two runners on base.",
-    "level1Zh": " - 20 to all 球種ing skills 投球時 with at least two runners on base",
+    "level1Zh": "壘上有兩名跑壘者以上時，球速、體力和控球減少",
     "level2Zh": " - 10 to all 球種ing skills 投球時 with at least two runners on base",
     "level3Zh": " - 5 to all 球種ing skills 投球時 with at least two runners on base."
   },
@@ -1075,7 +1075,7 @@
     "level1": "Reduce fielding penalty by 50% when playing in the infield",
     "level2": "Reduce fielding penalty by 75% when playing in the infield",
     "level3": "No fielding penalty when playing in the infield",
-    "level1Zh": "Reduce 守備 penalty by 50% 在內野守備時",
+    "level1Zh": "當打內野手時，減少防守和傳球懲罰",
     "level2Zh": "Reduce 守備 penalty by 75% 在內野守備時",
     "level3Zh": "No 守備 penalty 在內野守備時"
   },
@@ -1090,7 +1090,7 @@
     "level1": "Reducing fielding penalty by 50% when playing in the outfield",
     "level2": "Reduce fielding penalty by 75% when playing in the outfield",
     "level3": "No fielding penalty when playing in the outfield",
-    "level1Zh": "Reducing 守備 penalty by 50% 在外野守備時",
+    "level1Zh": "當打外野手時，減少防守和傳球懲罰",
     "level2Zh": "Reduce 守備 penalty by 75% 在外野守備時",
     "level3Zh": "No 守備 penalty 在外野守備時"
   },
@@ -1105,7 +1105,7 @@
     "level1": "Huge 4x Effect- Increased error in pitch location when holding a power pitch for too long. In Shared-screen versus play: 10% chance that power pitches will have increased error in pitch location",
     "level2": "Major 2x Effect- Increased error in pitch location when holding a power pitch for too long. In Shared-screen versus play: 10% chance that power pitches will have increased error in pitch location",
     "level3": "Minor 1x Effect- Increased error in pitch location when holding a power pitch for too long. In Shared-screen versus play: 10% chance that power pitches will have increased error in pitch location",
-    "level1Zh": "Huge 4倍效果 - 增加 誤差於 球種 location 當 holding a 力量 球種 過久. 在單機對戰模式中： 10% 機率 that 力量 球種es will have 增加 誤差於 球種 location",
+    "level1Zh": "用力投球時，投球位置的錯誤機率增加",
     "level2Zh": "主要 2倍效果 - 增加 誤差於 球種 location 當 holding a 力量 球種 過久. 在單機對戰模式中： 10% 機率 that 力量 球種es will have 增加 誤差於 球種 location",
     "level3Zh": "小幅 1倍效果 - 增加 誤差於 球種 location 當 holding a 力量 球種 過久. 在單機對戰模式中： 10% 機率 that 力量 球種es will have 增加 誤差於 球種 location"
   }
