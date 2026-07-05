@@ -10,7 +10,7 @@ const getStatColor = (val: number | string | undefined | null) => {
   if (num >= 90) return 'rgba(239, 68, 68, 0.4)';
   if (num >= 80) return 'rgba(249, 115, 22, 0.4)';
   if (num >= 70) return 'rgba(234, 179, 8, 0.4)';
-  if (num >= 50) return 'rgba(34, 197, 94, 0.3)';
+  if (num >= 45) return 'rgba(34, 197, 94, 0.3)';
   return 'transparent';
 };
 

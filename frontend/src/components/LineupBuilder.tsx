@@ -1,53 +1,27 @@
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import playersData from '../data/players.json';
-import { autoPickLineup, optimizeBattingOrder } from '../utils/lineupOptimizer';
+import { autoPickLineup, optimizeBattingOrder, ALL_TEAMS } from '../utils/lineupOptimizer';
 import type { OptimizationStrategy, Lineup, BattingStrategy } from '../utils/lineupOptimizer';
 import { calculateTeamStats } from '../utils/teamStats';
 import TeamRadar from './TeamRadar';
 import PlayerRadar from './PlayerRadar';
 import { renderPositionBadge } from './PlayerGrid';
-import { Settings2, RefreshCw, UserPlus } from 'lucide-react';
+import { Settings2, RefreshCw, UserPlus, Search } from 'lucide-react';
 
-const TEAM_NAMES = Array.from(new Set(playersData.map(p => p.team))).filter(Boolean).sort();
+const TEAM_NAMES = [ALL_TEAMS, ...Array.from(new Set(playersData.map(p => p.team))).filter(Boolean).sort()];
 
-const SHIFT_POSITIONS: Record<string, any> = {
-  normal: {
-    'C': { top: '85%', left: '50%' },
-    '1B': { top: '55%', left: '75%' },
-    '2B': { top: '40%', left: '65%' },
-    '3B': { top: '55%', left: '25%' },
-    'SS': { top: '40%', left: '35%' },
-    'LF': { top: '20%', left: '15%' },
-    'CF': { top: '10%', left: '50%' },
-    'RF': { top: '20%', left: '85%' },
-    'SP': { top: '60%', left: '50%' },
-  },
-  pull: {
-    'C': { top: '85%', left: '50%' },
-    '1B': { top: '55%', left: '78%' },
-    '2B': { top: '45%', left: '70%' },
-    '3B': { top: '45%', left: '45%' },
-    'SS': { top: '40%', left: '55%' },
-    'LF': { top: '25%', left: '30%' },
-    'CF': { top: '15%', left: '65%' },
-    'RF': { top: '15%', left: '90%' },
-    'SP': { top: '60%', left: '50%' },
-  },
-  bunt: {
-    'C': { top: '85%', left: '50%' },
-    '1B': { top: '65%', left: '65%' },
-    '2B': { top: '55%', left: '75%' },
-    '3B': { top: '65%', left: '35%' },
-    'SS': { top: '55%', left: '25%' },
-    'LF': { top: '20%', left: '15%' },
-    'CF': { top: '10%', left: '50%' },
-    'RF': { top: '20%', left: '85%' },
-    'SP': { top: '60%', left: '50%' },
-  }
+const FIELD_POSITIONS: Record<string, { top: string, left: string }> = {
+  'C': { top: '85%', left: '50%' },
+  '1B': { top: '55%', left: '75%' },
+  '2B': { top: '40%', left: '65%' },
+  '3B': { top: '55%', left: '25%' },
+  'SS': { top: '40%', left: '35%' },
+  'LF': { top: '20%', left: '15%' },
+  'CF': { top: '10%', left: '50%' },
+  'RF': { top: '20%', left: '85%' },
+  'SP': { top: '60%', left: '50%' }
 };
-
-type ShiftMode = 'normal' | 'pull' | 'bunt';
 
 const renderProgressBar = (label: string, value: number, color: string) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: '4px', width: '75px' }}>
@@ -66,16 +40,19 @@ const LineupBuilder: React.FC = () => {
     return { C: null, '1B': null, '2B': null, '3B': null, SS: null, LF: null, CF: null, RF: null, DH: null, SP: null };
   });
   const [battingOrder, setBattingOrder] = useState<string[]>([]); // Array of player names
+  const [searchQuery, setSearchQuery] = useState('');
   
   const [selectingPosition, setSelectingPosition] = useState<string | null>(null);
   const [battingStrategy, setBattingStrategy] = useState<BattingStrategy>('sabermetrics');
   const [viewingPlayer, setViewingPlayer] = useState<any | null>(null);
-  const [shiftMode, setShiftMode] = useState<ShiftMode>('normal');
   const [draggedPlayer, setDraggedPlayer] = useState<any | null>(null);
   const [hoveredPlayer, setHoveredPlayer] = useState<any | null>(null);
   const [hoveredPosition, setHoveredPosition] = useState<string | null>(null);
 
-  const teamPlayers = useMemo(() => playersData.filter(p => p.team === selectedTeam), [selectedTeam]);
+  const teamPlayers = useMemo(() => {
+    if (selectedTeam === ALL_TEAMS) return playersData;
+    return playersData.filter(p => p.team === selectedTeam);
+  }, [selectedTeam]);
 
   const handleAutoPick = () => {
     const newLineup = autoPickLineup(playersData, selectedTeam, strategy);
@@ -102,6 +79,37 @@ const LineupBuilder: React.FC = () => {
     if (activePlayers.length === 0) return null;
     return calculateTeamStats(activePlayers)[0];
   }, [lineup]);
+
+  const filteredRosterPlayers = useMemo(() => {
+    return teamPlayers.filter(p => {
+      if (searchQuery && !p.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+      
+      if (selectingPosition) {
+        if (selectingPosition === 'SP') {
+          if (!p.isPitcher) return false;
+        } else if (selectingPosition === 'DH') {
+          if (p.isPitcher) return false;
+        } else {
+          const matches = p.primaryPosition === selectingPosition || (p.secondaryPositions && p.secondaryPositions.includes(selectingPosition));
+          if (!matches) return false;
+        }
+        const isAlreadyInLineup = Object.values(lineup).some(lineupPlayer => lineupPlayer?.name === p.name);
+        if (isAlreadyInLineup) return false;
+      }
+      
+      return true;
+    }).sort((a, b) => {
+      if (selectingPosition) {
+        const getScore = (p: any) => p.isPitcher 
+          ? (p.stats.velocity || 0) + (p.stats.junk || 0) + (p.stats.accuracy || 0)
+          : (p.stats.power || 0) + (p.stats.contact || 0) + (p.stats.fielding || 0) + (p.stats.speed || 0);
+        return getScore(b) - getScore(a);
+      }
+      return 0;
+    });
+  }, [teamPlayers, searchQuery, selectingPosition, lineup]);
 
   const availablePlayers = useMemo(() => {
     if (!selectingPosition) return [];
@@ -208,14 +216,7 @@ const LineupBuilder: React.FC = () => {
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '16px', background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-        <span style={{ color: 'var(--text-muted)', fontWeight: 'bold', fontSize: '14px' }}>Shift Simulation:</span>
-        <div style={{ display: 'flex', background: 'rgba(0,0,0,0.5)', padding: '4px', borderRadius: '8px' }}>
-          <button onClick={() => setShiftMode('normal')} style={{ background: shiftMode === 'normal' ? 'var(--primary-accent)' : 'transparent', color: shiftMode === 'normal' ? '#fff' : 'var(--text-muted)', border: 'none', padding: '6px 16px', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s', fontWeight: 'bold' }}>Normal</button>
-          <button onClick={() => setShiftMode('pull')} style={{ background: shiftMode === 'pull' ? 'var(--primary-accent)' : 'transparent', color: shiftMode === 'pull' ? '#fff' : 'var(--text-muted)', border: 'none', padding: '6px 16px', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s', fontWeight: 'bold' }}>Extreme Pull</button>
-          <button onClick={() => setShiftMode('bunt')} style={{ background: shiftMode === 'bunt' ? 'var(--primary-accent)' : 'transparent', color: shiftMode === 'bunt' ? '#fff' : 'var(--text-muted)', border: 'none', padding: '6px 16px', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s', fontWeight: 'bold' }}>Bunt Defense</button>
-        </div>
-      </div>
+
 
 
       {/* Top Row: Field + Roster */}
@@ -244,7 +245,7 @@ const LineupBuilder: React.FC = () => {
               </radialGradient>
             </defs>
             
-            {Object.entries(SHIFT_POSITIONS[shiftMode]).map(([pos, coords]: [string, any]) => {
+            {Object.entries(FIELD_POSITIONS).map(([pos, coords]: [string, any]) => {
                if (pos === 'SP' || pos === 'C' || pos === 'DH') return null;
                const player = lineup[pos];
                let radius = 50;
@@ -271,7 +272,7 @@ const LineupBuilder: React.FC = () => {
             })}
           </svg>
 
-          {Object.entries(SHIFT_POSITIONS[shiftMode]).map(([pos, coords]: [string, any]) => {
+          {Object.entries(FIELD_POSITIONS).map(([pos, coords]: [string, any]) => {
             const player = lineup[pos];
             const isSelected = selectingPosition === pos;
             
@@ -408,15 +409,26 @@ const LineupBuilder: React.FC = () => {
 
         {/* Team Roster (Always Visible) */}
         <div className="glass-panel" style={{ padding: '16px', flex: '1.5', height: '700px', display: 'flex', flexDirection: 'column', border: selectingPosition ? '2px solid var(--primary-accent)' : '1px solid rgba(255,255,255,0.1)', minWidth: '400px' }}>
-            <h3 style={{ marginTop: 0, marginBottom: '16px', color: 'var(--primary-accent)', display: 'flex', justifyContent: 'space-between' }}>
+            <h3 style={{ marginTop: 0, marginBottom: '16px', color: 'var(--primary-accent)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               {selectingPosition ? `Select ${selectingPosition}` : 'Team Roster'}
               {selectingPosition && (
                 <button onClick={() => setSelectingPosition(null)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}>✕</button>
               )}
             </h3>
             
+            <div style={{ marginBottom: '16px', position: 'relative' }}>
+              <Search size={16} style={{ position: 'absolute', left: '12px', top: '10px', color: 'rgba(255,255,255,0.5)' }} />
+              <input 
+                type="text" 
+                placeholder="Search players..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ width: '100%', padding: '8px 12px 8px 36px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.4)', color: '#fff', outline: 'none' }}
+              />
+            </div>
+            
             <div style={{ flex: 1, overflowY: 'auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px', alignContent: 'start', paddingRight: '8px' }}>
-              {teamPlayers.map(p => {
+              {filteredRosterPlayers.map(p => {
                 let isOptimal = false;
                 let isFaded = false;
                 
@@ -430,14 +442,10 @@ const LineupBuilder: React.FC = () => {
                    } else {
                        isOptimal = p.primaryPosition === activePos || p.secondaryPositions.includes(activePos as string);
                    }
-                   isFaded = !isOptimal; // fade out non-optimal
+                   isFaded = !selectingPosition && !isOptimal; // Only fade if hovering, since selecting filters them out
                 }
 
-                // Ensure player hasn't already been picked if we're in selecting mode
                 const isAlreadyInLineup = Object.values(lineup).some(lineupPlayer => lineupPlayer?.name === p.name);
-                if (selectingPosition && isAlreadyInLineup) {
-                  return null; // Don't show players already in lineup when selecting
-                }
 
                 return (
                   <div 

@@ -8,13 +8,15 @@ import TeamGrid from './components/TeamGrid';
 import TeamRadar from './components/TeamRadar';
 import LineupBuilder from './components/LineupBuilder';
 import TraitsDashboard from './components/TraitsDashboard';
+import ScoutingTactics from './components/ScoutingTactics';
+import DraftSimulator from './components/DraftSimulator';
 import { calculateTeamStats } from './utils/teamStats';
 import type { TeamStat } from './utils/teamStats';
-import { Languages, Activity, Users, Shield, ListStart, Star } from 'lucide-react';
+import { Languages, Activity, Users, Shield, ListStart, Star, Target, ShoppingCart } from 'lucide-react';
 
 function App() {
   const { t, toggleLanguage, language } = useLanguage();
-  const [viewMode, setViewMode] = useState<'players' | 'teams' | 'lineup' | 'traits'>('players');
+  const [viewMode, setViewMode] = useState<'players' | 'teams' | 'lineup' | 'traits' | 'scouting' | 'draft'>('players');
   
   const [selectedPlayer, setSelectedPlayer] = useState<any>(playersData[0]);
   
@@ -153,6 +155,26 @@ function App() {
             >
               <Star size={16} /> {t('app.viewTraits') || 'Traits View'}
             </button>
+            <button 
+              onClick={() => setViewMode('scouting')}
+              style={{ 
+                padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600,
+                background: viewMode === 'scouting' ? 'var(--primary-color)' : 'transparent',
+                color: viewMode === 'scouting' ? '#fff' : 'rgba(255,255,255,0.6)'
+              }}
+            >
+              <Target size={16} /> {t('app.viewScouting') || 'Scouting'}
+            </button>
+            <button 
+              onClick={() => setViewMode('draft')}
+              style={{ 
+                padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600,
+                background: viewMode === 'draft' ? 'var(--primary-color)' : 'transparent',
+                color: viewMode === 'draft' ? '#fff' : 'rgba(255,255,255,0.6)'
+              }}
+            >
+              <ShoppingCart size={16} /> {t('draft.title') || 'Draft Simulator'}
+            </button>
           </div>
         </div>
 
@@ -161,7 +183,7 @@ function App() {
         </button>
       </header>
 
-      <main className="dashboard-grid" style={{ gridTemplateColumns: (viewMode === 'lineup' || viewMode === 'traits') ? '1fr' : undefined }}>
+      <main className="dashboard-grid" style={{ gridTemplateColumns: (viewMode === 'lineup' || viewMode === 'traits' || viewMode === 'scouting' || viewMode === 'draft') ? '1fr' : undefined }}>
         <section className="main-content">
           {viewMode === 'players' ? (
             <PlayerGrid 
@@ -195,12 +217,16 @@ function App() {
             />
           ) : viewMode === 'traits' ? (
             <TraitsDashboard traits={traitsData} />
+          ) : viewMode === 'scouting' ? (
+            <ScoutingTactics players={playersData} />
+          ) : viewMode === 'draft' ? (
+            <DraftSimulator players={playersData} />
           ) : (
             <LineupBuilder />
           )}
         </section>
 
-        {viewMode !== 'lineup' && viewMode !== 'traits' && (
+        {viewMode !== 'lineup' && viewMode !== 'traits' && viewMode !== 'scouting' && viewMode !== 'draft' && (
           <aside className="sidebar">
             <div className="glass-panel radar-panel" style={{ overflowY: 'auto' }}>
               {viewMode === 'players' ? (

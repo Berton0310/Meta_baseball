@@ -6,6 +6,9 @@ export interface Lineup {
   [position: string]: any | null; // Returns player object or null
 }
 
+export const ALL_TEAMS = 'All Teams (不限隊伍)';
+
+
 const getScore = (player: any, strategy: OptimizationStrategy): number => {
   const { power, contact, speed, fielding, arm, velocity, junk, accuracy } = player.stats;
   if (player.isPitcher) {
@@ -26,7 +29,7 @@ const getScore = (player: any, strategy: OptimizationStrategy): number => {
 };
 
 export const autoPickLineup = (players: any[], teamName: string, strategy: OptimizationStrategy): Lineup => {
-  const teamPlayers = players.filter(p => p.team === teamName);
+  const teamPlayers = teamName === ALL_TEAMS ? players : players.filter(p => p.team === teamName);
   
   let appliedStrategy = strategy;
   if (strategy === 'team_signature' && teamPlayers.length > 0) {
