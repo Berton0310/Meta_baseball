@@ -1,6 +1,8 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { ShoppingCart, UserPlus, UserMinus, CheckCircle, Settings, Play, ArrowLeft, AlertTriangle, Scale, Target, Shield, Crosshair, DollarSign, Zap, Lightbulb, Activity } from 'lucide-react';
+import { ShoppingCart, UserPlus, UserMinus, CheckCircle, Settings, Play, ArrowLeft, AlertTriangle, Scale, Target, Shield, Crosshair, DollarSign, Zap, Lightbulb, Activity, X, Grid, Map } from 'lucide-react';
+import PlayerRadar from './PlayerRadar';
+import DraftFieldMap from './DraftFieldMap';
 import { renderPositionBadge } from './PlayerGrid';
 
 interface DraftSimulatorProps {
@@ -91,14 +93,16 @@ const PITCHER_POS = ['SP', 'RP', 'CP'];
 const BATTER_POS = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH', 'Utility_IF', 'Utility_OF', 'Super_Utility', 'Backup_C'];
 const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
   const { t } = useLanguage();
-  const [draftedPlayers, setDraftedPlayers] = useState<any[]>([]);
+  const [draftedRosterSlots, setDraftedRosterSlots] = useState<(any | null)[]>(Array(22).fill(null));
+  const draftedPlayers = useMemo(() => draftedRosterSlots.filter(p => p !== null), [draftedRosterSlots]);
+  const [viewingPlayer, setViewingPlayer] = useState<{player: any, archetype?: any} | null>(null);
   const [rosterPlan, setRosterPlan] = useState<'planA' | 'planB' | 'planC' | 'planD'>('planA');
   const [customArchetypes, setCustomArchetypes] = useState<Record<number, any>>({});
   const [archetypeFilter, setArchetypeFilter] = useState<'all' | 'pitchers' | 'hitters'>('all');
   const [budgetFilter, setBudgetFilter] = useState<'all' | 'pitchers' | 'hitters'>('all');
   const [pitcherBudgetCap, setPitcherBudgetCap] = useState<number>(0);
   
-  const [setupStep, setSetupStep] = useState<1|2|3>(1);
+  const [setupStep, setSetupStep] = useState<1|2>(1);
   
   const [targetPayroll, setTargetPayroll] = useState<number>(145000000);
   const [wizardPhase, setWizardPhase] = useState<'setup' | 'drafting'>('setup');
@@ -125,7 +129,36 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
     }
     return seq;
   }, [customRosterCounts]);
+
+  const BLUEPRINT_SLOTS = wizardSequence;
   const [customBudgets, setCustomBudgets] = useState<number[]>([]);
+  const [activeTargetSlot, setActiveTargetSlot] = useState<number | null>(null);
+  const [comparePlayer, setComparePlayer] = useState<any | null>(null);
+  const [isFieldMapOpen, setIsFieldMapOpen] = useState<boolean>(false);
+  const [isTraitsModalOpen, setIsTraitsModalOpen] = useState<boolean>(false);
+
+  
+  const teamChemistryCount = useMemo(() => {
+    const counts: Record<string, number> = {};
+    draftedPlayers.forEach(p => {
+      if (p.chemistry) {
+        counts[p.chemistry] = (counts[p.chemistry] || 0) + 1;
+      }
+    });
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  }, [draftedPlayers]);
+
+  const teamTraitsCount = useMemo(() => {
+    const counts: Record<string, number> = {};
+    draftedPlayers.forEach(p => {
+      if (p.traits) {
+        p.traits.forEach((tr: string) => {
+          counts[tr] = (counts[tr] || 0) + 1;
+        });
+      }
+    });
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  }, [draftedPlayers]);
 
   const recommendedPayroll = useMemo(() => {
     let base = 140000000;
@@ -239,7 +272,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
     // Set initial pitcher budget cap based on distribution
     let pSum = 0;
     budgets.forEach((amt, i) => {
-      if (PITCHER_POS.includes(wizardSequence[i]?.id)) pSum += amt;
+      if (PITCHER_POS.includes(BLUEPRINT_SLOTS[i]?.id)) pSum += amt;
     });
     setPitcherBudgetCap(pSum);
   };
@@ -253,7 +286,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
       let pSum = 0;
       let hSum = 0;
       for (let i = 0; i < next.length; i++) {
-        if (PITCHER_POS.includes(wizardSequence[i]?.id)) pSum += next[i];
+        if (PITCHER_POS.includes(BLUEPRINT_SLOTS[i]?.id)) pSum += next[i];
         else hSum += next[i];
       }
       pSum = pSum || 1;
@@ -265,7 +298,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
       let lastHIdx = -1;
 
       for (let i = 0; i < next.length; i++) {
-        const isPitcher = PITCHER_POS.includes(wizardSequence[i]?.id);
+        const isPitcher = PITCHER_POS.includes(BLUEPRINT_SLOTS[i]?.id);
         if (isPitcher) {
           next[i] = Math.max(500000, Math.round(prev[i] * (newPitcherCap / pSum)));
           adjustedPSum += next[i];
@@ -292,7 +325,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
 
   const handleBudgetChange = (idx: number, newValue: number) => {
     setCustomBudgets(prev => {
-      const isPitcherPool = PITCHER_POS.includes(wizardSequence[idx]?.id);
+      const isPitcherPool = PITCHER_POS.includes(BLUEPRINT_SLOTS[idx]?.id);
       const poolCap = isPitcherPool ? pitcherBudgetCap : (targetPayroll - pitcherBudgetCap);
       
       let val = Math.max(500000, Math.min(poolCap, newValue));
@@ -302,7 +335,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
       const next = [...prev];
       let remainingDelta = -delta;
       
-      let others = prev.map((v, i) => ({ i, v, isP: PITCHER_POS.includes(wizardSequence[i]?.id) }))
+      let others = prev.map((v, i) => ({ i, v, isP: PITCHER_POS.includes(BLUEPRINT_SLOTS[i]?.id) }))
                        .filter(item => item.i !== idx && item.isP === isPitcherPool);
                        
       const totalAvailableToSubtract = others.reduce((sum, item) => sum + Math.max(0, item.v - 500000), 0);
@@ -329,7 +362,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
       
       // We only adjust rounding errors for the active pool
       for (let i = 0; i < next.length; i++) {
-        const isP = PITCHER_POS.includes(wizardSequence[i]?.id);
+        const isP = PITCHER_POS.includes(BLUEPRINT_SLOTS[i]?.id);
         if (isP === isPitcherPool) {
           if (i !== idx) {
             next[i] = Math.max(500000, Math.round(next[i]));
@@ -349,7 +382,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
       }
       
       // Final sanity check sum
-      const finalSum = next.filter((_, i) => PITCHER_POS.includes(wizardSequence[i]?.id) === isPitcherPool).reduce((a,b)=>a+b,0);
+      const finalSum = next.filter((_, i) => PITCHER_POS.includes(BLUEPRINT_SLOTS[i]?.id) === isPitcherPool).reduce((a,b)=>a+b,0);
       if (finalSum !== poolCap && maxIdx !== -1) {
          next[maxIdx] += (poolCap - finalSum);
       }
@@ -372,24 +405,42 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
   }, [players, draftedPlayers]);
 
   const handleDraft = (player: any) => {
-    if (draftedPlayers.length >= 22) {
+    const cost = parseSalary(player.salary);
+    
+    let targetIdx = activeTargetSlot !== null ? activeTargetSlot : draftedRosterSlots.findIndex(p => p === null);
+    if (targetIdx === -1) {
       alert(t('draft.rosterFull'));
       return;
     }
-    const cost = parseSalary(player.salary);
-    if (currentSpent + cost > MAX_BUDGET) {
+    
+    const currentOccupant = draftedRosterSlots[targetIdx];
+    const previousCost = currentOccupant ? parseSalary(currentOccupant.salary) : 0;
+    
+    if (currentSpent - previousCost + cost > MAX_BUDGET) {
       alert(t('draft.budgetExceeded'));
       return;
     }
-    setDraftedPlayers([...draftedPlayers, player]);
+    
+    const newSlots = [...draftedRosterSlots];
+    newSlots[targetIdx] = player;
+    setDraftedRosterSlots(newSlots);
+    
+    // Automatically move to the next empty slot
+    const nextEmpty = newSlots.findIndex(p => p === null);
+    setActiveTargetSlot(nextEmpty !== -1 ? nextEmpty : null);
   };
 
   const handleRelease = (player: any) => {
-    setDraftedPlayers(draftedPlayers.filter(p => p.name !== player.name));
+    const idx = draftedRosterSlots.findIndex(p => p && p.name === player.name);
+    if (idx !== -1) {
+      const newSlots = [...draftedRosterSlots];
+      newSlots[idx] = null;
+      setDraftedRosterSlots(newSlots);
+    }
   };
 
-  const currentStepIndex = draftedPlayers.length;
-  const currentStep = wizardSequence[currentStepIndex];
+  const currentStepIndex = activeTargetSlot !== null ? activeTargetSlot : draftedPlayers.length;
+  const currentStep = activeTargetSlot !== null ? BLUEPRINT_SLOTS[activeTargetSlot] : BLUEPRINT_SLOTS[currentStepIndex];
   
   const currentSuggestedBudget = useMemo(() => {
     if (!currentStep || customBudgets.length === 0) return 0;
@@ -403,7 +454,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
   }, [currentStepIndex, currentStep, customBudgets, currentSpent]);
 
   const wizardCandidates = useMemo(() => {
-    if (!currentStep) return [];
+    if (!currentStep || activeTargetSlot === null) return [];
     
     const isValidForStep = (p: any, stepId: string) => {
       const pPos = p.primaryPosition;
@@ -465,7 +516,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
           ageMod = 1.10;
           ageBonusNotes.push(`+10% ${t('draft.agePrime')}`);
         } else if (p.age >= 34) {
-          const isLateBench = currentStepIndex >= 18;
+          const isLateBench = activeTargetSlot !== null && activeTargetSlot >= 18;
           if (isLateBench && cost <= 3000000) {
             ageBonusNotes.push(`No Penalty (Cheap Vet)`);
           } else {
@@ -510,11 +561,18 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
       const savingsInMillions = (currentSuggestedBudget - cost) / 1000000;
       
       // Luxury Tax Penalty: If a player exceeds the slot's budget, the penalty is 3x harsher.
-      const savingsBonus = savingsInMillions >= 0 
+      let savingsBonus = savingsInMillions >= 0 
         ? savingsInMillions * K_Factor 
         : savingsInMillions * K_Factor * 3;
+        
+      // Cap the extremes so it doesn't break the UI
+      savingsBonus = Math.min(40, Math.max(-60, savingsBonus));
       
-      const cpVal = modifiedScore + savingsBonus;
+      // Ensure cpVal doesn't go negative, but retain sorting resolution for bad values
+      let cpVal = modifiedScore + savingsBonus;
+      if (cpVal <= 0) {
+        cpVal = 1 / (1 - cpVal); 
+      }
 
       return { 
         ...p, 
@@ -527,7 +585,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
         _kFactor: K_Factor
       };
     }).sort((a, b) => b._cpValue - a._cpValue);
-  }, [availablePlayers, currentStep, remainingBudget, rosterPlan, currentStepIndex, t, customArchetypes, customBudgets]);
+  }, [availablePlayers, currentStep, remainingBudget, activeTargetSlot, draftedRosterSlots, t, customArchetypes, customBudgets]);
 
   const SelectionCard = ({ active, onClick, icon, title }: { active: boolean, onClick: () => void, icon: React.ReactNode, title: string }) => (
     <div 
@@ -605,7 +663,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
           </button>
           
           <button 
-            onClick={() => { setDraftedPlayers([]); setWizardPhase('setup'); }} 
+            onClick={() => { setDraftedRosterSlots(Array(22).fill(null)); setWizardPhase('setup'); }} 
             style={{ padding: '8px 16px', background: 'rgba(239, 68, 68, 0.2)', border: 'none', borderRadius: '6px', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}
           >
             <Settings size={16} /> {t('draft.returnClearRoster')}
@@ -614,225 +672,106 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-        
-        {/* Left Panel */}
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {wizardPhase === 'setup' ? (
-            // WIZARD LOBBY SETUP
-            <div className="glass-panel" style={{ padding: '24px', flex: 1 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary-accent)', fontSize: '1.5rem' }}>
-                  <Settings size={28} /> {t('draft.setupPhase')} - Step {setupStep} of 3
-                </h3>
-              </div>
-
-              {setupStep === 1 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', minHeight: '400px' }}>
-                  <div style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                    <h4 style={{ margin: '0 0 16px 0' }}>1. 建立名單配置 (Roster Blueprint)</h4>
-                    <select className="filter-select" style={{ padding: '12px 16px', fontSize: '1.1rem', width: '100%', marginBottom: '16px' }} value={rosterPlan} onChange={e => {
-                      setRosterPlan(e.target.value as any);
-                      if(draftedPlayers.length > 0 && window.confirm('Changing blueprint will clear your roster. Proceed?')) {
-                        setDraftedPlayers([]);
-                      }
-                    }}>
-                      <option value="planA">{t('draft.planA')} - 10 Pitchers / 12 Batters</option>
-                      <option value="planB">{t('draft.planB')} - 11 Pitchers / 11 Batters</option>
-                      <option value="planC">{t('draft.planC')} - 12 Pitchers / 10 Batters</option>
-                      <option value="planD">{t('draft.planD')} - 9 Pitchers / 13 Batters</option>
-                    </select>
-                    
-                    {/* Custom Counters */}
-                    {Object.keys(customRosterCounts).length > 0 && (() => {
-                      const targetP = rosterPlan === 'planA' ? 10 : rosterPlan === 'planB' ? 11 : rosterPlan === 'planC' ? 12 : 9;
-                      const targetB = 22 - targetP;
-                      const currentP = PITCHER_POS.reduce((sum, pos) => sum + (customRosterCounts[pos] || 0), 0);
-                      const currentB = BATTER_POS.reduce((sum, pos) => sum + (customRosterCounts[pos] || 0), 0);
+      
+      {wizardPhase === 'setup' ? (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px' }}>
+          <div className="glass-panel" style={{ padding: '24px', flex: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary-accent)', fontSize: '1.5rem' }}>
+                <Settings size={28} /> {t('draft.setupPhase')} - Step {setupStep} of 2
+              </h3>
+            </div>
+            {setupStep === 1 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', minHeight: '400px' }}>
+                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', flex: 1, overflowY: 'auto' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      1. {t('draft.posArchetypes')}
+                    </h4>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button onClick={() => setArchetypeFilter('all')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'all' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>全部</button>
+                      <button onClick={() => setArchetypeFilter('pitchers')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'pitchers' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>投手</button>
+                      <button onClick={() => setArchetypeFilter('hitters')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'hitters' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>野手</button>
+                    </div>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    {BLUEPRINT_SLOTS.map((step, idx) => {
+                      const isPitcher = ['SP', 'RP', 'CP'].includes(step.id);
+                      if (archetypeFilter === 'pitchers' && !isPitcher) return null;
+                      if (archetypeFilter === 'hitters' && isPitcher) return null;
                       
-                      const handleCountChange = (pos: string, delta: number) => {
-                        setCustomRosterCounts(prev => {
-                          const current = prev[pos] || 0;
-                          const next = current + delta;
-                          const min = ROSTER_LIMITS[pos]?.min || 0;
-                          if (next < min) return prev;
-                          return { ...prev, [pos]: next };
-                        });
-                      };
-
+                      const w = customArchetypes[idx] || DEFAULT_ARCHETYPES[step.id] || (isPitcher ? { velo: 34, junk: 33, acc: 33 } : { off: 34, def: 33, spd: 33 });
+                      
                       return (
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginTop: '16px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
-                          {/* Pitchers Column */}
-                          <div>
-                            <h5 style={{ margin: '0 0 12px 0', color: currentP === targetP ? '#10b981' : '#ef4444' }}>
-                              Pitchers ({currentP} / {targetP})
-                            </h5>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                              {PITCHER_POS.map(pos => (
-                                <div key={pos} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)', padding: '6px 12px', borderRadius: '4px' }}>
-                                  <span>{t(`draft.pos_${pos}`)}</span>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <button onClick={() => handleCountChange(pos, -1)} disabled={(customRosterCounts[pos] || 0) <= (ROSTER_LIMITS[pos]?.min || 0)} style={{ background: 'rgba(239,68,68,0.2)', border: 'none', color: '#ef4444', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>-</button>
-                                    <span style={{ width: '20px', textAlign: 'center', fontWeight: 'bold' }}>{customRosterCounts[pos] || 0}</span>
-                                    <button onClick={() => handleCountChange(pos, 1)} style={{ background: 'rgba(16,185,129,0.2)', border: 'none', color: '#10b981', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
-                                  </div>
-                                </div>
-                              ))}
+                        <div key={idx} style={{ background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem' }}>
+                          <div style={{ fontWeight: 'bold', color: '#3b82f6', marginBottom: '8px', fontSize: '1rem' }}>{idx + 1}. {t(`draft.pos_${step.id}`)}</div>
+                          {isPitcher ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archVelo')}</label>
+                                <input type="range" min="0" max="100" value={w.velo} onChange={e => handleArchetypeChange(idx, 'pitcher', 'velo', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#ef4444' }} />
+                                <span style={{ width: '24px', textAlign: 'right', color: '#ef4444', fontWeight: 'bold' }}>{w.velo}</span>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archJunk')}</label>
+                                <input type="range" min="0" max="100" value={w.junk} onChange={e => handleArchetypeChange(idx, 'pitcher', 'junk', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#f59e0b' }} />
+                                <span style={{ width: '24px', textAlign: 'right', color: '#f59e0b', fontWeight: 'bold' }}>{w.junk}</span>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archAcc')}</label>
+                                <input type="range" min="0" max="100" value={w.acc} onChange={e => handleArchetypeChange(idx, 'pitcher', 'acc', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#10b981' }} />
+                                <span style={{ width: '24px', textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>{w.acc}</span>
+                              </div>
+                              <div style={{ display: 'flex', height: '6px', borderRadius: '3px', overflow: 'hidden', marginTop: '4px' }}>
+                                <div style={{ width: `${(w.velo / ((w.velo + w.junk + w.acc) || 1)) * 100}%`, background: '#ef4444' }} />
+                                <div style={{ width: `${(w.junk / ((w.velo + w.junk + w.acc) || 1)) * 100}%`, background: '#f59e0b' }} />
+                                <div style={{ width: `${(w.acc / ((w.velo + w.junk + w.acc) || 1)) * 100}%`, background: '#10b981' }} />
+                              </div>
                             </div>
-                          </div>
-                          {/* Batters Column */}
-                          <div>
-                            <h5 style={{ margin: '0 0 12px 0', color: currentB === targetB ? '#10b981' : '#ef4444' }}>
-                              Batters ({currentB} / {targetB})
-                            </h5>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '250px', overflowY: 'auto', paddingRight: '8px' }}>
-                              {BATTER_POS.map(pos => (
-                                <div key={pos} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)', padding: '6px 12px', borderRadius: '4px' }}>
-                                  <span>{t(`draft.pos_${pos}`)}</span>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <button onClick={() => handleCountChange(pos, -1)} disabled={(customRosterCounts[pos] || 0) <= (ROSTER_LIMITS[pos]?.min || 0)} style={{ background: 'rgba(239,68,68,0.2)', border: 'none', color: '#ef4444', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>-</button>
-                                    <span style={{ width: '20px', textAlign: 'center', fontWeight: 'bold' }}>{customRosterCounts[pos] || 0}</span>
-                                    <button onClick={() => handleCountChange(pos, 1)} style={{ background: 'rgba(16,185,129,0.2)', border: 'none', color: '#10b981', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
-                                  </div>
-                                </div>
-                              ))}
+                          ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archOff')}</label>
+                                <input type="range" min="0" max="100" value={w.off} onChange={e => handleArchetypeChange(idx, 'hitter', 'off', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#ef4444' }} />
+                                <span style={{ width: '24px', textAlign: 'right', color: '#ef4444', fontWeight: 'bold' }}>{w.off}</span>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archDef')}</label>
+                                <input type="range" min="0" max="100" value={w.def} onChange={e => handleArchetypeChange(idx, 'hitter', 'def', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#3b82f6' }} />
+                                <span style={{ width: '24px', textAlign: 'right', color: '#3b82f6', fontWeight: 'bold' }}>{w.def}</span>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archSpd')}</label>
+                                <input type="range" min="0" max="100" value={w.spd} onChange={e => handleArchetypeChange(idx, 'hitter', 'spd', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#10b981' }} />
+                                <span style={{ width: '24px', textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>{w.spd}</span>
+                              </div>
+                              <div style={{ display: 'flex', height: '6px', borderRadius: '3px', overflow: 'hidden', marginTop: '4px' }}>
+                                <div style={{ width: `${(w.off / ((w.off + w.def + w.spd) || 1)) * 100}%`, background: '#ef4444' }} />
+                                <div style={{ width: `${(w.def / ((w.off + w.def + w.spd) || 1)) * 100}%`, background: '#3b82f6' }} />
+                                <div style={{ width: `${(w.spd / ((w.off + w.def + w.spd) || 1)) * 100}%`, background: '#10b981' }} />
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
                       );
-                    })()}
-                  </div>
-
-                  <div style={{ flex: 1 }} />
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    {(() => {
-                      const targetP = rosterPlan === 'planA' ? 10 : rosterPlan === 'planB' ? 11 : rosterPlan === 'planC' ? 12 : 9;
-                      const targetB = 22 - targetP;
-                      const currentP = PITCHER_POS.reduce((sum, pos) => sum + (customRosterCounts[pos] || 0), 0);
-                      const currentB = BATTER_POS.reduce((sum, pos) => sum + (customRosterCounts[pos] || 0), 0);
-                      const isValid = currentP === targetP && currentB === targetB;
-                      
-                      return (
-                        <button 
-                          onClick={() => setSetupStep(2)} 
-                          className="btn-primary" 
-                          disabled={!isValid}
-                          style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', gap: '8px', opacity: isValid ? 1 : 0.5 }}
-                        >
-                          {isValid ? '下一步：自訂戰術版' : '請確認名單總數'} <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
-                        </button>
-                      );
-                    })()}
+                    })}
                   </div>
                 </div>
-              )}
-
-              {setupStep === 2 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', minHeight: '400px' }}>
-                  {/* Custom Positional Archetypes Editor */}
-                  <div style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', flex: 1, overflowY: 'auto' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                      <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        2. {t('draft.posArchetypes')}
-                      </h4>
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        <button onClick={() => setArchetypeFilter('all')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'all' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>全部</button>
-                        <button onClick={() => setArchetypeFilter('pitchers')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'pitchers' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>投手</button>
-                        <button onClick={() => setArchetypeFilter('hitters')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'hitters' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>野手</button>
-                      </div>
-                    </div>
-                    
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                      {wizardSequence.map((step, idx) => {
-                        const isPitcher = ['SP', 'RP', 'CP'].includes(step.id);
-                        if (archetypeFilter === 'pitchers' && !isPitcher) return null;
-                        if (archetypeFilter === 'hitters' && isPitcher) return null;
-                        
-                        const w = customArchetypes[idx] || (isPitcher ? { velo: 34, junk: 33, acc: 33 } : { off: 34, def: 33, spd: 33 });
-                        
-                        return (
-                          <div key={idx} style={{ background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem' }}>
-                            <div style={{ fontWeight: 'bold', color: '#3b82f6', marginBottom: '8px', fontSize: '1rem' }}>{idx + 1}. {t(`draft.pos_${step.id}`)}</div>
-                            {isPitcher ? (
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                {/* Velo Slider */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archVelo')}</label>
-                                  <input type="range" min="0" max="100" value={w.velo} onChange={e => handleArchetypeChange(idx, 'pitcher', 'velo', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#ef4444' }} />
-                                  <span style={{ width: '24px', textAlign: 'right', color: '#ef4444', fontWeight: 'bold' }}>{w.velo}</span>
-                                </div>
-                                {/* Junk Slider */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archJunk')}</label>
-                                  <input type="range" min="0" max="100" value={w.junk} onChange={e => handleArchetypeChange(idx, 'pitcher', 'junk', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#f59e0b' }} />
-                                  <span style={{ width: '24px', textAlign: 'right', color: '#f59e0b', fontWeight: 'bold' }}>{w.junk}</span>
-                                </div>
-                                {/* Acc Slider */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archAcc')}</label>
-                                  <input type="range" min="0" max="100" value={w.acc} onChange={e => handleArchetypeChange(idx, 'pitcher', 'acc', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#10b981' }} />
-                                  <span style={{ width: '24px', textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>{w.acc}</span>
-                                </div>
-                                {/* Progress Bar */}
-                                <div style={{ display: 'flex', height: '6px', borderRadius: '3px', overflow: 'hidden', marginTop: '4px' }}>
-                                  <div style={{ width: `${(w.velo / ((w.velo + w.junk + w.acc) || 1)) * 100}%`, background: '#ef4444' }} title="Velo %" />
-                                  <div style={{ width: `${(w.junk / ((w.velo + w.junk + w.acc) || 1)) * 100}%`, background: '#f59e0b' }} title="Junk %" />
-                                  <div style={{ width: `${(w.acc / ((w.velo + w.junk + w.acc) || 1)) * 100}%`, background: '#10b981' }} title="Acc %" />
-                                </div>
-                              </div>
-                            ) : (
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                {/* Off Slider */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archOff')}</label>
-                                  <input type="range" min="0" max="100" value={w.off} onChange={e => handleArchetypeChange(idx, 'hitter', 'off', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#ef4444' }} />
-                                  <span style={{ width: '24px', textAlign: 'right', color: '#ef4444', fontWeight: 'bold' }}>{w.off}</span>
-                                </div>
-                                {/* Def Slider */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archDef')}</label>
-                                  <input type="range" min="0" max="100" value={w.def} onChange={e => handleArchetypeChange(idx, 'hitter', 'def', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#3b82f6' }} />
-                                  <span style={{ width: '24px', textAlign: 'right', color: '#3b82f6', fontWeight: 'bold' }}>{w.def}</span>
-                                </div>
-                                {/* Spd Slider */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <label style={{ width: '40px', fontSize: '0.75rem', color: '#9ca3af' }}>{t('draft.archSpd')}</label>
-                                  <input type="range" min="0" max="100" value={w.spd} onChange={e => handleArchetypeChange(idx, 'hitter', 'spd', Number(e.target.value))} style={{ flex: 1, cursor: 'pointer', accentColor: '#10b981' }} />
-                                  <span style={{ width: '24px', textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>{w.spd}</span>
-                                </div>
-                                {/* Progress Bar */}
-                                <div style={{ display: 'flex', height: '6px', borderRadius: '3px', overflow: 'hidden', marginTop: '4px' }}>
-                                  <div style={{ width: `${(w.off / ((w.off + w.def + w.spd) || 1)) * 100}%`, background: '#ef4444' }} title="Offense %" />
-                                  <div style={{ width: `${(w.def / ((w.off + w.def + w.spd) || 1)) * 100}%`, background: '#3b82f6' }} title="Defense %" />
-                                  <div style={{ width: `${(w.spd / ((w.off + w.def + w.spd) || 1)) * 100}%`, background: '#10b981' }} title="Speed %" />
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <button onClick={() => setSetupStep(1)} style={{ padding: '12px 24px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '6px', color: 'white', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                      <ArrowLeft size={16} /> 上一步
-                    </button>
-                    <button onClick={() => setSetupStep(3)} className="btn-primary" style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      下一步：預算分配 <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
-                    </button>
-                  </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <button onClick={() => setSetupStep(2)} className="btn-primary" style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
+                    下一步：預算分配 <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
+                  </button>
                 </div>
-              )}
-
-              {setupStep === 3 && (
+              </div>
+            )}
+            {setupStep === 2 && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', minHeight: '400px' }}>
                   
                   {/* Target Payroll Slider */}
                   <div style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                       <h4 style={{ margin: 0, color: '#10b981', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <DollarSign size={20} /> 3. {t('draft.targetPayroll')} ({formatMoney(targetPayroll)})
+                        <DollarSign size={20} /> 2. {t('draft.targetPayroll')} ({formatMoney(targetPayroll)})
                       </h4>
                       {/* Recommended Budget Button */}
                       {targetPayroll !== recommendedPayroll && (
@@ -930,7 +869,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                   </div>
 
                   <div style={{ overflowY: 'auto', maxHeight: '400px', display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: '8px' }}>
-                    {wizardSequence && wizardSequence.map((step, idx) => {
+                    {wizardSequence && BLUEPRINT_SLOTS.map((step, idx) => {
                       const isPitcher = PITCHER_POS.includes(step.id);
                       if (budgetFilter === 'pitchers' && !isPitcher) return null;
                       if (budgetFilter === 'hitters' && isPitcher) return null;
@@ -963,7 +902,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                     </button>
                     <button 
                       disabled={totalAllocated > targetPayroll}
-                      onClick={() => setWizardPhase('drafting')} 
+                      onClick={() => { setWizardPhase('drafting'); setActiveTargetSlot(0); }} 
                       className="btn-primary" 
                       style={{ padding: '12px 24px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', fontSize: '1.2rem', opacity: totalAllocated > targetPayroll ? 0.5 : 1 }}
                     >
@@ -972,137 +911,281 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                   </div>
                 </div>
               )}
-            </div>
-          ) : (
-            // WIZARD LIVE DRAFTING PANEL
-            <div className="glass-panel" style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-              {currentStep ? (
-                <>
-                  <div style={{ marginBottom: '24px', background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '8px', borderLeft: '4px solid var(--primary-accent)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                      <span style={{ color: 'var(--primary-accent)', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '0.85rem' }}>
-                        {t('draft.stepProgress')} {currentStepIndex + 1} / 22
-                      </span>
-                      <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                        {t('draft.budgetSaved')}: <span style={{ color: currentSuggestedBudget - (customBudgets[currentStepIndex]||0) >= 0 ? '#10b981' : '#ef4444' }}>{formatMoney(currentSuggestedBudget - (customBudgets[currentStepIndex]||0))}</span>
-                      </span>
-                    </div>
-                    <h3 style={{ margin: '0 0 8px 0', fontSize: '1.5rem' }}>{t('draft.currentGoal')} <span style={{ color: '#3b82f6' }}>{t(`draft.pos_${currentStep.id}`)}</span></h3>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>{t('draft.targetBudget')}:</span>
-                      <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#10b981' }}>{formatMoney(currentSuggestedBudget)}</span>
-                    </div>
+          </div>
+        </div>
+      ) : (
+        // WIZARD LIVE DRAFTING PANEL (SANDBOX MODE)
+        <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+          
+          {/* Left: Field Map & Draft Slots */}
+          <div className="glass-panel" style={{ flex: '1.5', minWidth: '400px', display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px' }}>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+               <h3 style={{ margin: 0, color: 'var(--primary-accent)' }}>{t('draft.roster')} ({draftedPlayers.length} / 22)</h3>
+               <div style={{ display: 'flex', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', padding: '4px' }}>
+                 <button 
+                   onClick={() => setIsFieldMapOpen(true)}
+                   style={{ background: 'var(--primary-color)', border: 'none', color: '#fff', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                 >
+                   <Map size={16}/> 查看球場
+                 </button>
+                 <button 
+                   onClick={() => setIsTraitsModalOpen(true)}
+                   style={{ background: 'var(--secondary-color)', border: 'none', color: '#fff', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '8px' }}
+                 >
+                   <Activity size={16}/> 團隊屬性
+                 </button>
+               </div>
+             </div>
+             
+             {/* HUD */}
+             {activeTargetSlot !== null && BLUEPRINT_SLOTS[activeTargetSlot] && (
+               <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #3b82f6', display: 'flex', gap: '16px' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Target Role</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#3b82f6' }}>{BLUEPRINT_SLOTS[activeTargetSlot].id}</div>
                   </div>
-
-                  <div style={{ background: 'rgba(59, 130, 246, 0.1)', borderLeft: '4px solid #3b82f6', padding: '12px', borderRadius: '0 8px 8px 0', marginBottom: '16px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)', lineHeight: '1.5' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#3b82f6', fontWeight: 'bold', marginBottom: '6px' }}>
-                      <Lightbulb size={16} /> CP 值 (優先度) 演算法說明
-                    </div>
-                    <div><strong>🎯 Base (基礎):</strong> 根據「自訂守位期望配比 (Positional Strategy Board)」計算的能力值。</div>
-                    <div><strong>📈 Adj (加權):</strong> 結合球員年齡 (超級新秀/衰退) 與多守位等特質後的真實戰力。</div>
-                    <div><strong>💰 Bonus (財務):</strong> 低於預算將獲得加分；若超支，將面臨高達 3 倍的豪華稅扣分！</div>
-                    <div><strong>🔍 Focus (期望):</strong> 系統自動判定此順位該找 <strong>Stars (容忍超支找球星)</strong> 還是 <strong>Scrubs (嚴格控管找綠葉)</strong>。</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Slot Budget</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#f59e0b' }}>{formatMoney(customBudgets[activeTargetSlot] || 0)}</div>
                   </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Total Available</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#10b981' }}>{formatMoney(currentSuggestedBudget)}</div>
+                  </div>
+               </div>
+             )}
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', maxHeight: '550px' }}>
-                    {wizardCandidates.slice(0, 50).map(p => (
-                      <div key={p.name} style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                            <div className={`rating-badge rating-${p.rating?.replace('+', 'plus').replace('-', 'minus') || 'none'}`} style={{ minWidth: '40px', textAlign: 'center' }}>{p.rating}</div>
-                            <div>
-                              <div style={{ fontWeight: 'bold', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                {p.name} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{p.age} yrs</span>
-                                {p._bonusNotes.length > 0 && <span style={{ fontSize: '0.75rem', background: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', padding: '2px 6px', borderRadius: '4px' }}>{p._bonusNotes.join(', ')}</span>}
-                              </div>
-                              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                                {p.salary} • <span style={{ color: '#f59e0b', fontWeight: 'bold' }}>{t('draft.cpValue')}: {p._cpValue.toFixed(1)}</span>
-                              </div>
-                              <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>
-                                Pos: {p.primaryPosition} {p.secondaryPositions?.length ? `(+ ${p.secondaryPositions.join(', ')})` : ''}
-                              </div>
+             {/* 22 Slots Grid */}
+             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '12px', overflowY: 'auto', maxHeight: '500px', paddingRight: '8px' }}>
+               {BLUEPRINT_SLOTS.map((slot, idx) => {
+                 const p = draftedRosterSlots[idx];
+                 const isActive = activeTargetSlot === idx;
+                 
+                 return (
+                   <div 
+                     key={idx}
+                     onClick={() => setActiveTargetSlot(idx)}
+                     style={{
+                       background: isActive ? 'var(--primary-accent)' : 'rgba(0,0,0,0.3)',
+                       border: `2px ${!p ? 'dashed' : 'solid'} ${isActive ? '#facc15' : (p ? 'var(--primary-accent)' : 'rgba(255,255,255,0.2)')}`,
+                       borderRadius: '8px', padding: '12px', cursor: 'pointer',
+                       boxShadow: isActive ? '0 0 15px rgba(250, 204, 21, 0.4)' : 'none',
+                       transition: 'all 0.2s'
+                     }}
+                   >
+                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                       <span style={{ fontWeight: 'bold', color: isActive ? '#fff' : 'var(--text-muted)' }}>
+                         {slot.id}
+                       </span>
+                       {p && (
+                         <button 
+                           onClick={(e) => { e.stopPropagation(); handleRelease(p); }}
+                           style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 0 }}
+                         ><X size={14}/></button>
+                       )}
+                     </div>
+                     
+                     {p ? (
+                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                         <div style={{ fontWeight: 'bold', fontSize: '0.9rem', color: isActive ? '#fff' : 'var(--primary-accent)' }}>
+                           {p.name.split(' ')[1] || p.name}
+                         </div>
+                         <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', display: 'flex', justifyContent: 'space-between' }}>
+                           <span>{p.rating}</span>
+                           <span style={{ color: parseSalary(p.salary) > (customBudgets[idx] || 0) ? '#ef4444' : '#10b981' }}>
+                             {formatMoney(parseSalary(p.salary))}
+                           </span>
+                         </div>
+                       </div>
+                     ) : (
+                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', opacity: 0.5 }}>
+                         <UserPlus size={20} />
+                         <span style={{ fontSize: '0.8rem' }}>{formatMoney(customBudgets[idx] || 0)}</span>
+                       </div>
+                     )}
+                   </div>
+                 );
+               })}
+             </div>
+          </div>
+          
+          {/* Right: Candidate List */}
+          <div className="glass-panel" style={{ flex: '2', minWidth: '400px', display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px' }}>
+            <h3 style={{ margin: 0, color: 'var(--primary-accent)' }}>Candidates</h3>
+            
+            {activeTargetSlot === null ? (
+               <div style={{ padding: '48px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
+                 Select a slot on the left to view recommended candidates.
+               </div>
+            ) : (
+               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', maxHeight: '700px', paddingRight: '8px' }}>
+                  {wizardCandidates.slice(0, 50).map(p => (
+                    <div key={p.name} onClick={() => setViewingPlayer({ player: p, archetype: customArchetypes[activeTargetSlot] })} style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', transition: 'background 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'} onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                          <div className={`rating-badge rating-${p.rating?.replace('+', 'plus').replace('-', 'minus') || 'none'}`} style={{ minWidth: '40px', textAlign: 'center' }}>{p.rating}</div>
+                          <div>
+                            <div style={{ fontWeight: 'bold', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              {p.name} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{p.age} yrs</span>
+                              {p._bonusNotes.length > 0 && <span style={{ fontSize: '0.75rem', background: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', padding: '2px 6px', borderRadius: '4px' }}>{p._bonusNotes.join(', ')}</span>}
+                            </div>
+                            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                              {p.salary} • <span style={{ color: '#f59e0b', fontWeight: 'bold' }}>{t('draft.cpValue')}: {p._cpValue.toFixed(1)}</span>
+                            </div>
+                            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>
+                              Pos: {p.primaryPosition} {p.secondaryPositions?.length ? `(+ ${p.secondaryPositions.join(', ')})` : ''}
                             </div>
                           </div>
-                          <button onClick={() => handleDraft(p)} className="btn-primary" style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
+                          <button onClick={(e) => { e.stopPropagation(); handleDraft(p); }} className="btn-primary" style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '8px', width: '100%', justifyContent: 'center' }}>
                             <UserPlus size={16} /> {t('draft.draftPlayer')}
                           </button>
-                        </div>
-                        
-                        {/* CP Breakdown Panel */}
-                        <div style={{ background: 'rgba(0,0,0,0.3)', padding: '8px 12px', borderRadius: '6px', fontSize: '0.8rem', display: 'flex', flexWrap: 'wrap', gap: '12px', color: 'rgba(255,255,255,0.7)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                          <div style={{ color: 'var(--primary-accent)', fontWeight: 'bold' }}>{t('draft.cpBreakdown')}:</div>
-                          <div>🎯 Base Score: {p._baseScore}</div>
-                          {p._ageBonusNotes.map((note: string, i: number) => (
-                            <div key={`age-${i}`} style={{ color: note.includes('+') ? '#10b981' : note.includes('-') ? '#ef4444' : '#9ca3af' }}>👶 Age: {note}</div>
-                          ))}
-                          {p._bonusNotes.map((note: string, i: number) => (
-                            <div key={`trait-${i}`} style={{ color: '#f59e0b' }}>✨ Trait: {note}</div>
-                          ))}
-                          <div>📈 Adj Score: {p._modifiedScore.toFixed(1)}</div>
-                          <div style={{ color: p._savingsBonus >= 0 ? '#10b981' : '#ef4444' }}>
-                            💰 Savings Bonus: {p._savingsBonus >= 0 ? '+' : ''}{p._savingsBonus.toFixed(1)} 
-                            <span style={{ opacity: 0.5, marginLeft: '4px' }}>(Focus: {p._kFactor < 4 ? 'Stars' : 'Scrubs'})</span>
-                          </div>
+                          <button 
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              if (comparePlayer && comparePlayer.name !== p.name) {
+                                 setViewingPlayer({ player: comparePlayer, player2: p, archetype: customArchetypes[activeTargetSlot] });
+                              } else {
+                                 setComparePlayer(p);
+                              }
+                            }} 
+                            style={{ padding: '4px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', background: comparePlayer?.name === p.name ? 'var(--primary-color)' : 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', width: '100%' }}
+                          >
+                            <Scale size={12} /> {comparePlayer?.name === p.name ? '比較中...' : '比較 (Compare)'}
+                          </button>
                         </div>
                       </div>
-                    ))}
-                    {wizardCandidates.length === 0 && <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No suitable players found for this role.</p>}
-                  </div>
-                </>
-              ) : (
-                <div style={{ textAlign: 'center', padding: '48px', color: 'var(--primary-accent)' }}>
-                  <CheckCircle size={64} style={{ marginBottom: '16px' }} />
-                  <h2>{t('draft.wizardComplete')}</h2>
-                  <button onClick={() => setWizardPhase('setup')} className="btn-primary" style={{ marginTop: '16px' }}>
-                    Restart Draft Wizard
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Right Panel: Drafted Roster */}
-        <div className="glass-panel" style={{ padding: '24px' }}>
-          <h3 style={{ margin: '0 0 16px 0', display: 'flex', justifyContent: 'space-between' }}>
-            <span>{t('draft.roster')}</span>
-            <span style={{ color: 'var(--primary-accent)' }}>{draftedPlayers.length} / 22</span>
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', overflowY: 'auto', maxHeight: '750px' }}>
-            {draftedPlayers.map((p, idx) => {
-               const stepLabel = t(`draft.pos_${wizardSequence[idx]?.id}`);
-               
-               return (
-                <div key={`drafted-${p.name}-${idx}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(0,0,0,0.2)', borderRadius: '6px', borderLeft: '4px solid var(--primary-color)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ color: 'rgba(255,255,255,0.3)', width: '24px' }}>{idx + 1}.</span>
-                    <div className={`rating-badge rating-${p.rating?.replace('+', 'plus').replace('-', 'minus') || 'none'}`} style={{ minWidth: '40px', textAlign: 'center' }}>{p.rating}</div>
-                    <div>
-                      <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        {p.name} <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>{p.age}y</span>
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                        {stepLabel ? <span style={{ color: '#3b82f6', marginRight: '8px' }}>[{stepLabel}]</span> : null}
-                        {renderPositionBadge(p.primaryPosition)} • {p.salary}
+                      
+                      <div style={{ background: 'rgba(0,0,0,0.3)', padding: '8px 12px', borderRadius: '6px', fontSize: '0.8rem', display: 'flex', flexWrap: 'wrap', gap: '12px', color: 'rgba(255,255,255,0.7)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                        <div style={{ color: 'var(--primary-accent)', fontWeight: 'bold' }}>{t('draft.cpBreakdown')}:</div>
+                        <div>🎯 Base Score: {p._baseScore}</div>
+                        {p._ageBonusNotes.map((note, i) => (
+                          <div key={`age-${i}`} style={{ color: note.includes('+') ? '#10b981' : note.includes('-') ? '#ef4444' : '#9ca3af' }}>👶 Age: {note}</div>
+                        ))}
+                        {p._bonusNotes.map((note, i) => (
+                          <div key={`trait-${i}`} style={{ color: '#f59e0b' }}>✨ Trait: {note}</div>
+                        ))}
+                        <div>📈 Adj Score: {p._modifiedScore.toFixed(1)}</div>
+                        <div style={{ color: p._savingsBonus >= 0 ? '#10b981' : '#ef4444' }}>
+                          {p._savingsBonus >= 0 ? '💰 省錢紅利 (Bonus)' : '🛑 超支懲罰 (Penalty)'}: {p._savingsBonus >= 0 ? '+' : ''}{p._savingsBonus.toFixed(1)} 
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <button onClick={() => handleRelease(p)} style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#ef4444', padding: '6px', borderRadius: '4px', cursor: 'pointer' }}>
-                    <UserMinus size={16} />
-                  </button>
-                </div>
-              );
-            })}
-            {draftedPlayers.length === 0 && (
-              <div style={{ padding: '48px', textAlign: 'center', color: 'rgba(255,255,255,0.2)' }}>
-                <ShoppingCart size={48} style={{ marginBottom: '16px' }} />
-                <div>Your roster is empty. Start drafting!</div>
-              </div>
+                  ))}
+                  {wizardCandidates.length === 0 && <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No suitable players found for this role.</p>}
+               </div>
             )}
           </div>
         </div>
-        
-      </div>
+      )}
+      {/* Player Details Modal */}
+      {viewingPlayer && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }} onClick={() => { setViewingPlayer(null); setComparePlayer(null); }}>
+          <div className="glass-panel" style={{ padding: '24px', width: viewingPlayer.player2 ? '800px' : '500px', maxWidth: '95%', position: 'relative', overflowY: 'auto', maxHeight: '90vh' }} onClick={e => e.stopPropagation()}>
+            <button 
+              onClick={() => { setViewingPlayer(null); setComparePlayer(null); }}
+              style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', cursor: 'pointer', padding: '4px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}
+            ><X size={20}/></button>
+            <PlayerRadar player={viewingPlayer.player} player2={viewingPlayer.player2} targetArchetype={viewingPlayer.archetype} />
+          </div>
+        </div>
+      )}
+
+      {/* Compare Banner HUD */}
+      {comparePlayer && !viewingPlayer && (
+        <div style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(245, 158, 11, 0.95)', color: '#fff', padding: '12px 24px', borderRadius: '30px', display: 'flex', alignItems: 'center', gap: '16px', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', zIndex: 900, backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Scale size={18} />
+            <span style={{ fontWeight: 'bold' }}>Comparing: {comparePlayer.name}</span>
+          </div>
+          <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>Select another player to compare.</div>
+          <button onClick={() => setComparePlayer(null)} style={{ background: 'rgba(0,0,0,0.3)', border: 'none', color: '#fff', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+            <X size={14}/>
+          </button>
+        </div>
+      )}
+
+    
+      {/* Team Traits Modal */}
+      {isTraitsModalOpen && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1050 }} onClick={() => setIsTraitsModalOpen(false)}>
+          <div className="glass-panel" style={{ padding: '32px', width: '800px', maxWidth: '95%', position: 'relative', maxHeight: '85vh', display: 'flex', flexDirection: 'column' }} onClick={e => e.stopPropagation()}>
+            <button 
+              onClick={() => setIsTraitsModalOpen(false)}
+              style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}
+            ><X size={20}/></button>
+            <h2 style={{ marginTop: 0, marginBottom: '24px', color: 'var(--primary-accent)', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <Activity size={24}/> 團隊屬性數量統整 (Team Traits Summary)
+            </h2>
+            
+            <div style={{ display: 'flex', gap: '24px', flex: 1, overflow: 'hidden' }}>
+              {/* Chemistry Column */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(0,0,0,0.2)', padding: '20px', borderRadius: '12px', overflowY: 'auto' }}>
+                <h3 style={{ margin: 0, color: '#3b82f6', borderBottom: '1px solid rgba(59,130,246,0.3)', paddingBottom: '8px' }}>🧪 球隊化學效應 (Chemistry)</h3>
+                {teamChemistryCount.length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {teamChemistryCount.map(([chem, count]) => (
+                      <div key={chem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '10px 16px', borderRadius: '8px' }}>
+                        <span style={{ fontWeight: 'bold' }}>{t(`chemistry.${chem}`) || chem}</span>
+                        <span style={{ background: '#3b82f6', color: '#fff', padding: '2px 10px', borderRadius: '12px', fontWeight: 'bold', fontSize: '0.9rem' }}>{count}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '20px' }}>尚未選入任何球員</div>
+                )}
+              </div>
+              
+              {/* Traits Column */}
+              <div style={{ flex: 1.5, display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(0,0,0,0.2)', padding: '20px', borderRadius: '12px', overflowY: 'auto' }}>
+                <h3 style={{ margin: 0, color: '#f59e0b', borderBottom: '1px solid rgba(245,158,11,0.3)', paddingBottom: '8px' }}>✨ 球員特殊能力 (Traits)</h3>
+                {teamTraitsCount.length > 0 ? (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    {teamTraitsCount.map(([trait, count]) => (
+                      <div key={trait} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '10px 16px', borderRadius: '8px' }}>
+                        <span style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{t(`traits.${trait}`) || trait}</span>
+                        <span style={{ background: '#f59e0b', color: '#fff', padding: '2px 10px', borderRadius: '12px', fontWeight: 'bold', fontSize: '0.9rem' }}>{count}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '20px' }}>尚未選入具有特殊能力的球員</div>
+                )}
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      )}
+
+      {/* Field Map Modal */}
+      {isFieldMapOpen && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1050 }} onClick={() => setIsFieldMapOpen(false)}>
+          <div className="glass-panel" style={{ padding: '24px', width: '900px', maxWidth: '95%', position: 'relative' }} onClick={e => e.stopPropagation()}>
+            <button 
+              onClick={() => setIsFieldMapOpen(false)}
+              style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', cursor: 'pointer', padding: '4px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}
+            ><X size={20}/></button>
+            <h2 style={{ marginTop: 0, marginBottom: '24px', color: 'var(--primary-accent)', textAlign: 'center' }}>球場陣容分佈圖 (Field Roster)</h2>
+            <DraftFieldMap 
+              draftedRosterSlots={draftedRosterSlots}
+              blueprintSlots={BLUEPRINT_SLOTS}
+              activeFilter={activeTargetSlot !== null ? BLUEPRINT_SLOTS[activeTargetSlot]?.id : undefined}
+              onPositionClick={(pos) => {
+                const emptyIdx = BLUEPRINT_SLOTS.findIndex((s, i) => s.id === pos && draftedRosterSlots[i] === null);
+                if (emptyIdx !== -1) setActiveTargetSlot(emptyIdx);
+                else {
+                  const anyIdx = BLUEPRINT_SLOTS.findIndex(s => s.id === pos);
+                  if (anyIdx !== -1) setActiveTargetSlot(anyIdx);
+                }
+                setIsFieldMapOpen(false);
+              }}
+            />
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
