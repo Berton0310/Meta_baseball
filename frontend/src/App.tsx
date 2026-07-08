@@ -8,7 +8,7 @@ import TeamGrid from './components/TeamGrid';
 import TeamRadar from './components/TeamRadar';
 import LineupBuilder from './components/LineupBuilder';
 import TraitsDashboard from './components/TraitsDashboard';
-import ScoutingTactics from './components/ScoutingTactics';
+import PlayerComparison from './components/PlayerComparison';
 import DraftSimulator from './components/DraftSimulator';
 import { calculateTeamStats } from './utils/teamStats';
 import type { TeamStat } from './utils/teamStats';
@@ -16,7 +16,7 @@ import { Languages, Activity, Users, Shield, ListStart, Star, Target, ShoppingCa
 
 function App() {
   const { t, toggleLanguage, language } = useLanguage();
-  const [viewMode, setViewMode] = useState<'players' | 'teams' | 'lineup' | 'traits' | 'scouting' | 'draft'>('players');
+  const [viewMode, setViewMode] = useState<'players' | 'teams' | 'lineup' | 'traits' | 'compare' | 'draft'>('players');
   
   const [selectedPlayer, setSelectedPlayer] = useState<any>(playersData[0]);
   
@@ -143,7 +143,7 @@ function App() {
                 color: viewMode === 'lineup' ? '#fff' : 'rgba(255,255,255,0.6)'
               }}
             >
-              <ListStart size={16} /> {t('app.viewLineup') || 'Lineup Builder'}
+              <ListStart size={16} /> {t('app.viewLineup') || 'Tactical Dashboard'}
             </button>
             <button 
               onClick={() => setViewMode('traits')}
@@ -156,14 +156,14 @@ function App() {
               <Star size={16} /> {t('app.viewTraits') || 'Traits View'}
             </button>
             <button 
-              onClick={() => setViewMode('scouting')}
+              onClick={() => setViewMode('compare')}
               style={{ 
                 padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600,
-                background: viewMode === 'scouting' ? 'var(--primary-color)' : 'transparent',
-                color: viewMode === 'scouting' ? '#fff' : 'rgba(255,255,255,0.6)'
+                background: viewMode === 'compare' ? 'var(--primary-color)' : 'transparent',
+                color: viewMode === 'compare' ? '#fff' : 'rgba(255,255,255,0.6)'
               }}
             >
-              <Target size={16} /> {t('app.viewScouting') || 'Scouting'}
+              <Activity size={16} /> {t('app.viewCompare') || 'Compare'}
             </button>
             <button 
               onClick={() => setViewMode('draft')}
@@ -183,7 +183,7 @@ function App() {
         </button>
       </header>
 
-      <main className="dashboard-grid" style={{ gridTemplateColumns: (viewMode === 'lineup' || viewMode === 'traits' || viewMode === 'scouting' || viewMode === 'draft') ? '1fr' : undefined }}>
+      <main className="dashboard-grid" style={{ gridTemplateColumns: (viewMode === 'lineup' || viewMode === 'traits' || viewMode === 'compare' || viewMode === 'draft') ? '1fr' : undefined }}>
         <section className="main-content">
           {viewMode === 'players' ? (
             <PlayerGrid 
@@ -217,8 +217,8 @@ function App() {
             />
           ) : viewMode === 'traits' ? (
             <TraitsDashboard traits={traitsData} />
-          ) : viewMode === 'scouting' ? (
-            <ScoutingTactics players={playersData} />
+          ) : viewMode === 'compare' ? (
+            <PlayerComparison players={playersData} />
           ) : viewMode === 'draft' ? (
             <DraftSimulator players={playersData} />
           ) : (
@@ -226,7 +226,7 @@ function App() {
           )}
         </section>
 
-        {viewMode !== 'lineup' && viewMode !== 'traits' && viewMode !== 'scouting' && viewMode !== 'draft' && (
+        {viewMode !== 'lineup' && viewMode !== 'traits' && viewMode !== 'compare' && viewMode !== 'draft' && (
           <aside className="sidebar">
             <div className="glass-panel radar-panel" style={{ overflowY: 'auto' }}>
               {viewMode === 'players' ? (

@@ -28,6 +28,13 @@ const getScore = (player: any, strategy: OptimizationStrategy): number => {
   }
 };
 
+export const FULL_ROSTER_POSITIONS = [
+  'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH',
+  'SP1', 'SP2', 'SP3', 'SP4', 'SP5',
+  'RP1', 'RP2', 'RP3', 'RP4', 'RP5', 'CP',
+  'BN1', 'BN2', 'BN3', 'BN4', 'BN5'
+];
+
 export const autoPickLineup = (players: any[], teamName: string, strategy: OptimizationStrategy): Lineup => {
   const teamPlayers = teamName === ALL_TEAMS ? players : players.filter(p => p.team === teamName);
   
@@ -41,13 +48,10 @@ export const autoPickLineup = (players: any[], teamName: string, strategy: Optim
     else appliedStrategy = 'overall';
   }
   
-  // Sort players by score
   const sortedPlayers = [...teamPlayers].sort((a, b) => getScore(b, appliedStrategy as OptimizationStrategy) - getScore(a, appliedStrategy as OptimizationStrategy));
   
-  const lineup: Lineup = {
-    C: null, '1B': null, '2B': null, '3B': null, SS: null, 
-    LF: null, CF: null, RF: null, DH: null, SP: null
-  };
+  const lineup: Lineup = {};
+  for (const pos of FULL_ROSTER_POSITIONS) lineup[pos] = null;
 
   const usedPlayerNames = new Set<string>();
 
@@ -56,11 +60,39 @@ export const autoPickLineup = (players: any[], teamName: string, strategy: Optim
     if (usedPlayerNames.has(player.name)) return false;
 
     if (player.isPitcher) {
-      if (!lineup.SP && (player.primaryPosition === 'SP' || player.primaryPosition.includes('SP'))) {
-        lineup.SP = player;
-        usedPlayerNames.add(player.name);
-        return true;
+      // Try Rotation
+      if (player.primaryPosition.includes('SP')) {
+        for (let i = 1; i <= 5; i++) {
+          if (!lineup[`SP${i}`]) {
+            lineup[`SP${i}`] = player;
+            usedPlayerNames.add(player.name);
+            return true;
+          }
+        }
       }
+      // Try Bullpen
+      if (player.primaryPosition.includes('RP') || player.primaryPosition.includes('CP')) {
+        if (player.primaryPosition.includes('CP') && !lineup.CP) {
+          lineup.CP = player;
+          usedPlayerNames.add(player.name);
+          return true;
+        }
+        for (let i = 1; i <= 5; i++) {
+          if (!lineup[`RP${i}`]) {
+            lineup[`RP${i}`] = player;
+            usedPlayerNames.add(player.name);
+            return true;
+          }
+        }
+      }
+      // If still not assigned, put SP in RP or vice versa
+      for (let i = 1; i <= 5; i++) {
+        if (!lineup[`SP${i}`]) { lineup[`SP${i}`] = player; usedPlayerNames.add(player.name); return true; }
+      }
+      for (let i = 1; i <= 5; i++) {
+        if (!lineup[`RP${i}`]) { lineup[`RP${i}`] = player; usedPlayerNames.add(player.name); return true; }
+      }
+      if (!lineup.CP) { lineup.CP = player; usedPlayerNames.add(player.name); return true; }
       return false;
     }
 
@@ -72,7 +104,7 @@ export const autoPickLineup = (players: any[], teamName: string, strategy: Optim
     }
 
     // Try secondary
-    for (const pos of player.secondaryPositions) {
+    for (const pos of player.secondaryPositions || []) {
       if (!lineup[pos] && lineup[pos] !== undefined) {
         lineup[pos] = player;
         usedPlayerNames.add(player.name);
@@ -87,6 +119,15 @@ export const autoPickLineup = (players: any[], teamName: string, strategy: Optim
       return true;
     }
 
+    // Try Bench
+    for (let i = 1; i <= 5; i++) {
+      if (!lineup[`BN${i}`]) {
+        lineup[`BN${i}`] = player;
+        usedPlayerNames.add(player.name);
+        return true;
+      }
+    }
+
     return false;
   };
 
@@ -95,10 +136,11 @@ export const autoPickLineup = (players: any[], teamName: string, strategy: Optim
     tryAssign(p);
   }
 
-  // Second pass: fill empty spots with whoever is left (just to ensure a complete team if possible)
-  for (const pos of POSITIONS) {
+  // Second pass: fill empty spots with whoever is left
+  for (const pos of FULL_ROSTER_POSITIONS) {
     if (!lineup[pos]) {
-      const available = sortedPlayers.find(p => !usedPlayerNames.has(p.name) && (pos === 'SP' ? p.isPitcher : !p.isPitcher));
+      const isP = pos.includes('SP') || pos.includes('RP') || pos === 'CP';
+      const available = sortedPlayers.find(p => !usedPlayerNames.has(p.name) && (isP ? p.isPitcher : !p.isPitcher));
       if (available) {
         lineup[pos] = available;
         usedPlayerNames.add(available.name);

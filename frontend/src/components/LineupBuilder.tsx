@@ -1,53 +1,42 @@
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import playersData from '../data/players.json';
-import { autoPickLineup, optimizeBattingOrder, ALL_TEAMS } from '../utils/lineupOptimizer';
+import { autoPickLineup, optimizeBattingOrder, ALL_TEAMS, FULL_ROSTER_POSITIONS } from '../utils/lineupOptimizer';
 import type { OptimizationStrategy, Lineup, BattingStrategy } from '../utils/lineupOptimizer';
 import { calculateTeamStats } from '../utils/teamStats';
-import TeamRadar from './TeamRadar';
-import PlayerRadar from './PlayerRadar';
-import { renderPositionBadge } from './PlayerGrid';
-import { Settings2, RefreshCw, UserPlus, Search } from 'lucide-react';
+import { Settings2, RefreshCw, UserPlus, Search, Trash2, Shield, Swords, Users, Target } from 'lucide-react';
+import playerImageMap from '../data/playerImageMap.json';
 
 const TEAM_NAMES = [ALL_TEAMS, ...Array.from(new Set(playersData.map(p => p.team))).filter(Boolean).sort()];
 
-const FIELD_POSITIONS: Record<string, { top: string, left: string }> = {
-  'C': { top: '85%', left: '50%' },
-  '1B': { top: '55%', left: '75%' },
-  '2B': { top: '40%', left: '65%' },
-  '3B': { top: '55%', left: '25%' },
-  'SS': { top: '40%', left: '35%' },
-  'LF': { top: '20%', left: '15%' },
-  'CF': { top: '10%', left: '50%' },
-  'RF': { top: '20%', left: '85%' },
-  'SP': { top: '60%', left: '50%' }
+const ROSTER_GROUPS = {
+  starters: ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'],
+  rotation: ['SP1', 'SP2', 'SP3', 'SP4', 'SP5'],
+  bullpen: ['RP1', 'RP2', 'RP3', 'RP4', 'RP5', 'CP'],
+  bench: ['BN1', 'BN2', 'BN3', 'BN4', 'BN5']
 };
-
-const renderProgressBar = (label: string, value: number, color: string) => (
-  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', width: '75px' }}>
-    <span style={{ fontSize: '9px', width: '20px', color: 'var(--text-muted)' }}>{label}</span>
-    <div style={{ flex: 1, height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
-      <div style={{ width: `${value}%`, height: '100%', background: color }} />
-    </div>
-  </div>
-);
 
 const LineupBuilder: React.FC = () => {
   const { t } = useLanguage();
   const [selectedTeam, setSelectedTeam] = useState<string>(TEAM_NAMES[0]);
   const [strategy, setStrategy] = useState<OptimizationStrategy>('overall');
-  const [lineup, setLineup] = useState<Lineup>(() => {
-    return { C: null, '1B': null, '2B': null, '3B': null, SS: null, LF: null, CF: null, RF: null, DH: null, SP: null };
-  });
-  const [battingOrder, setBattingOrder] = useState<string[]>([]); // Array of player names
-  const [searchQuery, setSearchQuery] = useState('');
   
+  const [lineup, setLineup] = useState<Lineup>(() => {
+    const init: Lineup = {};
+    FULL_ROSTER_POSITIONS.forEach(pos => init[pos] = null);
+    return init;
+  });
+  
+  const [battingOrder, setBattingOrder] = useState<(any | null)[]>(new Array(9).fill(null));
+  
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectingPosition, setSelectingPosition] = useState<string | null>(null);
+  const [selectingBattingSlot, setSelectingBattingSlot] = useState<number | null>(null);
   const [battingStrategy, setBattingStrategy] = useState<BattingStrategy>('sabermetrics');
-  const [viewingPlayer, setViewingPlayer] = useState<any | null>(null);
+
   const [draggedPlayer, setDraggedPlayer] = useState<any | null>(null);
-  const [hoveredPlayer, setHoveredPlayer] = useState<any | null>(null);
   const [hoveredPosition, setHoveredPosition] = useState<string | null>(null);
+  const [hoveredBattingSlot, setHoveredBattingSlot] = useState<number | null>(null);
 
   const teamPlayers = useMemo(() => {
     if (selectedTeam === ALL_TEAMS) return playersData;
@@ -58,20 +47,97 @@ const LineupBuilder: React.FC = () => {
     const newLineup = autoPickLineup(playersData, selectedTeam, strategy);
     setLineup(newLineup);
     
-    // Auto-fill batting order using baseball logic
-    const batters = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH']
-      .map(pos => newLineup[pos])
-      .filter(Boolean);
-    
-    setBattingOrder(optimizeBattingOrder(batters, battingStrategy));
+    // Auto-fill batting order
+    const batters = ROSTER_GROUPS.starters.map(pos => newLineup[pos]).filter(Boolean);
+    const orderNames = optimizeBattingOrder(batters, battingStrategy);
+    const orderObjects = orderNames.map(name => batters.find(b => b.name === name) || null);
+    // Pad to 9
+    while (orderObjects.length < 9) orderObjects.push(null);
+    setBattingOrder(orderObjects.slice(0, 9));
     setSelectingPosition(null);
+    setSelectingBattingSlot(null);
+  };
+
+  const handleClearAll = () => {
+    const emptyLineup: Lineup = {};
+    FULL_ROSTER_POSITIONS.forEach(pos => emptyLineup[pos] = null);
+    setLineup(emptyLineup);
+    setBattingOrder(new Array(9).fill(null));
   };
 
   const handleTeamChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedTeam(e.target.value);
-    setLineup({ C: null, '1B': null, '2B': null, '3B': null, SS: null, LF: null, CF: null, RF: null, DH: null, SP: null });
-    setBattingOrder([]);
+    handleClearAll();
+  };
+
+  const filteredRosterPlayers = useMemo(() => {
+    return teamPlayers.filter(p => {
+      if (searchQuery && !p.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+      
+      // Filter logically if selecting a position
+      if (selectingPosition) {
+        if (selectingPosition.includes('SP')) {
+          if (!p.isPitcher) return false;
+        } else if (selectingPosition.includes('RP') || selectingPosition === 'CP') {
+          if (!p.isPitcher) return false;
+        } else if (selectingPosition === 'DH' || selectingPosition.includes('BN')) {
+          // Both can be anyone, usually fielders
+        } else {
+          // Specific fielding pos
+          const matches = p.primaryPosition === selectingPosition || (p.secondaryPositions && p.secondaryPositions.includes(selectingPosition));
+          if (!matches) return false;
+        }
+      }
+
+      // If selecting batting slot, recommend non-pitchers
+      if (selectingBattingSlot !== null) {
+        if (p.isPitcher) return false;
+      }
+
+      // Check if already in lineup
+      const isAlreadyInLineup = Object.values(lineup).some(lineupPlayer => lineupPlayer?.name === p.name);
+      if (isAlreadyInLineup && selectingPosition) return false;
+
+      // Check if already in batting order
+      if (selectingBattingSlot !== null) {
+         if (battingOrder.some(b => b?.name === p.name)) return false;
+      }
+
+      return true;
+    });
+  }, [teamPlayers, searchQuery, selectingPosition, selectingBattingSlot, lineup, battingOrder]);
+
+  const assignPlayerToPosition = (player: any, pos: string) => {
+    // Remove from old position if they are in one
+    const newLineup = { ...lineup };
+    Object.keys(newLineup).forEach(k => {
+      if (newLineup[k]?.name === player.name) newLineup[k] = null;
+    });
+    newLineup[pos] = player;
+    setLineup(newLineup);
     setSelectingPosition(null);
+  };
+
+  const assignPlayerToBattingOrder = (player: any, slotIndex: number) => {
+    const newOrder = [...battingOrder];
+    // Remove from old slot if exists
+    const oldIndex = newOrder.findIndex(p => p?.name === player.name);
+    if (oldIndex !== -1) newOrder[oldIndex] = null;
+    newOrder[slotIndex] = player;
+    setBattingOrder(newOrder);
+    setSelectingBattingSlot(null);
+  };
+
+  const removePlayer = (pos: string) => {
+    setLineup({ ...lineup, [pos]: null });
+  };
+
+  const removeBatter = (slotIndex: number) => {
+    const newOrder = [...battingOrder];
+    newOrder[slotIndex] = null;
+    setBattingOrder(newOrder);
   };
 
   const currentLineupTeamStat = useMemo(() => {
@@ -80,528 +146,329 @@ const LineupBuilder: React.FC = () => {
     return calculateTeamStats(activePlayers)[0];
   }, [lineup]);
 
-  const filteredRosterPlayers = useMemo(() => {
-    return teamPlayers.filter(p => {
-      if (searchQuery && !p.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-        return false;
-      }
-      
-      if (selectingPosition) {
-        if (selectingPosition === 'SP') {
-          if (!p.isPitcher) return false;
-        } else if (selectingPosition === 'DH') {
-          if (p.isPitcher) return false;
-        } else {
-          const matches = p.primaryPosition === selectingPosition || (p.secondaryPositions && p.secondaryPositions.includes(selectingPosition));
-          if (!matches) return false;
-        }
-        const isAlreadyInLineup = Object.values(lineup).some(lineupPlayer => lineupPlayer?.name === p.name);
-        if (isAlreadyInLineup) return false;
-      }
-      
-      return true;
-    }).sort((a, b) => {
-      if (selectingPosition) {
-        const getScore = (p: any) => p.isPitcher 
-          ? (p.stats.velocity || 0) + (p.stats.junk || 0) + (p.stats.accuracy || 0)
-          : (p.stats.power || 0) + (p.stats.contact || 0) + (p.stats.fielding || 0) + (p.stats.speed || 0);
-        return getScore(b) - getScore(a);
-      }
-      return 0;
-    });
-  }, [teamPlayers, searchQuery, selectingPosition, lineup]);
-
-  const availablePlayers = useMemo(() => {
-    if (!selectingPosition) return [];
-    const usedNames = new Set(Object.values(lineup).filter(Boolean).map(p => p.name));
-    
-    // For SP, only show pitchers. For others, show fielders.
-    const isPitcherPos = selectingPosition === 'SP';
-    
-    return teamPlayers.filter(p => {
-      if (usedNames.has(p.name)) return false;
-      if (isPitcherPos) return p.isPitcher;
-      return !p.isPitcher;
-    }).sort((a, b) => {
-      // Sort by whether they actually play this position
-      const aPlays = a.primaryPosition === selectingPosition || a.secondaryPositions.includes(selectingPosition);
-      const bPlays = b.primaryPosition === selectingPosition || b.secondaryPositions.includes(selectingPosition);
-      if (aPlays && !bPlays) return -1;
-      if (!aPlays && bPlays) return 1;
-      return (b.stats.power + b.stats.contact) - (a.stats.power + a.stats.contact);
-    });
-  }, [selectingPosition, teamPlayers, lineup]);
-
-  const assignPlayerToPosition = (player: any, pos: string) => {
-    const newLineup = { ...lineup, [pos]: player };
-    setLineup(newLineup);
-    
-    if (!player.isPitcher || pos === 'DH') {
-      if (!battingOrder.includes(player.name)) {
-        setBattingOrder((prev: string[]) => [...prev, player.name as string]);
-      }
-    }
-    setSelectingPosition(null);
-  };
-
-  const removePlayer = (pos: string) => {
+  const renderSlot = (pos: string, isPitcherSlot: boolean) => {
     const player = lineup[pos];
-    if (player) {
-      setBattingOrder((prev: string[]) => prev.filter(name => name !== player.name));
-    }
-    setLineup({ ...lineup, [pos]: null });
+    const isSelected = selectingPosition === pos;
+    const isHovered = hoveredPosition === pos;
+
+    const rawImagePath = player ? (playerImageMap as any)[`${player.team}-${player.name}`] : null;
+    const imagePath = rawImagePath ? `${import.meta.env.BASE_URL}${rawImagePath.replace(/^\//, '')}` : null;
+
+    return (
+      <div 
+        key={pos}
+        onClick={() => { setSelectingPosition(pos); setSelectingBattingSlot(null); }}
+        onDragOver={(e) => { e.preventDefault(); }}
+        onDragEnter={() => setHoveredPosition(pos)}
+        onDragLeave={() => setHoveredPosition(null)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setHoveredPosition(null);
+          if (draggedPlayer) {
+            assignPlayerToPosition(draggedPlayer, pos);
+          }
+        }}
+        style={{
+          background: isSelected ? 'var(--primary-accent)' : (isHovered ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.4)'),
+          border: `1px solid ${isSelected ? '#fff' : 'rgba(255,255,255,0.1)'}`,
+          borderRadius: '8px',
+          padding: '8px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          position: 'relative',
+          minHeight: '100px',
+          transition: 'all 0.2s',
+          boxShadow: isHovered ? '0 0 10px rgba(255,255,255,0.5)' : 'none'
+        }}
+      >
+        <div style={{ position: 'absolute', top: '4px', left: '6px', fontSize: '10px', fontWeight: 'bold', color: 'var(--primary-accent)' }}>{pos}</div>
+        
+        {player ? (
+          <>
+            {imagePath ? (
+              <img src={imagePath} alt={player.name} style={{ width: '40px', height: '40px', objectFit: 'contain', marginBottom: '4px' }} />
+            ) : (
+              <div style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <UserPlus size={16} color="rgba(255,255,255,0.3)" />
+              </div>
+            )}
+            <div style={{ fontSize: '12px', fontWeight: 'bold', textAlign: 'center', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {player.name}
+            </div>
+            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>{player.rating}</div>
+            <button 
+              onClick={(e) => { e.stopPropagation(); removePlayer(pos); }}
+              style={{ position: 'absolute', top: '-5px', right: '-5px', background: '#ef4444', border: 'none', borderRadius: '50%', width: '18px', height: '18px', color: 'white', cursor: 'pointer', fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >×</button>
+          </>
+        ) : (
+          <UserPlus size={24} style={{ color: 'rgba(255,255,255,0.1)', marginTop: '10px' }} />
+        )}
+      </div>
+    );
   };
 
-  const moveBatter = (index: number, direction: number) => {
-    if (index + direction < 0 || index + direction >= battingOrder.length) return;
-    const newOrder = [...battingOrder];
-    const temp = newOrder[index];
-    newOrder[index] = newOrder[index + direction];
-    newOrder[index + direction] = temp;
-    setBattingOrder(newOrder);
-  };
+  const renderBattingSlot = (index: number) => {
+    const player = battingOrder[index];
+    const isSelected = selectingBattingSlot === index;
+    const isHovered = hoveredBattingSlot === index;
 
-  const handleAutoSortBattingOrder = () => {
-    const currentBatters = battingOrder.map(name => teamPlayers.find(p => p.name === name)).filter(Boolean);
-    if (currentBatters.length > 0) {
-      setBattingOrder(optimizeBattingOrder(currentBatters, battingStrategy));
-    }
+    const rawImagePath = player ? (playerImageMap as any)[`${player.team}-${player.name}`] : null;
+    const imagePath = rawImagePath ? `${import.meta.env.BASE_URL}${rawImagePath.replace(/^\//, '')}` : null;
+
+    return (
+      <div 
+        key={index}
+        onClick={() => { setSelectingBattingSlot(index); setSelectingPosition(null); }}
+        onDragOver={(e) => { e.preventDefault(); }}
+        onDragEnter={() => setHoveredBattingSlot(index)}
+        onDragLeave={() => setHoveredBattingSlot(null)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setHoveredBattingSlot(null);
+          if (draggedPlayer && !draggedPlayer.isPitcher) {
+            assignPlayerToBattingOrder(draggedPlayer, index);
+          }
+        }}
+        style={{
+          background: isSelected ? 'var(--primary-accent)' : (isHovered ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.4)'),
+          border: `1px solid ${isSelected ? '#fff' : 'rgba(255,255,255,0.1)'}`,
+          borderRadius: '8px',
+          padding: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          cursor: 'pointer',
+          position: 'relative',
+          transition: 'all 0.2s',
+        }}
+      >
+        <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--primary-accent)', width: '20px' }}>{index + 1}.</div>
+        {player ? (
+          <>
+            {imagePath ? (
+              <img src={imagePath} alt={player.name} style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+            ) : (
+              <div style={{ width: '32px', height: '32px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <UserPlus size={14} color="rgba(255,255,255,0.3)" />
+              </div>
+            )}
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{player.name}</div>
+              <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>{player.primaryPosition} | {player.rating}</div>
+            </div>
+            <button 
+              onClick={(e) => { e.stopPropagation(); removeBatter(index); }}
+              style={{ background: '#ef4444', border: 'none', borderRadius: '50%', width: '20px', height: '20px', color: 'white', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >×</button>
+          </>
+        ) : (
+          <div style={{ flex: 1, color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>Empty Slot</div>
+        )}
+      </div>
+    );
   };
 
   return (
-    <div className="lineup-builder">
-      <div className="glass-panel" style={{ padding: '16px', marginBottom: '20px', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: '200px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'rgba(255,255,255,0.7)' }}>
-            Select Team
-          </label>
-          <select value={selectedTeam} onChange={handleTeamChange} className="filter-select" style={{ width: '100%' }}>
-            {TEAM_NAMES.map(t => <option key={t} value={t}>{t}</option>)}
-          </select>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', height: '100%' }}>
+      
+      {/* Header Panel */}
+      <div className="glass-panel" style={{ padding: '16px 24px', display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
+          <Settings2 size={24} color="var(--primary-accent)" />
+          {t('lineup.title') || 'Tactical Dashboard'}
+        </h2>
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>{t('lineup.selectTeam') || 'Base Team'}:</span>
+            <select 
+              value={selectedTeam} 
+              onChange={handleTeamChange}
+              style={{ padding: '6px 12px', borderRadius: '6px', background: 'rgba(0,0,0,0.5)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
+              {TEAM_NAMES.map(tStr => <option key={tStr} value={tStr}>{tStr}</option>)}
+            </select>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>{t('lineup.strategy') || 'Strategy'}:</span>
+            <select 
+              value={strategy} 
+              onChange={(e) => setStrategy(e.target.value as OptimizationStrategy)}
+              style={{ padding: '6px 12px', borderRadius: '6px', background: 'rgba(0,0,0,0.5)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
+              <option value="overall">Balanced (Overall)</option>
+              <option value="power">Power Focus</option>
+              <option value="contact">Contact Focus</option>
+              <option value="speed">Speed Focus</option>
+              <option value="defense">Defense Focus</option>
+              <option value="team_signature">Team Signature</option>
+            </select>
+          </div>
+          <button 
+            onClick={handleAutoPick}
+            className="btn-primary"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '6px' }}
+          >
+            <RefreshCw size={16} /> {t('lineup.autoPick') || 'Auto Pick'}
+          </button>
+          <button 
+            onClick={handleClearAll}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: '1px solid #ef4444', cursor: 'pointer' }}
+          >
+            <Trash2 size={16} /> {t('lineup.clearAll') || 'Clear All'}
+          </button>
         </div>
-
-        <div style={{ flex: 1, minWidth: '200px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'rgba(255,255,255,0.7)' }}>
-            Optimization Strategy
-          </label>
-          <select value={strategy} onChange={(e) => setStrategy(e.target.value as OptimizationStrategy)} className="filter-select" style={{ width: '100%' }}>
-            <option value="overall">Highest Overall (綜合最佳)</option>
-            <option value="team_signature">Team Signature (隊伍專屬球風)</option>
-            <option value="power">Maximize Power (極致力量)</option>
-            <option value="contact">Maximize Contact (機關槍安打)</option>
-            <option value="speed">Maximize Speed (極速狂奔)</option>
-            <option value="defense">Maximize Defense (鐵壁防守)</option>
-          </select>
-        </div>
-
-        <button 
-          onClick={handleAutoPick}
-          style={{
-            background: 'var(--primary-color)',
-            color: 'white',
-            border: 'none',
-            padding: '12px 24px',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontWeight: 'bold',
-            marginTop: '22px',
-            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)'
-          }}
-        >
-          <Settings2 size={18} />
-          Auto-Pick Lineup
-        </button>
       </div>
 
-
-
-
-      {/* Top Row: Field + Roster */}
-      <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', gap: '20px', flex: 1, overflow: 'hidden' }}>
         
-        {/* Field View */}
-        <div className="glass-panel" style={{ flex: '2.5', minWidth: '400px', position: 'relative', height: '700px', backgroundImage: `url(${import.meta.env.BASE_URL}field_bg.png)`, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden' }}>
+        {/* Left Panel: Roster Pool */}
+        <div className="glass-panel" style={{ width: '350px', display: 'flex', flexDirection: 'column', padding: '16px', border: (selectingPosition || selectingBattingSlot !== null) ? '2px solid var(--primary-accent)' : '1px solid rgba(255,255,255,0.1)' }}>
+          <h3 style={{ marginTop: 0, marginBottom: '16px', color: 'var(--primary-accent)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Users size={20} />
+              {selectingPosition ? `Select ${selectingPosition}` : (selectingBattingSlot !== null ? `Select Bat ${selectingBattingSlot + 1}` : (t('lineup.roster') || 'Player Pool'))}
+            </div>
+            {(selectingPosition || selectingBattingSlot !== null) && (
+              <button onClick={() => { setSelectingPosition(null); setSelectingBattingSlot(null); }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}>✕</button>
+            )}
+          </h3>
           
-          <svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 1 }}>
-            <defs>
-              <radialGradient id="heatmap-elite" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#ef4444" stopOpacity="0.6" />
-                <stop offset="100%" stopColor="#ef4444" stopOpacity="0" />
-              </radialGradient>
-              <radialGradient id="heatmap-great" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#f97316" stopOpacity="0.5" />
-                <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
-              </radialGradient>
-              <radialGradient id="heatmap-good" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#eab308" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#eab308" stopOpacity="0" />
-              </radialGradient>
-              <radialGradient id="heatmap-average" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-            
-            {Object.entries(FIELD_POSITIONS).map(([pos, coords]: [string, any]) => {
-               if (pos === 'SP' || pos === 'C' || pos === 'DH') return null;
-               const player = lineup[pos];
-               let radius = 50;
-               let gradient = "url(#heatmap-average)";
-               
-               if (player) {
-                   const score = ((player.stats.fielding || 50) + (player.stats.speed || 50)) / 2;
-                   radius = 40 + (score * 0.9); // 90 score -> 121 radius
-                   if (score >= 90) gradient = "url(#heatmap-elite)";
-                   else if (score >= 80) gradient = "url(#heatmap-great)";
-                   else if (score >= 70) gradient = "url(#heatmap-good)";
-               }
-               
-               return (
-                 <circle 
-                   key={`heatmap-${pos}`} 
-                   cx={coords.left} 
-                   cy={coords.top} 
-                   r={radius} 
-                   fill={gradient} 
-                   style={{ transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
-                 />
-               )
-            })}
-          </svg>
-
-          {Object.entries(FIELD_POSITIONS).map(([pos, coords]: [string, any]) => {
-            const player = lineup[pos];
-            const isSelected = selectingPosition === pos;
-            
-            const isHovered = hoveredPosition === pos;
-            let isSuggested = false;
-            const activePlayer = draggedPlayer || hoveredPlayer;
-            if (activePlayer && pos !== 'DH') {
-              if (activePlayer.isPitcher && pos === 'SP') isSuggested = true;
-              else if (!activePlayer.isPitcher && pos !== 'SP') {
-                isSuggested = activePlayer.primaryPosition === pos || activePlayer.secondaryPositions.includes(pos);
+          <div style={{ marginBottom: '16px', position: 'relative' }}>
+            <Search size={16} style={{ position: 'absolute', left: '12px', top: '10px', color: 'rgba(255,255,255,0.5)' }} />
+            <input 
+              type="text" 
+              placeholder={t('search') || "搜尋球員..."} 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ width: '100%', padding: '8px 12px 8px 36px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.4)', color: '#fff', outline: 'none' }}
+            />
+          </div>
+          
+          <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: '8px' }}>
+            {filteredRosterPlayers.map(p => {
+              // Dim the player card if they are completely inappropriate for the selected slot, but let them choose anyway
+              let isRecommended = true;
+              if (selectingPosition) {
+                 if (selectingPosition.includes('SP') && !p.isPitcher) isRecommended = false;
+                 if ((selectingPosition.includes('RP') || selectingPosition === 'CP') && !p.isPitcher) isRecommended = false;
               }
-            }
+              if (selectingBattingSlot !== null && p.isPitcher) isRecommended = false;
 
-            return (
-              <div 
-                key={pos}
-                style={{
-                  position: 'absolute',
-                  top: coords.top,
-                  left: coords.left,
-                  transform: 'translate(-50%, -50%)',
-                  transition: 'top 0.6s cubic-bezier(0.4, 0, 0.2, 1), left 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-                  zIndex: isHovered || isSuggested ? 20 : 10
-                }}
-              >
+              const isAlreadyInLineup = Object.values(lineup).some(lineupPlayer => lineupPlayer?.name === p.name);
+              const isAlreadyInBatting = battingOrder.some(b => b?.name === p.name);
+
+              return (
                 <div 
-                  onClick={() => setSelectingPosition(pos)}
-                  onDragOver={(e) => { e.preventDefault(); }}
-                  onDragEnter={() => setHoveredPosition(pos)}
-                  onDragLeave={() => setHoveredPosition(null)}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    setHoveredPosition(null);
-                    if (draggedPlayer) {
-                      assignPlayerToPosition(draggedPlayer, pos);
-                    }
+                  key={p.name}
+                  draggable
+                  onDragStart={() => setDraggedPlayer(p)}
+                  onDragEnd={() => setDraggedPlayer(null)}
+                  onClick={() => {
+                    if (selectingPosition) assignPlayerToPosition(p, selectingPosition);
+                    else if (selectingBattingSlot !== null) assignPlayerToBattingOrder(p, selectingBattingSlot);
                   }}
                   style={{
-                    background: isSelected || isHovered ? 'var(--primary-accent)' : (player ? 'rgba(15, 23, 42, 0.9)' : 'rgba(15, 23, 42, 0.5)'),
-                    border: `2px ${!player ? 'dashed' : 'solid'} ${isSuggested ? '#facc15' : (player ? 'var(--primary-accent)' : 'rgba(255,255,255,0.3)')}`,
-                    borderRadius: '50%',
-                    width: isHovered || isSuggested ? '68px' : '60px',
-                    height: isHovered || isSuggested ? '68px' : '60px',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    cursor: (selectingPosition || selectingBattingSlot !== null) ? 'pointer' : 'grab',
+                    opacity: isRecommended ? 1 : 0.4,
                     display: 'flex',
-                    flexDirection: 'column',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    color: '#fff',
-                    boxShadow: isSuggested ? '0 0 15px rgba(250, 204, 21, 0.6)' : '0 4px 12px rgba(0,0,0,0.8)',
-                    transition: 'all 0.2s',
+                    gap: '12px',
+                    transition: 'all 0.2s'
                   }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
                 >
-                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: player ? '#fff' : 'var(--text-muted)' }}>{pos}</div>
-                  {player ? (
-                     <div style={{ fontSize: '10px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '90%', textAlign: 'center', color: 'var(--primary-accent)' }}>
-                       {player.name.split(' ')[1] || player.name}
-                     </div>
-                  ) : (
-                    <UserPlus size={16} style={{ marginTop: '4px', color: 'rgba(255,255,255,0.4)' }} />
-                  )}
-                  {player && (
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); removePlayer(pos); }}
-                      style={{ position: 'absolute', top: '-5px', right: '-5px', background: '#ef4444', border: 'none', borderRadius: '50%', width: '20px', height: '20px', color: 'white', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    >×</button>
-                  )}
-                </div>
-
-                {/* Data Overlay Badge */}
-                {player && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '-10px',
-                    left: '50px',
-                    background: 'rgba(15, 23, 42, 0.9)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '6px',
-                    padding: '2px 6px',
-                    fontSize: '10px',
-                    fontWeight: 'bold',
-                    color: '#fff',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    pointerEvents: 'none',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
-                    fontFamily: 'monospace'
-                  }}>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '8px' }}>{pos === 'SP' ? 'VEL' : 'FLD'}</span>
-                    <span style={{ color: pos === 'SP' ? '#38bdf8' : '#4ade80' }}>
-                      {pos === 'SP' ? player.stats.velocity : player.stats.fielding}
-                    </span>
+                  <div style={{ color: p.isPitcher ? '#38bdf8' : '#4ade80', fontWeight: 'bold', width: '24px' }}>{p.primaryPosition}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{p.name}</div>
+                    <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>{p.team} | {p.rating}</div>
                   </div>
-                )}
-              </div>
-            );
-          })}
-          
-          {/* DH Spot */}
-          <div 
-            onClick={() => setSelectingPosition('DH')}
-            onDragOver={(e) => { e.preventDefault(); }}
-            onDragEnter={() => setHoveredPosition('DH')}
-            onDragLeave={() => setHoveredPosition(null)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setHoveredPosition(null);
-              if (draggedPlayer) assignPlayerToPosition(draggedPlayer, 'DH');
-            }}
-            style={{
-              position: 'absolute', top: '20px', right: '20px',
-              background: selectingPosition === 'DH' || hoveredPosition === 'DH' ? 'var(--primary-accent)' : (lineup.DH ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.4)'),
-              border: `2px ${!lineup.DH ? 'dashed' : 'solid'} ${(hoveredPlayer || draggedPlayer) && !((hoveredPlayer || draggedPlayer).isPitcher) ? '#facc15' : (lineup.DH ? 'var(--primary-color)' : 'rgba(255,255,255,0.5)')}`,
-              borderRadius: '8px', padding: '8px', cursor: 'pointer', color: '#fff',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', width: '80px',
-              boxShadow: (hoveredPlayer || draggedPlayer) && !((hoveredPlayer || draggedPlayer).isPitcher) ? '0 0 15px rgba(250, 204, 21, 0.6)' : 'none',
-              transform: hoveredPosition === 'DH' ? 'scale(1.05)' : 'scale(1)',
-              transition: 'all 0.2s'
-            }}
-          >
-            <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--primary-accent)' }}>DH</div>
-            {lineup.DH ? (
-               <div style={{ fontSize: '11px', textAlign: 'center' }}>{lineup.DH.name}</div>
-            ) : <UserPlus size={16} />}
-            {lineup.DH && (
-              <button 
-                onClick={(e) => { e.stopPropagation(); removePlayer('DH'); }}
-                style={{ position: 'absolute', top: '-5px', right: '-5px', background: '#ef4444', border: 'none', borderRadius: '50%', width: '20px', height: '20px', color: 'white', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              >×</button>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-end' }}>
+                    {isAlreadyInLineup && <span style={{ fontSize: '9px', background: 'var(--primary-accent)', padding: '2px 4px', borderRadius: '4px' }}>Field</span>}
+                    {isAlreadyInBatting && <span style={{ fontSize: '9px', background: '#eab308', padding: '2px 4px', borderRadius: '4px' }}>Bat</span>}
+                  </div>
+                </div>
+              );
+            })}
+            {filteredRosterPlayers.length === 0 && (
+              <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.3)', marginTop: '20px' }}>No players found</div>
             )}
           </div>
         </div>
 
-        {/* Team Roster (Always Visible) */}
-        <div className="glass-panel" style={{ padding: '16px', flex: '1.5', height: '700px', display: 'flex', flexDirection: 'column', border: selectingPosition ? '2px solid var(--primary-accent)' : '1px solid rgba(255,255,255,0.1)', minWidth: '400px' }}>
-            <h3 style={{ marginTop: 0, marginBottom: '16px', color: 'var(--primary-accent)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              {selectingPosition ? `Select ${selectingPosition}` : 'Team Roster'}
-              {selectingPosition && (
-                <button onClick={() => setSelectingPosition(null)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}>✕</button>
-              )}
+        {/* Right Panel: Dashboard Area */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', paddingRight: '8px' }}>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '20px' }}>
+            {/* Batting Order Panel */}
+            <div className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0, marginBottom: '16px', color: '#eab308' }}>
+                <Swords size={20} />
+                {t('lineup.battingOrder') || 'Batting Order'}
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
+                {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(renderBattingSlot)}
+              </div>
+            </div>
+
+            {/* Starting Lineup Panel */}
+            <div className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0, marginBottom: '16px', color: '#4ade80' }}>
+                <Shield size={20} />
+                {t('lineup.starters') || 'Starting Lineup'}
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                {ROSTER_GROUPS.starters.map(pos => renderSlot(pos, false))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            {/* Rotation */}
+            <div className="glass-panel" style={{ padding: '16px' }}>
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0, marginBottom: '16px', color: '#38bdf8' }}>
+                <Target size={20} />
+                {t('lineup.rotation') || 'Starting Rotation'}
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '12px' }}>
+                {ROSTER_GROUPS.rotation.map(pos => renderSlot(pos, true))}
+              </div>
+            </div>
+
+            {/* Bench */}
+            <div className="glass-panel" style={{ padding: '16px' }}>
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0, marginBottom: '16px', color: '#a78bfa' }}>
+                <Users size={20} />
+                {t('lineup.bench') || 'Bench'}
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '12px' }}>
+                {ROSTER_GROUPS.bench.map(pos => renderSlot(pos, false))}
+              </div>
+            </div>
+          </div>
+
+          {/* Bullpen */}
+          <div className="glass-panel" style={{ padding: '16px', marginBottom: '40px' }}>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0, marginBottom: '16px', color: '#f472b6' }}>
+              <Target size={20} />
+              {t('lineup.bullpen') || 'Bullpen (RP/CP)'}
             </h3>
-            
-            <div style={{ marginBottom: '16px', position: 'relative' }}>
-              <Search size={16} style={{ position: 'absolute', left: '12px', top: '10px', color: 'rgba(255,255,255,0.5)' }} />
-              <input 
-                type="text" 
-                placeholder="Search players..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ width: '100%', padding: '8px 12px 8px 36px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.4)', color: '#fff', outline: 'none' }}
-              />
-            </div>
-            
-            <div style={{ flex: 1, overflowY: 'auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px', alignContent: 'start', paddingRight: '8px' }}>
-              {filteredRosterPlayers.map(p => {
-                let isOptimal = false;
-                let isFaded = false;
-                
-                const activePos = selectingPosition || hoveredPosition;
-                
-                if (activePos) {
-                   if (activePos === 'SP') {
-                       isOptimal = p.isPitcher;
-                   } else if (activePos === 'DH') {
-                       isOptimal = !p.isPitcher;
-                   } else {
-                       isOptimal = p.primaryPosition === activePos || p.secondaryPositions.includes(activePos as string);
-                   }
-                   isFaded = !selectingPosition && !isOptimal; // Only fade if hovering, since selecting filters them out
-                }
-
-                const isAlreadyInLineup = Object.values(lineup).some(lineupPlayer => lineupPlayer?.name === p.name);
-
-                return (
-                  <div 
-                    key={p.name} 
-                    draggable={true}
-                    onDragStart={(e) => {
-                      setDraggedPlayer(p);
-                      e.dataTransfer.effectAllowed = 'move';
-                    }}
-                    onDragEnd={() => setDraggedPlayer(null)}
-                    onMouseEnter={() => setHoveredPlayer(p)}
-                    onMouseLeave={() => setHoveredPlayer(null)}
-                    onClick={() => {
-                      if (selectingPosition) {
-                        assignPlayerToPosition(p, selectingPosition);
-                      } else {
-                        setViewingPlayer(p);
-                      }
-                    }}
-                    style={{
-                      background: 'rgba(0,0,0,0.3)',
-                      padding: '8px',
-                      borderRadius: '6px',
-                      cursor: 'grab',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      borderLeft: isOptimal ? '4px solid var(--primary-accent)' : '4px solid transparent',
-                      opacity: isFaded ? 0.4 : 1,
-                      transition: 'all 0.2s',
-                      position: 'relative',
-                      transform: draggedPlayer?.name === p.name ? 'scale(0.95)' : 'scale(1)',
-                    }}
-                  >
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: '16px' }}>
-                        <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          {p.name} 
-                          {renderPositionBadge(p.primaryPosition)}
-                        </div>
-                        {p.rating && (
-                          <div className={`rating-badge rating-${p.rating.replace('+', 'plus').replace('-', 'minus')}`}>
-                            {p.rating}
-                          </div>
-                        )}
-                      </div>
-                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                         {renderProgressBar(p.isPitcher ? 'VEL' : 'POW', (p.isPitcher ? p.stats.velocity : p.stats.power) ?? 0, '#ef4444')}
-                         {renderProgressBar(p.isPitcher ? 'JNK' : 'CON', (p.isPitcher ? p.stats.junk : p.stats.contact) ?? 0, '#f97316')}
-                         {renderProgressBar(p.isPitcher ? 'ACC' : 'SPD', (p.isPitcher ? p.stats.accuracy : p.stats.speed) ?? 0, '#3b82f6')}
-                         {renderProgressBar('FLD', p.stats.fielding, '#4ade80')}
-                      </div>
-                    </div>
-                    {/* If not selecting, show a small indicator that they are in the lineup */}
-                    {!selectingPosition && isAlreadyInLineup && (
-                      <div style={{ position: 'absolute', top: '8px', right: '8px', width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary-color)' }} title="In Lineup"></div>
-                    )}
-                  </div>
-                );
-              })}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '12px' }}>
+              {ROSTER_GROUPS.bullpen.map(pos => renderSlot(pos, true))}
             </div>
           </div>
+
+        </div>
+
       </div>
-
-      {/* Bottom Layout: Batting Order + Lineup Stats */}
-      <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-        
-        {/* Batting Order */}
-        <div className="glass-panel" style={{ padding: '16px', flex: '1.5', minWidth: '400px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
-                <h3 style={{ margin: 0, color: 'var(--primary-color)' }}>Batting Order</h3>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                  <select 
-                    value={battingStrategy} 
-                    onChange={(e) => setBattingStrategy(e.target.value as BattingStrategy)}
-                    className="filter-select"
-                    style={{ padding: '4px 8px', fontSize: '12px', minWidth: '120px' }}
-                  >
-                    <option value="sabermetrics">Sabermetrics (Modern)</option>
-                    <option value="traditional">Traditional</option>
-                  </select>
-                  <button 
-                    onClick={handleAutoSortBattingOrder}
-                    disabled={battingOrder.length === 0}
-                    style={{ 
-                      background: 'rgba(56, 189, 248, 0.2)', 
-                      border: '1px solid rgba(56, 189, 248, 0.5)', 
-                      color: '#38bdf8', 
-                      padding: '4px 8px', 
-                      borderRadius: '4px', 
-                      cursor: battingOrder.length === 0 ? 'not-allowed' : 'pointer',
-                      fontSize: '12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}
-                  >
-                    <RefreshCw size={12} /> Auto-Sort
-                  </button>
-                </div>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {battingOrder.map((name, index) => {
-                  const p = teamPlayers.find(p => p.name === name);
-                  return (
-                    <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(0,0,0,0.2)', padding: '6px 12px', borderRadius: '4px' }}>
-                      <div style={{ fontWeight: 'bold', color: 'var(--primary-accent)', width: '20px' }}>{index + 1}.</div>
-                      <div style={{ flex: 1 }}>{p?.name || name}</div>
-                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>{p?.primaryPosition}</div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <button 
-                          onClick={() => moveBatter(index, -1)} 
-                          disabled={index === 0}
-                          style={{ background: 'none', border: 'none', color: index === 0 ? 'rgba(255,255,255,0.1)' : '#fff', cursor: index === 0 ? 'default' : 'pointer', padding: '0 4px', fontSize: '10px' }}
-                        >▲</button>
-                        <button 
-                          onClick={() => moveBatter(index, 1)} 
-                          disabled={index === battingOrder.length - 1}
-                          style={{ background: 'none', border: 'none', color: index === battingOrder.length - 1 ? 'rgba(255,255,255,0.1)' : '#fff', cursor: index === battingOrder.length - 1 ? 'default' : 'pointer', padding: '0 4px', fontSize: '10px' }}
-                        >▼</button>
-                      </div>
-                    </div>
-                  );
-                })}
-                {battingOrder.length < 9 && (
-                  <div style={{ padding: '6px 12px', color: 'rgba(255,255,255,0.3)', fontStyle: 'italic' }}>
-                    Select {9 - battingOrder.length} more hitters...
-                  </div>
-                )}
-              </div>
-            </div>
-
-        {/* Team Radar */}
-        <div className="glass-panel" style={{ padding: '16px', flex: '2', minWidth: '400px' }}>
-              <h3 style={{ marginTop: 0, marginBottom: '16px', color: 'var(--primary-color)' }}>Lineup Stats</h3>
-              {currentLineupTeamStat ? (
-                <div style={{ height: '350px' }}>
-                  <TeamRadar team={currentLineupTeamStat} />
-                </div>
-              ) : (
-                <p style={{ color: 'rgba(255,255,255,0.5)', textAlign: 'center', marginTop: '100px' }}>Select players to view stats.</p>
-              )}
-            </div>
-        </div>
-      {/* Player Details Modal */}
-      {viewingPlayer && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }} onClick={() => setViewingPlayer(null)}>
-          <div className="glass-panel" style={{ padding: '24px', width: '500px', maxWidth: '90%', position: 'relative', overflowY: 'auto', maxHeight: '90vh' }} onClick={e => e.stopPropagation()}>
-            <button 
-              onClick={() => setViewingPlayer(null)}
-              style={{ position: 'absolute', top: '12px', right: '12px', background: 'none', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '20px', zIndex: 10 }}
-            >×</button>
-            <PlayerRadar player={viewingPlayer} />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
