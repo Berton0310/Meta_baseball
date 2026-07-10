@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radar } from 'react-chartjs-2';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { useLanguage } from '../context/LanguageContext';
 import { renderPositionBadge } from './PlayerGrid';
 import traitsData from '../data/traits_info.json';
@@ -24,8 +24,6 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
     console.error('traitsData is undefined!');
   }
 
-  const isPitcher = player.isPitcher;
-
   const labels = ['POW', 'CON', 'SPD', 'FLD', 'ARM', 'VEL', 'JNK', 'ACC'];
 
   const getValues = (p: any) => p.isPitcher
@@ -33,71 +31,13 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
     : [p.stats.power || 0, p.stats.contact || 0, p.stats.speed || 0, p.stats.fielding || 0, p.stats.arm || 0, 0, 0, 0];
 
   const dataValues = getValues(player);
+  const dataValues2 = player2 ? getValues(player2) : null;
 
-  const datasets = [
-    {
-      label: player.name,
-      data: dataValues,
-      backgroundColor: 'rgba(0, 91, 172, 0.3)',
-      borderColor: 'rgba(0, 91, 172, 1)',
-      pointBackgroundColor: 'rgba(0, 91, 172, 1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(0, 91, 172, 1)',
-      borderWidth: 2,
-    }
-  ];
-
-  if (player2) {
-    datasets.push({
-      label: player2.name,
-      data: getValues(player2),
-      backgroundColor: 'rgba(245, 158, 11, 0.3)',
-      borderColor: 'rgba(245, 158, 11, 1)',
-      pointBackgroundColor: 'rgba(245, 158, 11, 1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(245, 158, 11, 1)',
-      borderWidth: 2,
-    });
-  }
-
-  const data = {
-    labels,
-    datasets,
-  };
-
-  const options = {
-    scales: {
-      r: {
-        min: 0,
-        max: 100,
-        angleLines: {
-          color: 'rgba(255, 255, 255, 0.3)'
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.3)'
-        },
-        pointLabels: {
-          color: '#f8fafc',
-          font: {
-            size: 13,
-            weight: 'bold' as const
-          }
-        },
-        ticks: {
-          display: false,
-          stepSize: 20
-        }
-      }
-    },
-    plugins: {
-      legend: {
-        display: false
-      }
-    },
-    maintainAspectRatio: false
-  };
+  const radarData = labels.map((label, i) => ({
+    subject: label,
+    A: dataValues[i],
+    ...(dataValues2 ? { B: dataValues2[i] } : {})
+  }));
 
   const rawImagePath = (playerImageMap as any)[`${player.team}-${player.name}`];
   const imagePath = rawImagePath ? `${import.meta.env.BASE_URL}${rawImagePath.replace(/^\//, '')}` : null;
@@ -358,7 +298,17 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
       </div>
 
       <div style={{ height: '300px', width: '100%' }}>
-        <Radar data={data} options={options} />
+        <ResponsiveContainer width="100%" height="100%">
+          <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
+            <PolarGrid stroke="rgba(255, 255, 255, 0.3)" />
+            <PolarAngleAxis dataKey="subject" tick={{ fill: '#f8fafc', fontSize: 13, fontWeight: 'bold' }} />
+            <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+            <Radar name={player.name} dataKey="A" stroke="rgba(0, 91, 172, 1)" fill="rgba(0, 91, 172, 1)" fillOpacity={0.3} strokeWidth={2} dot={{ r: 3, fill: 'rgba(0, 91, 172, 1)', stroke: '#fff', strokeWidth: 1 }} />
+            {player2 && (
+              <Radar name={player2.name} dataKey="B" stroke="rgba(245, 158, 11, 1)" fill="rgba(245, 158, 11, 1)" fillOpacity={0.3} strokeWidth={2} dot={{ r: 3, fill: 'rgba(245, 158, 11, 1)', stroke: '#fff', strokeWidth: 1 }} />
+            )}
+          </RadarChart>
+        </ResponsiveContainer>
       </div>
 
       {/* Two Column Layout for Details */}

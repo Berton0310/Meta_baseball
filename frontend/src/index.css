@@ -7,6 +7,15 @@
   --text-muted: #94a3b8;
   --border-color: rgba(255, 255, 255, 0.1);
   --glass-blur: blur(12px);
+  /* Chemistry type colors (same palette as TraitsDashboard) */
+  --chem-competitive: #ef4444;
+  --chem-spirited: #f97316;
+  --chem-disciplined: #3b82f6;
+  --chem-scholarly: #a855f7;
+  --chem-crafty: #22c55e;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --success-color: #4ade80;
 }
 
 * {
@@ -82,13 +91,17 @@ body {
 /* Dashboard Layout */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 7fr 3fr;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
   gap: 24px;
+}
+
+.dashboard-grid > * {
+  min-width: 0;
 }
 
 @media (max-width: 1024px) {
   .dashboard-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -276,4 +289,923 @@ body {
   color: #c7d2fe;
   margin-right: 8px;
   margin-bottom: 8px;
+}
+
+/* ===== Team Dashboard ===== */
+.team-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.dashboard-card {
+  padding: 24px;
+  min-width: 0;
+}
+
+.dashboard-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px 0;
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+.dashboard-header-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dashboard-header-team {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.dashboard-team-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+}
+
+/* Card grid: multi-column on desktop, 2 columns <=1024px, 1 column <=640px */
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* Chemistry counter */
+.dashboard-chem-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.chem-mini-card {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.chem-mini-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chem-mini-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.chem-level-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--bg-dark);
+  white-space: nowrap;
+}
+
+.chem-mini-count {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.chem-mini-count-unit {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.chem-progress-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.chem-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.chem-mini-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Salary & roster overview */
+.dashboard-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.dashboard-stat-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+}
+
+.dashboard-stat-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.dashboard-stat-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Position depth */
+.depth-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 10px;
+}
+
+.depth-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.depth-item-thin {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: var(--danger-color);
+}
+
+.depth-pos {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.depth-item-thin .depth-pos {
+  color: #fca5a5;
+}
+
+.depth-count {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.depth-warning {
+  font-size: 0.65rem;
+  color: var(--danger-color);
+  font-weight: 700;
+}
+
+/* Star players */
+.star-players-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.star-player-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 8px 12px;
+  min-width: 0;
+}
+
+.star-player-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.star-player-img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+}
+
+.star-player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.star-player-name {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Radar */
+.dashboard-radar-container {
+  width: 100%;
+  height: 320px;
+  min-width: 0;
+  /* Recharts renders a fixed-size svg; clip it so a stale measurement can't overflow the page */
+  overflow: hidden;
+}
+
+/* Traits overview */
+.dashboard-traits-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-trait-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.chem-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dashboard-trait-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.dashboard-trait-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid var(--success-color);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dashboard-trait-bad {
+  border-left-color: var(--danger-color);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.dashboard-trait-item-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.trait-sign-good {
+  color: var(--success-color);
+  font-weight: 800;
+}
+
+.trait-sign-bad {
+  color: var(--danger-color);
+  font-weight: 800;
+}
+
+.dashboard-trait-level {
+  font-size: 0.7rem;
+  font-weight: 800;
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 1px 6px;
+}
+
+.dashboard-trait-bad-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--danger-color);
+  background: rgba(239, 68, 68, 0.15);
+  border-radius: 8px;
+  padding: 1px 6px;
+}
+
+.dashboard-trait-desc {
+  font-size: 0.83rem;
+  color: var(--text-main);
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+.dashboard-trait-owners {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+/* Responsive: tablets */
+@media (max-width: 1024px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-chem-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Responsive: phones */
+@media (max-width: 640px) {
+  .app-container {
+    padding: 12px;
+  }
+
+  .navbar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .navbar > div {
+    flex-wrap: wrap;
+  }
+
+  .nav-tabs {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-chem-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-trait-list {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dashboard-radar-container {
+    height: 260px;
+  }
+}
+
+/* ===== Tactical Dashboard (LineupBuilder) ===== */
+/* Live lineup chemistry bar */
+.lineup-chem-panel {
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.lineup-chem-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.95rem;
+  flex-wrap: wrap;
+}
+
+.lineup-chem-bar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.lineup-chem-item {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.lineup-chem-item-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.lineup-chem-name {
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lineup-chem-item-bottom {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.lineup-chem-count {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.lineup-chem-hint {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* Trait fit badges on batting/bench slots */
+.trait-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+  min-width: 0;
+}
+
+.trait-fit-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 6px;
+  border: 1px solid;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: help;
+}
+
+.trait-fit-good {
+  color: var(--success-color);
+  border-color: var(--success-color);
+  background: rgba(74, 222, 128, 0.12);
+}
+
+.trait-fit-warn {
+  color: var(--warning-color);
+  border-color: var(--warning-color);
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.trait-fit-bad {
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+/* Position fit markers on fielding slots */
+.pos-fit-tag {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 0 4px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: help;
+}
+
+.pos-fit-warning {
+  display: flex;
+  cursor: help;
+}
+
+.slot-weighted-score {
+  font-size: 9px;
+  color: var(--text-muted);
+  cursor: help;
+}
+
+@media (max-width: 1024px) {
+  .lineup-chem-bar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Phones: allow the chemistry bar to wrap into two columns; minmax(0,1fr)
+   keeps it from overflowing horizontally down to 380px wide. */
+@media (max-width: 640px) {
+  .lineup-chem-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ===== My Team Manager ===== */
+.myteam-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.myteam-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 16px;
+}
+
+.myteam-action-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.myteam-name-input {
+  flex: 0 1 220px;
+  min-width: 140px;
+}
+
+.myteam-rename-input {
+  flex: 1 1 120px;
+  min-width: 0;
+  padding: 6px 10px;
+}
+
+/* Inline operation result messages (success green / failure red) */
+.myteam-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.myteam-message-success {
+  color: var(--success-color);
+  border-color: var(--success-color);
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.myteam-message-error {
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.myteam-message-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Saved roster cards */
+.myteam-roster-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.myteam-roster-card {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.myteam-roster-card:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.myteam-roster-card-active {
+  border-color: var(--primary-accent);
+  background: rgba(0, 91, 172, 0.18);
+  box-shadow: 0 0 12px rgba(0, 91, 172, 0.35);
+}
+
+.myteam-roster-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.myteam-active-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--primary-accent);
+  border-radius: 8px;
+  padding: 1px 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.myteam-roster-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.myteam-roster-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.myteam-icon-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.myteam-icon-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.myteam-icon-btn-danger:hover {
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.myteam-empty-hint,
+.myteam-select-hint {
+  color: var(--text-muted);
+  padding: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.myteam-select-hint {
+  padding: 40px;
+}
+
+/* Editor: current roster (left) + player pool (right) */
+.myteam-editor {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  min-width: 0;
+}
+
+.myteam-editor > * {
+  min-width: 0;
+}
+
+.myteam-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.myteam-current-list {
+  max-height: 620px;
+  overflow-y: auto;
+  padding-right: 6px;
+  min-width: 0;
+}
+
+.myteam-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 8px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.myteam-group-header:first-child {
+  margin-top: 0;
+}
+
+.myteam-group-count {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0 8px;
+}
+
+.myteam-player-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  min-width: 0;
+  transition: background 0.15s ease;
+}
+
+.myteam-player-row:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.myteam-player-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.myteam-salary {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Remove button only appears on row hover */
+.myteam-remove-btn {
+  opacity: 0;
+  background: var(--danger-color);
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease;
+}
+
+.myteam-player-row:hover .myteam-remove-btn {
+  opacity: 1;
+}
+
+/* Player pool */
+.myteam-pool-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.myteam-pool-filters .filter-select {
+  min-width: 0;
+  flex: 1 1 130px;
+}
+
+.myteam-pool-search {
+  position: relative;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.myteam-pool-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.myteam-pool-list {
+  max-height: 620px;
+  overflow-y: auto;
+  padding-right: 6px;
+  min-width: 0;
+}
+
+.myteam-pool-row {
+  cursor: pointer;
+}
+
+.myteam-pool-row-in {
+  border-color: rgba(74, 222, 128, 0.4);
+  background: rgba(74, 222, 128, 0.06);
+}
+
+.myteam-pool-team {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.myteam-in-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--success-color);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Tablets: editor columns stack */
+@media (max-width: 1024px) {
+  .myteam-editor {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Phones: single-column roster cards; shorter scroll areas */
+@media (max-width: 640px) {
+  .myteam-roster-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .myteam-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .myteam-action-group .filter-select,
+  .myteam-name-input {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .myteam-current-list,
+  .myteam-pool-list {
+    max-height: 420px;
+  }
 }

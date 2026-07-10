@@ -10,13 +10,15 @@ import LineupBuilder from './components/LineupBuilder';
 import TraitsDashboard from './components/TraitsDashboard';
 import PlayerComparison from './components/PlayerComparison';
 import DraftSimulator from './components/DraftSimulator';
+import TeamDashboard from './components/TeamDashboard';
+import MyTeamManager from './components/MyTeamManager';
 import { calculateTeamStats } from './utils/teamStats';
 import type { TeamStat } from './utils/teamStats';
-import { Languages, Activity, Users, Shield, ListStart, Star, Target, ShoppingCart } from 'lucide-react';
+import { Languages, Activity, Users, Shield, ListStart, Star, Target, ShoppingCart, LayoutDashboard, UserCog } from 'lucide-react';
 
 function App() {
   const { t, toggleLanguage, language } = useLanguage();
-  const [viewMode, setViewMode] = useState<'players' | 'teams' | 'lineup' | 'traits' | 'compare' | 'draft'>('players');
+  const [viewMode, setViewMode] = useState<'dashboard' | 'myteam' | 'players' | 'teams' | 'lineup' | 'traits' | 'compare' | 'draft'>('dashboard');
   
   const [selectedPlayer, setSelectedPlayer] = useState<any>(playersData[0]);
   
@@ -114,8 +116,28 @@ function App() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           <h1><Activity size={28} color="var(--primary-accent)" /> {t('app.title')}</h1>
           
-          <div style={{ display: 'flex', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', padding: '4px' }}>
-            <button 
+          <div className="nav-tabs" style={{ display: 'flex', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', padding: '4px' }}>
+            <button
+              onClick={() => setViewMode('dashboard')}
+              style={{
+                padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600,
+                background: viewMode === 'dashboard' ? 'var(--primary-color)' : 'transparent',
+                color: viewMode === 'dashboard' ? '#fff' : 'rgba(255,255,255,0.6)'
+              }}
+            >
+              <LayoutDashboard size={16} /> {t('app.dashboard') || 'Team Dashboard'}
+            </button>
+            <button
+              onClick={() => setViewMode('myteam')}
+              style={{
+                padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600,
+                background: viewMode === 'myteam' ? 'var(--primary-color)' : 'transparent',
+                color: viewMode === 'myteam' ? '#fff' : 'rgba(255,255,255,0.6)'
+              }}
+            >
+              <UserCog size={16} /> {t('myteam.title') || 'My Teams'}
+            </button>
+            <button
               onClick={() => setViewMode('players')}
               style={{ 
                 padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600,
@@ -183,9 +205,13 @@ function App() {
         </button>
       </header>
 
-      <main className="dashboard-grid" style={{ gridTemplateColumns: (viewMode === 'lineup' || viewMode === 'traits' || viewMode === 'compare' || viewMode === 'draft') ? '1fr' : undefined }}>
+      <main className="dashboard-grid" style={{ gridTemplateColumns: (viewMode === 'dashboard' || viewMode === 'myteam' || viewMode === 'lineup' || viewMode === 'traits' || viewMode === 'compare' || viewMode === 'draft') ? '1fr' : undefined }}>
         <section className="main-content">
-          {viewMode === 'players' ? (
+          {viewMode === 'dashboard' ? (
+            <TeamDashboard players={playersData} />
+          ) : viewMode === 'myteam' ? (
+            <MyTeamManager />
+          ) : viewMode === 'players' ? (
             <PlayerGrid 
               players={filteredAndSortedPlayers}
               selectedPlayer={selectedPlayer}
@@ -226,7 +252,7 @@ function App() {
           )}
         </section>
 
-        {viewMode !== 'lineup' && viewMode !== 'traits' && viewMode !== 'compare' && viewMode !== 'draft' && (
+        {viewMode !== 'dashboard' && viewMode !== 'myteam' && viewMode !== 'lineup' && viewMode !== 'traits' && viewMode !== 'compare' && viewMode !== 'draft' && (
           <aside className="sidebar">
             <div className="glass-panel radar-panel" style={{ overflowY: 'auto' }}>
               {viewMode === 'players' ? (

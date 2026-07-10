@@ -1,5 +1,6 @@
 [
   {
+    "id": "beewolves-gina-torrens",
     "name": "Gina Torrens",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -29,6 +30,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-handley-dexterez",
     "name": "Handley Dexterez",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -59,6 +61,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-kobe-kingman",
     "name": "Kobe Kingman",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -85,6 +88,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-buster-bigs",
     "name": "Buster Bigs",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -113,6 +117,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-billy-leboink",
     "name": "Billy LeBoink",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -139,6 +144,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-magic-moore",
     "name": "Magic Moore",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -165,6 +171,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-bertha-banks",
     "name": "Bertha Banks",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -194,6 +201,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-johnson-swanson",
     "name": "Johnson Swanson",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -220,6 +228,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-freddie-knox",
     "name": "Freddie Knox",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -246,6 +255,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-ruby-greene",
     "name": "Ruby Greene",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -274,6 +284,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-steve-monstur",
     "name": "Steve Monstur",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -303,6 +314,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-benny-balmer",
     "name": "Benny Balmer",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -331,6 +343,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-poke-foster",
     "name": "Poke Foster",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -359,6 +372,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-hurley-bender",
     "name": "Hurley Bender",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -397,6 +411,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-bevis-ortiz",
     "name": "Bevis Ortiz",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -434,6 +449,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-fran-gipani",
     "name": "Fran Gipani",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -473,6 +489,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-deshaun-levonn",
     "name": "Deshaun Levonn",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -508,6 +525,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-buzz-pastimm",
     "name": "Buzz Pastimm",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -548,6 +566,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-benson-rushmore",
     "name": "Benson Rushmore",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -583,6 +602,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-dusty-winder",
     "name": "Dusty Winder",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -617,6 +637,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-tatts-balfour",
     "name": "Tatts Balfour",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -653,6 +674,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "beewolves-smack-avery",
     "name": "Smack Avery",
     "team": "Beewolves",
     "conference": "Mega Conference",
@@ -688,6 +710,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "blowfish-elvis-stanley",
     "name": "Elvis Stanley",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -716,6 +739,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-jose-carloco",
     "name": "Jose Carloco",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -740,6 +764,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-nirub-oowanga",
     "name": "Nirub Oowanga",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -768,6 +793,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-marvin-steed",
     "name": "Marvin Steed",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -797,6 +823,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-keg-gutterson",
     "name": "Keg Gutterson",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -825,6 +852,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-sting-mcgee",
     "name": "Sting McGee",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -849,6 +877,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-shayanne-hill",
     "name": "Shayanne Hill",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -877,6 +906,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-rod-forth",
     "name": "Rod Forth",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -905,6 +935,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-hog-porker",
     "name": "Hog Porker",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -933,6 +964,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-harry-backman",
     "name": "Harry Backman",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -961,6 +993,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-ricky-quan",
     "name": "Ricky Quan",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -989,6 +1022,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-alfonzo-delgado",
     "name": "Alfonzo Delgado",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1017,6 +1051,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-pumper-lumpkins",
     "name": "Pumper Lumpkins",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1046,6 +1081,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-wanda-dregler",
     "name": "Wanda Dregler",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1085,6 +1121,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-lad-bradwick",
     "name": "Lad Bradwick",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1119,6 +1156,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-bartholomew-draculo",
     "name": "Bartholomew Draculo",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1157,6 +1195,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-shania-burns",
     "name": "Shania Burns",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1193,6 +1232,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-geoffery-jenkins",
     "name": "Geoffery Jenkins",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1231,6 +1271,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-dwight-breeze",
     "name": "Dwight Breeze",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1269,6 +1310,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-joanna-heater",
     "name": "Joanna Heater",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1306,6 +1348,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-mindy-marshwater",
     "name": "Mindy Marshwater",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1342,6 +1385,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "blowfish-julio-huper",
     "name": "Julio Huper",
     "team": "Blowfish",
     "conference": "Super Conference",
@@ -1380,6 +1424,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "buzzards-buttons-bunterson",
     "name": "Buttons Bunterson",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1409,6 +1454,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-joseph-trunk",
     "name": "Joseph Trunk",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1437,6 +1483,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-mario-mustaccio",
     "name": "Mario Mustaccio",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1466,6 +1513,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-jacques-o-ften",
     "name": "Jacques O'Ften",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1493,6 +1541,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-dano-yoshida",
     "name": "Dano Yoshida",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1519,6 +1568,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-thurman-colt",
     "name": "Thurman Colt",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1545,6 +1595,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-rolf-borgnar",
     "name": "Rolf Borgnar",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1573,6 +1624,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-sloop-whoopity",
     "name": "Sloop Whoopity",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1601,6 +1653,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-spits-mckinny",
     "name": "Spits McKinny",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1629,6 +1682,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-helena-bigsby",
     "name": "Helena Bigsby",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1653,6 +1707,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-billy-bronx",
     "name": "Billy Bronx",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1682,6 +1737,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-emilio-idoya",
     "name": "Emilio Idoya",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1712,6 +1768,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-ham-slamous",
     "name": "Ham Slamous",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1738,6 +1795,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-punchie-patterson",
     "name": "Punchie Patterson",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1776,6 +1834,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-meow-bubbkins",
     "name": "Meow Bubbkins",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1815,6 +1874,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-erlang-elwood",
     "name": "Erlang Elwood",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1853,6 +1913,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-hannah-hogswind",
     "name": "Hannah Hogswind",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1888,6 +1949,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-bradley-bowler",
     "name": "Bradley Bowler",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1925,6 +1987,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-sebastian-morrow",
     "name": "Sebastian Morrow",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1963,6 +2026,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-max-texis",
     "name": "Max Texis",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -1999,6 +2063,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-meat-commonly",
     "name": "Meat Commonly",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -2036,6 +2101,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "buzzards-leyla-buckberger",
     "name": "Leyla Buckberger",
     "team": "Buzzards",
     "conference": "Mega Conference",
@@ -2071,6 +2137,7 @@
     "teamStrength": "Defensive Experts"
   },
   {
+    "id": "crocodons-liane-drive",
     "name": "Liane Drive",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2099,6 +2166,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-andre-candela",
     "name": "Andre Candela",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2128,6 +2196,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-runda-thurd",
     "name": "Runda Thurd",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2156,6 +2225,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-terra-lionerre",
     "name": "Terra Lionerre",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2184,6 +2254,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-vinnie-vortex",
     "name": "Vinnie Vortex",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2210,6 +2281,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-gordon-fruitwell",
     "name": "Gordon Fruitwell",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2236,6 +2308,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-juanita-hernandez",
     "name": "Juanita Hernandez",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2264,6 +2337,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-norton-pickle",
     "name": "Norton Pickle",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2290,6 +2364,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-clifford-kane",
     "name": "Clifford Kane",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2318,6 +2393,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-evan-chukov",
     "name": "Evan Chukov",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2346,6 +2422,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-bubba-blastman",
     "name": "Bubba Blastman",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2373,6 +2450,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-trisha-lee",
     "name": "Trisha Lee",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2399,6 +2477,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-tarzan-woodburn",
     "name": "Tarzan Woodburn",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2427,6 +2506,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-jovita-pulo",
     "name": "Jovita Pulo",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2462,6 +2542,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-maurice-brick",
     "name": "Maurice Brick",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2501,6 +2582,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-jerry-kapps",
     "name": "Jerry Kapps",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2537,6 +2619,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-bae-paul",
     "name": "Bae Paul",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2575,6 +2658,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-norm-fenomeno",
     "name": "Norm Fenomeno",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2615,6 +2699,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-woody-ano",
     "name": "Woody Ano",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2651,6 +2736,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-tia-mayfair",
     "name": "Tia Mayfair",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2687,6 +2773,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-lou-dabaziz",
     "name": "Lou DaBaziz",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2723,6 +2810,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "crocodons-ricky-mcfarland",
     "name": "Ricky McFarland",
     "team": "Crocodons",
     "conference": "Mega Conference",
@@ -2758,6 +2846,7 @@
     "teamStrength": "Rotation Aces"
   },
   {
+    "id": "freebooters-stockton-brickhouse",
     "name": "Stockton Brickhouse",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -2786,6 +2875,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-oakley-stiffs",
     "name": "Oakley Stiffs",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -2815,6 +2905,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-sturdy-woodman",
     "name": "Sturdy Woodman",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -2841,6 +2932,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-gunns-jackman",
     "name": "Gunns Jackman",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -2870,6 +2962,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-patience-evergreen",
     "name": "Patience Evergreen",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -2898,6 +2991,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-pomp-duchee",
     "name": "Pomp Duchee",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -2927,6 +3021,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-walker-runs",
     "name": "Walker Runs",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -2955,6 +3050,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-jermaine-raines",
     "name": "Jermaine Raines",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -2983,6 +3079,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-kache-baskette",
     "name": "Kache Baskette",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3012,6 +3109,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-kenna-quorn",
     "name": "Kenna Quorn",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3040,6 +3138,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-landon-fare",
     "name": "Landon Fare",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3068,6 +3167,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-badhop-brown",
     "name": "Badhop Brown",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3094,6 +3194,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-rocky-backstop",
     "name": "Rocky Backstop",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3120,6 +3221,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-winnie-noelle",
     "name": "Winnie Noelle",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3157,6 +3259,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-nic-diegez",
     "name": "Nic Diegez",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3194,6 +3297,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-angel-verde",
     "name": "Angel Verde",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3230,6 +3334,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-lana-rhymes",
     "name": "Lana Rhymes",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3267,6 +3372,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-kent-rathswell",
     "name": "Kent Rathswell",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3307,6 +3413,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-steamboat-wisselle",
     "name": "Steamboat Wisselle",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3344,6 +3451,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-grace-loopinovich",
     "name": "Grace Loopinovich",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3382,6 +3490,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-ryder-mcpride",
     "name": "Ryder McPride",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3419,6 +3528,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "freebooters-kay-frequin",
     "name": "Kay Frequin",
     "team": "Freebooters",
     "conference": "Super Conference",
@@ -3455,6 +3565,7 @@
     "teamStrength": "Extreme Bullpen Beasts"
   },
   {
+    "id": "grapplers-ali-finderre",
     "name": "Ali Finderre",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3483,6 +3594,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-devon-godsendez",
     "name": "Devon Godsendez",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3509,6 +3621,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-joven-bambino",
     "name": "Joven Bambino",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3537,6 +3650,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-kelby-king",
     "name": "Kelby King",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3565,6 +3679,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-marco-demarco",
     "name": "Marco Demarco",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3594,6 +3709,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-zoom-delacruz",
     "name": "Zoom Delacruz",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3622,6 +3738,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-ian-fielder",
     "name": "Ian Fielder",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3650,6 +3767,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-grizz-senioro",
     "name": "Grizz Senioro",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3676,6 +3794,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-biff-noggins",
     "name": "Biff Noggins",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3704,6 +3823,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-eduardo-electro",
     "name": "Eduardo Electro",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3732,6 +3852,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-jefe-manzano",
     "name": "Jefe Manzano",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3760,6 +3881,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-ben-kringer",
     "name": "Ben Kringer",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3787,6 +3909,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-marla-moore",
     "name": "Marla Moore",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3815,6 +3938,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-ritonda-black",
     "name": "Ritonda Black",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3853,6 +3977,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-perd-lovelorn",
     "name": "Perd Lovelorn",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3890,6 +4015,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-hiro-misano",
     "name": "Hiro Misano",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3928,6 +4054,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-bertram-haftberger-iii",
     "name": "Bertram Haftberger III",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -3965,6 +4092,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-lola-nopps",
     "name": "Lola Nopps",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -4002,6 +4130,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-mack-gunn",
     "name": "Mack Gunn",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -4039,6 +4168,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-rallie-overro",
     "name": "Rallie Overro",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -4075,6 +4205,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-tucker-turlington",
     "name": "Tucker Turlington",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -4113,6 +4244,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "grapplers-meggy-meggles",
     "name": "Meggy Meggles",
     "team": "Grapplers",
     "conference": "Mega Conference",
@@ -4147,6 +4279,7 @@
     "teamStrength": "Bullpen Beasts"
   },
   {
+    "id": "heaters-raise-ruffo",
     "name": "Raise Ruffo",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4176,6 +4309,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-slapper-glute",
     "name": "Slapper Glute",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4204,6 +4338,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-theodore-stiffner",
     "name": "Theodore Stiffner",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4232,6 +4367,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-mantonio-laevo",
     "name": "Mantonio Laevo",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4258,6 +4394,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-carlton-starr",
     "name": "Carlton Starr",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4286,6 +4423,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-hank-hart",
     "name": "Hank Hart",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4312,6 +4450,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-dion-bass",
     "name": "Dion Bass",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4341,6 +4480,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-volt-bolter",
     "name": "Volt Bolter",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4368,6 +4508,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-maggie-rags",
     "name": "Maggie Rags",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4397,6 +4538,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-kimme-smoke",
     "name": "Kimme Smoke",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4425,6 +4567,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-bubbles-garcia",
     "name": "Bubbles Garcia",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4453,6 +4596,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-buscha-digman",
     "name": "Buscha Digman",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4481,6 +4625,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-murky-nubswubbles",
     "name": "Murky Nubswubbles",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4507,6 +4652,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-elmo-slayer",
     "name": "Elmo Slayer",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4545,6 +4691,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-bishop-fuller",
     "name": "Bishop Fuller",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4583,6 +4730,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-air-lovestone",
     "name": "Air Lovestone",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4622,6 +4770,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-pan-knibbles",
     "name": "Pan Knibbles",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4657,6 +4806,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-boris-biggsworth",
     "name": "Boris Biggsworth",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4695,6 +4845,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-derr-neverwocker",
     "name": "Derr Neverwocker",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4732,6 +4883,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-splash-cashmore",
     "name": "Splash Cashmore",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4768,6 +4920,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-huck-enduck",
     "name": "Huck Enduck",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4804,6 +4957,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "heaters-simba-delano",
     "name": "Simba Delano",
     "team": "Heaters",
     "conference": "Mega Conference",
@@ -4839,6 +4993,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "herbisaurs-morton-stanberg",
     "name": "Morton Stanberg",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -4868,6 +5023,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-henry-hampster",
     "name": "Henry Hampster",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -4896,6 +5052,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-grunt-manly",
     "name": "Grunt Manly",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -4924,6 +5081,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-juan-rojas",
     "name": "Juan Rojas",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -4952,6 +5110,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-milo-stewart",
     "name": "Milo Stewart",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -4980,6 +5139,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-yoink-sax",
     "name": "Yoink Sax",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5009,6 +5169,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-annabella-stokes",
     "name": "Annabella Stokes",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5037,6 +5198,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-fiona-clark",
     "name": "Fiona Clark",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5063,6 +5225,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-ralph-blue",
     "name": "Ralph Blue",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5093,6 +5256,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-stevo-reeves",
     "name": "Stevo Reeves",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5121,6 +5285,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-chilli-little",
     "name": "Chilli Little",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5149,6 +5314,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-nate-hanky",
     "name": "Nate Hanky",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5177,6 +5343,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-whopper-batsman",
     "name": "Whopper Batsman",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5203,6 +5370,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-gem-qualita",
     "name": "Gem Qualita",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5242,6 +5410,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-dick-lukas",
     "name": "Dick Lukas",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5280,6 +5449,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-olaff-slakov",
     "name": "Olaff Slakov",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5318,6 +5488,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-tussker-fuss",
     "name": "Tussker Fuss",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5355,6 +5526,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-sal-slinger",
     "name": "Sal Slinger",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5392,6 +5564,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-chuck-filthwick",
     "name": "Chuck Filthwick",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5426,6 +5599,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-leonar-ramiro",
     "name": "Leonar Ramiro",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5463,6 +5637,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-omar-chombo",
     "name": "Omar Chombo",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5499,6 +5674,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "herbisaurs-elrick-rippin",
     "name": "Elrick Rippin",
     "team": "Herbisaurs",
     "conference": "Super Conference",
@@ -5535,6 +5711,7 @@
     "teamStrength": "Extreme Defensive Experts"
   },
   {
+    "id": "hot-corners-stan-elyve",
     "name": "Stan Elyve",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5563,6 +5740,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-beau-belter",
     "name": "Beau Belter",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5591,6 +5769,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-nora-homes",
     "name": "Nora Homes",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5620,6 +5799,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-jeb-jumps",
     "name": "Jeb Jumps",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5647,6 +5827,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-bobby-bashe",
     "name": "Bobby Bashe",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5676,6 +5857,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-dirk-sportswood",
     "name": "Dirk Sportswood",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5703,6 +5885,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-geronimo-james",
     "name": "Geronimo James",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5731,6 +5914,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-tiny-degrande",
     "name": "Tiny deGrande",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5757,6 +5941,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-stu-berko",
     "name": "Stu Berko",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5783,6 +5968,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-randy-mann",
     "name": "Randy Mann",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5811,6 +5997,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-nori-miyoshi",
     "name": "Nori Miyoshi",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5839,6 +6026,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-seymour-scoks",
     "name": "Seymour Scoks",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5868,6 +6056,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-lars-stadkeleef",
     "name": "Lars Stadkeleef",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5894,6 +6083,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-noah-kaiser",
     "name": "Noah Kaiser",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5932,6 +6122,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-dot-dacornas",
     "name": "Dot Dacornas",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -5970,6 +6161,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-yolanda-cooper",
     "name": "Yolanda Cooper",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -6007,6 +6199,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-terrok-smith",
     "name": "Terrok Smith",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -6044,6 +6237,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-rachel-rhubarb",
     "name": "Rachel Rhubarb",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -6081,6 +6275,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-joseph-broseph",
     "name": "Joseph Broseph",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -6117,6 +6312,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-amazo-haze",
     "name": "Amazo Haze",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -6154,6 +6350,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-grump-everbright",
     "name": "Grump Everbright",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -6190,6 +6387,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "hot-corners-sirloin-jones",
     "name": "Sirloin Jones",
     "team": "Hot Corners",
     "conference": "Super Conference",
@@ -6226,6 +6424,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "jacks-jack-cracker",
     "name": "Jack Cracker",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6253,6 +6452,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-huffly-buffler",
     "name": "Huffly Buffler",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6282,6 +6482,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-juice-jackson",
     "name": "Juice Jackson",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6311,6 +6512,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-log-freely",
     "name": "Log Freely",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6339,6 +6541,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-razi-dazzler",
     "name": "Razi Dazzler",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6367,6 +6570,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-rob-glover",
     "name": "Rob Glover",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6395,6 +6599,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-downtown-upton",
     "name": "Downtown Upton",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6423,6 +6628,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-tuff-lift",
     "name": "Tuff Lift",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6449,6 +6655,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-yoyo-yamamoto",
     "name": "Yoyo Yamamoto",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6477,6 +6684,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-betty-sparks",
     "name": "Betty Sparks",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6501,6 +6709,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-bruno-adamo",
     "name": "Bruno Adamo",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6529,6 +6738,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-batch-wilson",
     "name": "Batch Wilson",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6557,6 +6767,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-clutch-cormen",
     "name": "Clutch Cormen",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6583,6 +6794,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-donk-oh",
     "name": "Donk Oh",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6620,6 +6832,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-alberto-roberto",
     "name": "Alberto Roberto",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6658,6 +6871,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-barry-ozone",
     "name": "Barry Ozone",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6695,6 +6909,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-bella-mietballe",
     "name": "Bella Mietballe",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6733,6 +6948,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-stitch-gripowski",
     "name": "Stitch Gripowski",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6773,6 +6989,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-immaculo-spectaculo",
     "name": "Immaculo Spectaculo",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6809,6 +7026,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-ellain-munstar",
     "name": "Ellain Munstar",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6843,6 +7061,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-kisha-musharra",
     "name": "Kisha Musharra",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6879,6 +7098,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "jacks-chico-lapada",
     "name": "Chico Lapada",
     "team": "Jacks",
     "conference": "Mega Conference",
@@ -6916,6 +7136,7 @@
     "teamStrength": "Extreme Contact Specialists"
   },
   {
+    "id": "moonstars-herbert-hackman",
     "name": "Herbert Hackman",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -6944,6 +7165,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-nance-tools",
     "name": "Nance Tools",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -6973,6 +7195,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-testy-osteroni",
     "name": "Testy Osteroni",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7001,6 +7224,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-gustav-gustavson",
     "name": "Gustav Gustavson",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7030,6 +7254,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-boo-louis",
     "name": "Boo Louis",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7058,6 +7283,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-windy-wheels",
     "name": "Windy Wheels",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7087,6 +7313,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-lacky-luster",
     "name": "Lacky Luster",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7116,6 +7343,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-pepe-vinicio",
     "name": "Pepe Vinicio",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7144,6 +7372,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-rusty-bustum",
     "name": "Rusty Bustum",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7168,6 +7397,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-elija-gobbleson",
     "name": "Elija Gobbleson",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7194,6 +7424,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-raffy-slaps",
     "name": "Raffy Slaps",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7222,6 +7453,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-clubber-buff",
     "name": "Clubber Buff",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7248,6 +7480,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-clyde-oliver",
     "name": "Clyde Oliver",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7276,6 +7509,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-dale-nale",
     "name": "Dale Nale",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7304,6 +7538,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-alisha-woodrow",
     "name": "Alisha Woodrow",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7342,6 +7577,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-slip-sauder",
     "name": "Slip Sauder",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7378,6 +7614,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-vern-turnburner",
     "name": "Vern Turnburner",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7416,6 +7653,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-durn-wonderfloss",
     "name": "Durn Wonderfloss",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7453,6 +7691,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-deft-weddums",
     "name": "Deft Weddums",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7492,6 +7731,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-bert-bergerer",
     "name": "Bert Bergerer",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7528,6 +7768,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-taylor-mcwhales",
     "name": "Taylor McWhales",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7565,6 +7806,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moonstars-lil-bupton",
     "name": "Lil Bupton",
     "team": "Moonstars",
     "conference": "Super Conference",
@@ -7601,6 +7843,7 @@
     "teamStrength": "Extreme Rotation Aces"
   },
   {
+    "id": "moose-heroniumus-jackson",
     "name": "Heroniumus Jackson",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7629,6 +7872,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-rip-dingers",
     "name": "Rip Dingers",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7658,6 +7902,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-perry-quaker",
     "name": "Perry Quaker",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7684,6 +7929,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-irene-fast",
     "name": "Irene Fast",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7713,6 +7959,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-nacho-crisp",
     "name": "Nacho Crisp",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7741,6 +7988,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-buck-swiner",
     "name": "Buck Swiner",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7769,6 +8017,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-fred-bobbit",
     "name": "Fred Bobbit",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7797,6 +8046,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-roman-rhoades",
     "name": "Roman Rhoades",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7825,6 +8075,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-stallion-johnson",
     "name": "Stallion Johnson",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7853,6 +8104,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-pedro-nixon",
     "name": "Pedro Nixon",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7879,6 +8131,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-hose-tremendo",
     "name": "Hose Tremendo",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7907,6 +8160,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-lionel-martinez",
     "name": "Lionel Martinez",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7935,6 +8189,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-wiggles-freeman",
     "name": "Wiggles Freeman",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7961,6 +8216,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-rhiannon-cannon",
     "name": "Rhiannon Cannon",
     "team": "Moose",
     "conference": "Super Conference",
@@ -7999,6 +8255,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-joeffrey-rockman",
     "name": "Joeffrey Rockman",
     "team": "Moose",
     "conference": "Super Conference",
@@ -8034,6 +8291,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-sancha-silvio",
     "name": "Sancha Silvio",
     "team": "Moose",
     "conference": "Super Conference",
@@ -8071,6 +8329,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-raul-strikes",
     "name": "Raul Strikes",
     "team": "Moose",
     "conference": "Super Conference",
@@ -8108,6 +8367,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-swirly-cutstiff",
     "name": "Swirly Cutstiff",
     "team": "Moose",
     "conference": "Super Conference",
@@ -8148,6 +8408,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-felix-farmhand",
     "name": "Felix Farmhand",
     "team": "Moose",
     "conference": "Super Conference",
@@ -8184,6 +8445,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-charlie-best",
     "name": "Charlie Best",
     "team": "Moose",
     "conference": "Super Conference",
@@ -8221,6 +8483,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-carla-tolbert",
     "name": "Carla Tolbert",
     "team": "Moose",
     "conference": "Super Conference",
@@ -8258,6 +8521,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "moose-klaus-d-gayme",
     "name": "Klaus D'Gayme",
     "team": "Moose",
     "conference": "Super Conference",
@@ -8293,6 +8557,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "nemesis-jackie-slam",
     "name": "Jackie Slam",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8322,6 +8587,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-jock-sports",
     "name": "Jock Sports",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8350,6 +8616,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-javier-hautier",
     "name": "Javier Hautier",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8378,6 +8645,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-hito-moonshota",
     "name": "Hito Moonshota",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8406,6 +8674,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-mash-taters",
     "name": "Mash Taters",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8430,6 +8699,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-javy-yatter",
     "name": "Javy Yatter",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8459,6 +8729,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-stacy-staples",
     "name": "Stacy Staples",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8487,6 +8758,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-brine-pickleford",
     "name": "Brine Pickleford",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8515,6 +8787,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-churl-dangerfield",
     "name": "Churl Dangerfield",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8544,6 +8817,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-amy-zoner",
     "name": "Amy Zoner",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8573,6 +8847,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-flash-leathar",
     "name": "Flash Leathar",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8601,6 +8876,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-gabby-ganez",
     "name": "Gabby Ganez",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8629,6 +8905,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-mimori-aoshima",
     "name": "Mimori Aoshima",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8655,6 +8932,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-ansel-carouse",
     "name": "Ansel Carouse",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8693,6 +8971,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-heidi-mabettes",
     "name": "Heidi Mabettes",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8731,6 +9010,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-mark-harbourmouth",
     "name": "Mark Harbourmouth",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8768,6 +9048,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-deuce-stacker",
     "name": "Deuce Stacker",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8805,6 +9086,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-jacob-marshmallow",
     "name": "Jacob Marshmallow",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8843,6 +9125,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-binky-stevens",
     "name": "Binky Stevens",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8879,6 +9162,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-lucy-finnegans",
     "name": "Lucy Finnegans",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8915,6 +9199,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-babette-walkman",
     "name": "Babette Walkman",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8951,6 +9236,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "nemesis-lawrence-wimple",
     "name": "Lawrence Wimple",
     "team": "Nemesis",
     "conference": "Mega Conference",
@@ -8986,6 +9272,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "overdogs-guy-gold",
     "name": "Guy Gold",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9012,6 +9299,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-sakda-song",
     "name": "Sakda Song",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9041,6 +9329,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-kasha-emyn",
     "name": "Kasha Emyn",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9069,6 +9358,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-rhonda-horne",
     "name": "Rhonda Horne",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9097,6 +9387,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-anton-goodwood",
     "name": "Anton Goodwood",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9125,6 +9416,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-robbin-yew",
     "name": "Robbin Yew",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9154,6 +9446,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-elroy-action",
     "name": "Elroy Action",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9182,6 +9475,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-yvette-victorino",
     "name": "Yvette Victorino",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9208,6 +9502,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-casper-stern",
     "name": "Casper Stern",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9238,6 +9533,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-raphael-gonzolo",
     "name": "Raphael Gonzolo",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9266,6 +9562,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-samuel-perez",
     "name": "Samuel Perez",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9292,6 +9589,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-dick-burger",
     "name": "Dick Burger",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9318,6 +9616,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-digg-efforto",
     "name": "Digg Efforto",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9347,6 +9646,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-larry-la-joy",
     "name": "Larry La'Joy",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9384,6 +9684,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-chasey-kim",
     "name": "Chasey Kim",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9421,6 +9722,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-werner-bergenberg",
     "name": "Werner Bergenberg",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9458,6 +9760,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-carrie-wayward",
     "name": "Carrie Wayward",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9493,6 +9796,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-slick-pickman",
     "name": "Slick Pickman",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9532,6 +9836,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-brawn-thunderchump",
     "name": "Brawn Thunderchump",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9568,6 +9873,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-david-diggler",
     "name": "David Diggler",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9604,6 +9910,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-rocket-ramon",
     "name": "Rocket Ramon",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9640,6 +9947,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "overdogs-doug-nerdwerd",
     "name": "Doug Nerdwerd",
     "team": "Overdogs",
     "conference": "Mega Conference",
@@ -9678,6 +9986,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "platypi-kitty-kauffman",
     "name": "Kitty Kauffman",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9706,6 +10015,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-beefcake-mcstevens",
     "name": "Beefcake McStevens",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9735,6 +10045,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-herra-o-wuggliems",
     "name": "Herra O'Wuggliems",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9764,6 +10075,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-muffin-studwick",
     "name": "Muffin Studwick",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9794,6 +10106,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-willy-bacon",
     "name": "Willy Bacon",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9822,6 +10135,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-scooter-sandbrick",
     "name": "Scooter Sandbrick",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9850,6 +10164,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-charley-lopez",
     "name": "Charley Lopez",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9878,6 +10193,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-tugboat-thomas",
     "name": "Tugboat Thomas",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9902,6 +10218,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-kerry-cartman",
     "name": "Kerry Cartman",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9930,6 +10247,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-rory-crowds",
     "name": "Rory Crowds",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9958,6 +10276,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-sky-rodriguez",
     "name": "Sky Rodriguez",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -9984,6 +10303,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-linda-hand",
     "name": "Linda Hand",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10012,6 +10332,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-chase-tibuhle",
     "name": "Chase Tibuhle",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10040,6 +10361,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-ace-von-acesson",
     "name": "Ace von Acesson",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10078,6 +10400,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-stooby-tubrek",
     "name": "Stooby Tubrek",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10115,6 +10438,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-rusty-nozzle",
     "name": "Rusty Nozzle",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10152,6 +10476,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-rufus-zumar",
     "name": "Rufus Zumar",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10192,6 +10517,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-shirley-indiere",
     "name": "Shirley Indiere",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10231,6 +10557,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-chance-lotterbury",
     "name": "Chance Lotterbury",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10269,6 +10596,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-remington-sharp",
     "name": "Remington Sharp",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10305,6 +10633,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-hugh-jacobs",
     "name": "Hugh Jacobs",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10339,6 +10668,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "platypi-walt-huckster",
     "name": "Walt Huckster",
     "team": "Platypi",
     "conference": "Mega Conference",
@@ -10375,6 +10705,7 @@
     "teamStrength": "Contact Specialists"
   },
   {
+    "id": "sandcats-rodney-park",
     "name": "Rodney Park",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10401,6 +10732,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-marsha-brown",
     "name": "Marsha Brown",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10429,6 +10761,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-hercules-bentley",
     "name": "Hercules Bentley",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10455,6 +10788,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-jess-fowl",
     "name": "Jess Fowl",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10483,6 +10817,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-dolf-steak",
     "name": "Dolf Steak",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10513,6 +10848,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-knox-oxensocksen",
     "name": "Knox Oxensocksen",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10541,6 +10877,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-super-sampson",
     "name": "Super Sampson",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10569,6 +10906,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-chip-duffers",
     "name": "Chip Duffers",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10598,6 +10936,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-kara-kawaguchi",
     "name": "Kara Kawaguchi",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10624,6 +10963,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-winston-draper",
     "name": "Winston Draper",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10652,6 +10992,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-gia-axelson",
     "name": "Gia Axelson",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10680,6 +11021,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-tigg-tantrum",
     "name": "Tigg Tantrum",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10708,6 +11050,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-stracy-wickers",
     "name": "Stracy Wickers",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10736,6 +11079,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-kerwin-arches",
     "name": "Kerwin Arches",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10773,6 +11117,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-kandi-sweet",
     "name": "Kandi Sweet",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10811,6 +11156,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-beebee-takabasei",
     "name": "Beebee Takabasei",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10849,6 +11195,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-trey-mondo",
     "name": "Trey Mondo",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10885,6 +11232,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-sergio-slider",
     "name": "Sergio Slider",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10924,6 +11272,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-gasser-morris",
     "name": "Gasser Morris",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10961,6 +11310,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-maverick-mcmann",
     "name": "Maverick McMann",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -10997,6 +11347,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-jemma-yago",
     "name": "Jemma Yago",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -11031,6 +11382,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sandcats-ice-vainer",
     "name": "Ice Vainer",
     "team": "Sandcats",
     "conference": "Super Conference",
@@ -11066,6 +11418,7 @@
     "teamStrength": "Extreme Speed Demons"
   },
   {
+    "id": "sawteeth-slash-trips",
     "name": "Slash Trips",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11096,6 +11449,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-johnny-bags",
     "name": "Johnny Bags",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11124,6 +11478,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-junior-young-sr",
     "name": "Junior Young Sr",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11152,6 +11507,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-jon-ronero",
     "name": "Jon Ronero",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11181,6 +11537,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-lester-bronco",
     "name": "Lester Bronco",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11209,6 +11566,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-kira-nutmeg",
     "name": "Kira Nutmeg",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11237,6 +11595,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-dp-turner",
     "name": "DP Turner",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11266,6 +11625,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-junior-young-jr",
     "name": "Junior Young Jr",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11294,6 +11654,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-pex-flext",
     "name": "Pex Flext",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11322,6 +11683,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-cathy-culdesac",
     "name": "Cathy Culdesac",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11350,6 +11712,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-hanso-magikko",
     "name": "Hanso Magikko",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11379,6 +11742,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-mattie-batts",
     "name": "Mattie Batts",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11408,6 +11772,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-sammie-shigetani",
     "name": "Sammie Shigetani",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11436,6 +11801,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-lefty-southpalm",
     "name": "Lefty Southpalm",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11474,6 +11840,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-fabio-fabulo",
     "name": "Fabio Fabulo",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11512,6 +11879,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-thrash-allmeyer",
     "name": "Thrash Allmeyer",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11549,6 +11917,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-melody-moods",
     "name": "Melody Moods",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11587,6 +11956,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-grease-veterano",
     "name": "Grease Veterano",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11624,6 +11994,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-brick-towers",
     "name": "Brick Towers",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11660,6 +12031,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-doc-simpleman",
     "name": "Doc Simpleman",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11697,6 +12069,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-libby-doe",
     "name": "Libby Doe",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11731,6 +12104,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sawteeth-maximo-primo",
     "name": "Maximo Primo",
     "team": "Sawteeth",
     "conference": "Super Conference",
@@ -11767,6 +12141,7 @@
     "teamStrength": "Balanced"
   },
   {
+    "id": "sirloins-kat-stanza",
     "name": "Kat Stanza",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -11793,6 +12168,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-hammer-longballo",
     "name": "Hammer Longballo",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -11823,6 +12199,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-lloyd-cook",
     "name": "Lloyd Cook",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -11851,6 +12228,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-filet-jones",
     "name": "Filet Jones",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -11879,6 +12257,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-madoka-hayata",
     "name": "Madoka Hayata",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -11907,6 +12286,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-willard-wiggins",
     "name": "Willard Wiggins",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -11936,6 +12316,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-preston-addonomus",
     "name": "Preston Addonomus",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -11962,6 +12343,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-damien-rush",
     "name": "Damien Rush",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -11991,6 +12373,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-momo-tobo",
     "name": "Momo Tobo",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12015,6 +12398,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-tish-balin",
     "name": "Tish Balin",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12043,6 +12427,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-boomer-plattune",
     "name": "Boomer Plattune",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12069,6 +12454,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-javier-cortez",
     "name": "Javier Cortez",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12097,6 +12483,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-mick-steeyle",
     "name": "Mick Steeyle",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12123,6 +12510,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-manny-kays",
     "name": "Manny Kays",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12160,6 +12548,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-bugsy-snugs",
     "name": "Bugsy Snugs",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12197,6 +12586,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-slip-van-derwink",
     "name": "Slip Van'Derwink",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12235,6 +12625,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-kayo-niomo",
     "name": "Kayo Niomo",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12272,6 +12663,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-split-seemerson",
     "name": "Split Seemerson",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12312,6 +12704,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-shay-dee",
     "name": "Shay Dee",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12350,6 +12743,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-linus-digby",
     "name": "Linus Digby",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12385,6 +12779,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-miguel-duke",
     "name": "Miguel Duke",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12419,6 +12814,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "sirloins-franz-zilla",
     "name": "Franz Zilla",
     "team": "Sirloins",
     "conference": "Super Conference",
@@ -12454,6 +12850,7 @@
     "teamStrength": "Extreme Power Hitters"
   },
   {
+    "id": "wideloads-masha-donga",
     "name": "Masha Donga",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12482,6 +12879,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-darcy-hicks",
     "name": "Darcy Hicks",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12508,6 +12906,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-hack-liner",
     "name": "Hack Liner",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12537,6 +12936,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-chimo-gaspar",
     "name": "Chimo Gaspar",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12566,6 +12966,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-harmony-straus",
     "name": "Harmony Straus",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12594,6 +12995,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-wade-hobbes",
     "name": "Wade Hobbes",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12622,6 +13024,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-ella-roids",
     "name": "Ella Roids",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12650,6 +13053,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-fungo-accuro",
     "name": "Fungo Accuro",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12678,6 +13082,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-janus-friedman",
     "name": "Janus Friedman",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12706,6 +13111,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-izzy-baker",
     "name": "Izzy Baker",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12730,6 +13136,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-prince-prize",
     "name": "Prince Prize",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12758,6 +13165,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-olaf-beerson",
     "name": "Olaf Beerson",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12784,6 +13192,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-jules-bergman",
     "name": "Jules Bergman",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12810,6 +13219,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-chugg-burbony",
     "name": "Chugg Burbony",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12849,6 +13259,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-sanny-deals",
     "name": "Sanny Deals",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12886,6 +13297,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-latoya-lumberg",
     "name": "Latoya Lumberg",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12921,6 +13333,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-gerry-rawner",
     "name": "Gerry Rawner",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12959,6 +13372,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-holder-close",
     "name": "Holder Close",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -12999,6 +13413,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-bale-bozzer",
     "name": "Bale Bozzer",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -13036,6 +13451,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-molly-pops",
     "name": "Molly Pops",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -13072,6 +13488,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-kyrone-throne",
     "name": "Kyrone Throne",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -13106,6 +13523,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wideloads-rogan-balls",
     "name": "Rogan Balls",
     "team": "Wideloads",
     "conference": "Mega Conference",
@@ -13142,6 +13560,7 @@
     "teamStrength": "Power Hitters"
   },
   {
+    "id": "wild-pigs-bloop-michaels",
     "name": "Bloop Michaels",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13171,6 +13590,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-snag-roper",
     "name": "Snag Roper",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13197,6 +13617,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-spanky-wagnerd",
     "name": "Spanky Wagnerd",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13224,6 +13645,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-flash-evans",
     "name": "Flash Evans",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13252,6 +13674,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-rosy-hardman",
     "name": "Rosy Hardman",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13280,6 +13703,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-frank-battery",
     "name": "Frank Battery",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13307,6 +13731,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-mannon-moon",
     "name": "Mannon Moon",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13335,6 +13760,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-roberto-alba",
     "name": "Roberto Alba",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13363,6 +13789,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-wally-bacon",
     "name": "Wally Bacon",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13389,6 +13816,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-earnie-blings",
     "name": "Earnie Blings",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13417,6 +13845,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-turbo-miles",
     "name": "Turbo Miles",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13445,6 +13874,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-enrique-goyo",
     "name": "Enrique Goyo",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13472,6 +13902,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-godfried-storm",
     "name": "Godfried Storm",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13501,6 +13932,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-wes-yogurt",
     "name": "Wes Yogurt",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13537,6 +13969,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-hugs-lovell",
     "name": "Hugs Lovell",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13575,6 +14008,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-durbin-holmes",
     "name": "Durbin Holmes",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13610,6 +14044,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-wiff-smesson",
     "name": "Wiff Smesson",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13649,6 +14084,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-cutter-crackebarrel",
     "name": "Cutter Crackebarrel",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13688,6 +14124,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-donovan-drake",
     "name": "Donovan Drake",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13724,6 +14161,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-alana-lantana",
     "name": "Alana Lantana",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13760,6 +14198,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-kendra-kerr",
     "name": "Kendra Kerr",
     "team": "Wild Pigs",
     "conference": "Super Conference",
@@ -13795,6 +14234,7 @@
     "teamStrength": "Speed Demons"
   },
   {
+    "id": "wild-pigs-hander-o-speciallo",
     "name": "Hander O'Speciallo",
     "team": "Wild Pigs",
     "conference": "Super Conference",

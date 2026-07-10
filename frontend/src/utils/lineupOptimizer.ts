@@ -1,3 +1,5 @@
+import { canPlayPosition, positionWeightedScore, positionFitMultiplier, hasTrait } from './traitFitUtils';
+
 export type OptimizationStrategy = 'overall' | 'power' | 'contact' | 'speed' | 'defense' | 'team_signature';
 
 export const POSITIONS = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH', 'SP'];
@@ -132,8 +134,52 @@ export const autoPickLineup = (players: any[], teamName: string, strategy: Optim
   };
 
   // First pass: Try to slot highest scorers
-  for (const p of sortedPlayers) {
-    tryAssign(p);
+  if (appliedStrategy === 'overall') {
+    // 'overall' strategy: pitchers keep the original greedy logic, but fielder
+    // position slots are filled with the best position-weighted score
+    // (secondary positions penalized via positionFitMultiplier; the Utility
+    // trait refunds part of that penalty).
+    for (const p of sortedPlayers) {
+      if (p.isPitcher) tryAssign(p);
+    }
+
+    // Fill scarce, defense-first positions before the corner spots.
+    const FIELD_FILL_ORDER = ['C', 'SS', 'CF', '2B', '3B', 'RF', 'LF', '1B', 'DH'];
+    for (const pos of FIELD_FILL_ORDER) {
+      let best: any = null;
+      let bestScore = -1;
+      for (const p of sortedPlayers) {
+        if (p.isPitcher || usedPlayerNames.has(p.name)) continue;
+        const fit = canPlayPosition(p, pos);
+        const mult = positionFitMultiplier(fit, hasTrait(p, 'Utility'));
+        if (mult === 0) continue;
+        const score = (positionWeightedScore(p, pos) || 0) * mult;
+        if (score > bestScore) {
+          bestScore = score;
+          best = p;
+        }
+      }
+      if (best) {
+        lineup[pos] = best;
+        usedPlayerNames.add(best.name);
+      }
+    }
+
+    // Remaining fielders go to the bench in overall-score order.
+    for (const p of sortedPlayers) {
+      if (p.isPitcher || usedPlayerNames.has(p.name)) continue;
+      for (let i = 1; i <= 5; i++) {
+        if (!lineup[`BN${i}`]) {
+          lineup[`BN${i}`] = p;
+          usedPlayerNames.add(p.name);
+          break;
+        }
+      }
+    }
+  } else {
+    for (const p of sortedPlayers) {
+      tryAssign(p);
+    }
   }
 
   // Second pass: fill empty spots with whoever is left

@@ -1,13 +1,42 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import playersData from '../data/players.json';
 import { autoPickLineup, optimizeBattingOrder, ALL_TEAMS, FULL_ROSTER_POSITIONS } from '../utils/lineupOptimizer';
 import type { OptimizationStrategy, Lineup, BattingStrategy } from '../utils/lineupOptimizer';
+import { listRosters, getRosterPlayers, encodeTeamSource, decodeTeamSource } from '../utils/myTeamStorage';
 import { calculateTeamStats } from '../utils/teamStats';
-import { Settings2, RefreshCw, UserPlus, Search, Trash2, Shield, Swords, Users, Target } from 'lucide-react';
+import { CHEMISTRY_TYPES, CHEMISTRY_COLOR_VARS, normalizeChemistry, getChemistryLevel, nextThreshold } from '../utils/chemistryUtils';
+import type { ChemistryType } from '../utils/chemistryUtils';
+import {
+  TRAIT_BATTING_FIT, NEGATIVE_HITTER_TRAITS, getTraitByName, hasTrait,
+  getEffectiveTraitDesc, formatSlotRanges, canPlayPosition, positionWeightedScore
+} from '../utils/traitFitUtils';
+import { Settings2, RefreshCw, UserPlus, Search, Trash2, Shield, Swords, Users, Target, FlaskConical, AlertTriangle } from 'lucide-react';
 import playerImageMap from '../data/playerImageMap.json';
 
-const TEAM_NAMES = [ALL_TEAMS, ...Array.from(new Set(playersData.map(p => p.team))).filter(Boolean).sort()];
+const LEAGUE_TEAMS = Array.from(new Set(playersData.map(p => p.team))).filter(Boolean).sort();
+const DEFAULT_SOURCE_KEY = encodeTeamSource({ kind: 'static', team: ALL_TEAMS });
+const LAST_SOURCE_KEY = 'smb4.lineup.lastSource';
+
+/** 讀取上次的來源 key 並驗證是否仍有效；無效則回傳預設值。 */
+function resolveInitialSourceKey(): string {
+  try {
+    const saved = localStorage.getItem(LAST_SOURCE_KEY);
+    if (!saved) return DEFAULT_SOURCE_KEY;
+    const source = decodeTeamSource(saved);
+    if (source.kind === 'static') {
+      // ALL_TEAMS 或仍存在的球隊皆有效
+      if (source.team === ALL_TEAMS || LEAGUE_TEAMS.includes(source.team)) return saved;
+    } else {
+      // myteam：確認 rosterId 仍在 listRosters() 中
+      const rosters = listRosters();
+      if (rosters.some(r => r.id === source.rosterId)) return saved;
+    }
+  } catch {
+    // localStorage 不可用：靜默回傳預設值
+  }
+  return DEFAULT_SOURCE_KEY;
+}
 
 const ROSTER_GROUPS = {
   starters: ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'],
@@ -16,37 +45,111 @@ const ROSTER_GROUPS = {
   bench: ['BN1', 'BN2', 'BN3', 'BN4', 'BN5']
 };
 
+// Resolve the player pool for an encoded team source.
+const playersForSource = (sourceKey: string): any[] => {
+  const source = decodeTeamSource(sourceKey);
+  if (source.kind === 'myteam') return getRosterPlayers(source);
+  if (source.team === ALL_TEAMS) return playersData;
+  return playersData.filter(p => p.team === source.team);
+};
+
+// --- Lineup persistence (per team source) ----------------------------------
+// Stored under `smb4.lineup.{static:{team}|myteam:{rosterId}}` as player ids.
+const lineupStorageKey = (sourceKey: string) => `smb4.lineup.${sourceKey}`;
+
+interface SavedLineup {
+  lineup: Record<string, string | null>;
+  battingOrder: (string | null)[];
+  battingStrategy?: BattingStrategy;
+}
+
+// Restore a saved lineup, resolving ids against the source's current player
+// pool. Ids that no longer exist in the pool fall back to an empty slot.
+const loadSavedLineup = (sourceKey: string) => {
+  const emptyLineup: Lineup = {};
+  FULL_ROSTER_POSITIONS.forEach(pos => emptyLineup[pos] = null);
+  const result = {
+    lineup: emptyLineup,
+    battingOrder: new Array(9).fill(null) as (any | null)[],
+    battingStrategy: null as BattingStrategy | null,
+  };
+  try {
+    const raw = localStorage.getItem(lineupStorageKey(sourceKey));
+    if (!raw) return result;
+    const saved = JSON.parse(raw) as SavedLineup;
+    const byId = new Map(playersForSource(sourceKey).map(p => [p.id, p]));
+    if (saved.lineup && typeof saved.lineup === 'object') {
+      FULL_ROSTER_POSITIONS.forEach(pos => {
+        const id = saved.lineup[pos];
+        result.lineup[pos] = (id && byId.get(id)) || null;
+      });
+    }
+    if (Array.isArray(saved.battingOrder)) {
+      result.battingOrder = new Array(9).fill(null).map((_, i) => {
+        const id = saved.battingOrder[i];
+        return (id && byId.get(id)) || null;
+      });
+    }
+    if (saved.battingStrategy === 'traditional' || saved.battingStrategy === 'sabermetrics') {
+      result.battingStrategy = saved.battingStrategy;
+    }
+  } catch {
+    // Corrupted storage: start from an empty lineup.
+  }
+  return result;
+};
+
 const LineupBuilder: React.FC = () => {
-  const { t } = useLanguage();
-  const [selectedTeam, setSelectedTeam] = useState<string>(TEAM_NAMES[0]);
+  const { t, language } = useLanguage();
+  // Lazy initializer：首次 render 就讀取上次的來源（省去多餘的重渲染）
+  const [sourceKey, setSourceKey] = useState<string>(resolveInitialSourceKey);
   const [strategy, setStrategy] = useState<OptimizationStrategy>('overall');
-  
-  const [lineup, setLineup] = useState<Lineup>(() => {
-    const init: Lineup = {};
-    FULL_ROSTER_POSITIONS.forEach(pos => init[pos] = null);
-    return init;
-  });
-  
-  const [battingOrder, setBattingOrder] = useState<(any | null)[]>(new Array(9).fill(null));
-  
+
+  // Custom rosters saved in "My Teams" (re-read on each mount)
+  const myRosters = useMemo(() => listRosters(), []);
+
+  // Restore the saved lineup for the initial source on mount.
+  const initialSaved = useMemo(() => loadSavedLineup(resolveInitialSourceKey()), []);
+  const [lineup, setLineup] = useState<Lineup>(initialSaved.lineup);
+  const [battingOrder, setBattingOrder] = useState<(any | null)[]>(initialSaved.battingOrder);
+  const [battingStrategy, setBattingStrategy] = useState<BattingStrategy>(initialSaved.battingStrategy || 'sabermetrics');
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectingPosition, setSelectingPosition] = useState<string | null>(null);
   const [selectingBattingSlot, setSelectingBattingSlot] = useState<number | null>(null);
-  const [battingStrategy, setBattingStrategy] = useState<BattingStrategy>('sabermetrics');
 
   const [draggedPlayer, setDraggedPlayer] = useState<any | null>(null);
   const [hoveredPosition, setHoveredPosition] = useState<string | null>(null);
   const [hoveredBattingSlot, setHoveredBattingSlot] = useState<number | null>(null);
 
-  const teamPlayers = useMemo(() => {
-    if (selectedTeam === ALL_TEAMS) return playersData;
-    return playersData.filter(p => p.team === selectedTeam);
-  }, [selectedTeam]);
+  const teamPlayers = useMemo(() => playersForSource(sourceKey), [sourceKey]);
+
+  // Auto-save the current lineup whenever it changes. A fully empty lineup
+  // removes the entry instead (so "Clear All" also clears the storage).
+  useEffect(() => {
+    const isEmpty = Object.values(lineup).every(p => !p) && battingOrder.every(p => !p);
+    try {
+      if (isEmpty) {
+        localStorage.removeItem(lineupStorageKey(sourceKey));
+      } else {
+        const payload: SavedLineup = {
+          lineup: Object.fromEntries(FULL_ROSTER_POSITIONS.map(pos => [pos, lineup[pos]?.id ?? null])),
+          battingOrder: battingOrder.map(p => p?.id ?? null),
+          battingStrategy,
+        };
+        localStorage.setItem(lineupStorageKey(sourceKey), JSON.stringify(payload));
+      }
+    } catch {
+      // Storage unavailable / quota exceeded: skip persistence.
+    }
+  }, [lineup, battingOrder, battingStrategy, sourceKey]);
 
   const handleAutoPick = () => {
-    const newLineup = autoPickLineup(playersData, selectedTeam, strategy);
+    // Pass the resolved pool with the ALL_TEAMS sentinel so custom rosters
+    // (whose players keep their original team names) are not filtered away.
+    const newLineup = autoPickLineup(teamPlayers, ALL_TEAMS, strategy);
     setLineup(newLineup);
-    
+
     // Auto-fill batting order
     const batters = ROSTER_GROUPS.starters.map(pos => newLineup[pos]).filter(Boolean);
     const orderNames = optimizeBattingOrder(batters, battingStrategy);
@@ -63,11 +166,28 @@ const LineupBuilder: React.FC = () => {
     FULL_ROSTER_POSITIONS.forEach(pos => emptyLineup[pos] = null);
     setLineup(emptyLineup);
     setBattingOrder(new Array(9).fill(null));
+    try {
+      localStorage.removeItem(lineupStorageKey(sourceKey));
+    } catch {
+      // Storage unavailable: ignore.
+    }
   };
 
   const handleTeamChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedTeam(e.target.value);
-    handleClearAll();
+    const key = e.target.value;
+    const saved = loadSavedLineup(key);
+    setSourceKey(key);
+    setLineup(saved.lineup);
+    setBattingOrder(saved.battingOrder);
+    if (saved.battingStrategy) setBattingStrategy(saved.battingStrategy);
+    setSelectingPosition(null);
+    setSelectingBattingSlot(null);
+    // 儲存本次選擇，重新整理後可自動還原
+    try {
+      localStorage.setItem(LAST_SOURCE_KEY, key);
+    } catch {
+      // Storage 不可用：略過
+    }
   };
 
   const filteredRosterPlayers = useMemo(() => {
@@ -146,6 +266,68 @@ const LineupBuilder: React.FC = () => {
     return calculateTeamStats(activePlayers)[0];
   }, [lineup]);
 
+  // Unique players currently slotted anywhere in the roster
+  // (batting 9 + SP1-5 + RP1-5 + CP + BN1-5, deduplicated by name).
+  const activeLineupPlayers = useMemo(() => {
+    const seen = new Set<string>();
+    const list: any[] = [];
+    Object.values(lineup).forEach(p => {
+      if (p && !seen.has(p.name)) {
+        seen.add(p.name);
+        list.push(p);
+      }
+    });
+    return list;
+  }, [lineup]);
+
+  // Live chemistry counts for the current lineup (updates on every drop/remove).
+  const chemCounts = useMemo(() => {
+    const counts: Record<ChemistryType, number> = {
+      Competitive: 0, Spirited: 0, Disciplined: 0, Scholarly: 0, Crafty: 0
+    };
+    activeLineupPlayers.forEach(p => {
+      const chem = normalizeChemistry(p.chemistry);
+      if (chem) counts[chem]++;
+    });
+    return counts;
+  }, [activeLineupPlayers]);
+
+  const chemUpgradeHint = (count: number): string => {
+    const threshold = nextThreshold(count);
+    if (threshold === null) return t('dashboard.maxLevel');
+    return t('dashboard.upgradeHint')
+      .replace('{n}', String(threshold - count))
+      .replace('{lv}', String(getChemistryLevel(threshold)));
+  };
+
+  // Trait badges for a batting-order slot (1-based slot number).
+  // Title text uses the trait description at the level currently in effect.
+  const getBattingBadges = (player: any, slotNumber: number) => {
+    const badges: { kind: 'good' | 'warn' | 'bad'; label: string; title: string }[] = [];
+    (player.traits || []).forEach((traitName: string) => {
+      const trait = getTraitByName(traitName);
+      if (!trait) return;
+      const displayName = language === 'zh-TW' ? (trait.nameZh || trait.nameEn) : trait.nameEn;
+      const { level, desc } = getEffectiveTraitDesc(trait, chemCounts, language);
+      const descPart = desc ? ` | Lv${level}: ${desc}` : '';
+      if (NEGATIVE_HITTER_TRAITS.has(trait.nameEn)) {
+        badges.push({ kind: 'bad', label: displayName, title: `${t('lineup.negativeTraitWarn')}${descPart}` });
+        return;
+      }
+      const fit = TRAIT_BATTING_FIT[trait.nameEn];
+      if (!fit) return;
+      if (fit.bench) {
+        badges.push({ kind: 'warn', label: displayName, title: `${t('lineup.suggestBench')}${descPart}` });
+      } else if (fit.slots.includes(slotNumber)) {
+        badges.push({ kind: 'good', label: `✓ ${displayName}`, title: `${t('lineup.slotFitGood')}${descPart}` });
+      } else {
+        const suggest = t('lineup.suggestSlots').replace('{slots}', formatSlotRanges(fit.slots));
+        badges.push({ kind: 'warn', label: displayName, title: `${suggest}${descPart}` });
+      }
+    });
+    return badges;
+  };
+
   const renderSlot = (pos: string, isPitcherSlot: boolean) => {
     const player = lineup[pos];
     const isSelected = selectingPosition === pos;
@@ -153,6 +335,15 @@ const LineupBuilder: React.FC = () => {
 
     const rawImagePath = player ? (playerImageMap as any)[`${player.team}-${player.name}`] : null;
     const imagePath = rawImagePath ? `${import.meta.env.BASE_URL}${rawImagePath.replace(/^\//, '')}` : null;
+
+    // Position fit + weighted score (bench slots have no fixed position)
+    const isBench = pos.startsWith('BN');
+    const fit = player && !isBench ? canPlayPosition(player, pos) : null;
+    const weightedScore = player && !isBench && !isPitcherSlot ? positionWeightedScore(player, pos) : null;
+    const isUtility = player ? hasTrait(player, 'Utility') : false;
+    const pinchPerfectTrait = isBench && player && hasTrait(player, 'Pinch Perfect')
+      ? getTraitByName('Pinch Perfect')
+      : null;
 
     return (
       <div 
@@ -185,7 +376,23 @@ const LineupBuilder: React.FC = () => {
         }}
       >
         <div style={{ position: 'absolute', top: '4px', left: '6px', fontSize: '10px', fontWeight: 'bold', color: 'var(--primary-accent)' }}>{pos}</div>
-        
+
+        {/* Position fit marker: primary = nothing, secondary = neutral tag, mismatch = warning */}
+        {player && fit === 'secondary' && (
+          <span className="pos-fit-tag" style={{ position: 'absolute', top: '4px', right: '8px' }} title={t('lineup.posSecondary')}>
+            {t('lineup.posSecondaryShort')}
+          </span>
+        )}
+        {player && fit === 'none' && (
+          <span
+            className="pos-fit-warning"
+            style={{ position: 'absolute', top: '4px', right: '8px' }}
+            title={isUtility ? t('lineup.posMismatchUtility') : t('lineup.posMismatch').replace('{pos}', pos)}
+          >
+            <AlertTriangle size={14} color={isUtility ? 'var(--warning-color)' : 'var(--danger-color)'} />
+          </span>
+        )}
+
         {player ? (
           <>
             {imagePath ? (
@@ -198,7 +405,22 @@ const LineupBuilder: React.FC = () => {
             <div style={{ fontSize: '12px', fontWeight: 'bold', textAlign: 'center', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {player.name}
             </div>
-            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>{player.rating}</div>
+            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>
+              {player.rating}
+              {weightedScore !== null && (
+                <span className="slot-weighted-score" title={t('lineup.weightedScore')}>
+                  {' '}| {t('lineup.weightedScoreShort')} {weightedScore}
+                </span>
+              )}
+            </div>
+            {pinchPerfectTrait && (
+              <span
+                className="trait-fit-badge trait-fit-good"
+                title={`${t('lineup.benchFitGood')} | Lv${getEffectiveTraitDesc(pinchPerfectTrait, chemCounts, language).level}: ${getEffectiveTraitDesc(pinchPerfectTrait, chemCounts, language).desc}`}
+              >
+                ✓ {language === 'zh-TW' ? pinchPerfectTrait.nameZh : pinchPerfectTrait.nameEn}
+              </span>
+            )}
             <button 
               onClick={(e) => { e.stopPropagation(); removePlayer(pos); }}
               style={{ position: 'absolute', top: '-5px', right: '-5px', background: '#ef4444', border: 'none', borderRadius: '50%', width: '18px', height: '18px', color: 'white', cursor: 'pointer', fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -256,17 +478,30 @@ const LineupBuilder: React.FC = () => {
                 <UserPlus size={14} color="rgba(255,255,255,0.3)" />
               </div>
             )}
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{player.name}</div>
               <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>{player.primaryPosition} | {player.rating}</div>
+              {(() => {
+                const badges = getBattingBadges(player, index + 1);
+                if (badges.length === 0) return null;
+                return (
+                  <div className="trait-badge-row">
+                    {badges.map((b, i) => (
+                      <span key={i} className={`trait-fit-badge trait-fit-${b.kind}`} title={b.title}>
+                        {b.label}
+                      </span>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
-            <button 
+            <button
               onClick={(e) => { e.stopPropagation(); removeBatter(index); }}
               style={{ background: '#ef4444', border: 'none', borderRadius: '50%', width: '20px', height: '20px', color: 'white', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >×</button>
           </>
         ) : (
-          <div style={{ flex: 1, color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>Empty Slot</div>
+          <div style={{ flex: 1, color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>{t('lineup.emptySlot')}</div>
         )}
       </div>
     );
@@ -284,12 +519,24 @@ const LineupBuilder: React.FC = () => {
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>{t('lineup.selectTeam') || 'Base Team'}:</span>
-            <select 
-              value={selectedTeam} 
+            <select
+              value={sourceKey}
               onChange={handleTeamChange}
               style={{ padding: '6px 12px', borderRadius: '6px', background: 'rgba(0,0,0,0.5)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)' }}
             >
-              {TEAM_NAMES.map(tStr => <option key={tStr} value={tStr}>{tStr}</option>)}
+              <option value={DEFAULT_SOURCE_KEY}>{t('lineup.allTeams')}</option>
+              {myRosters.length > 0 && (
+                <optgroup label={t('lineup.groupMyTeams')}>
+                  {myRosters.map(r => (
+                    <option key={r.id} value={encodeTeamSource({ kind: 'myteam', rosterId: r.id })}>{r.name}</option>
+                  ))}
+                </optgroup>
+              )}
+              <optgroup label={t('lineup.groupLeagueTeams')}>
+                {LEAGUE_TEAMS.map(team => (
+                  <option key={team} value={encodeTeamSource({ kind: 'static', team })}>{team}</option>
+                ))}
+              </optgroup>
             </select>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -299,12 +546,12 @@ const LineupBuilder: React.FC = () => {
               onChange={(e) => setStrategy(e.target.value as OptimizationStrategy)}
               style={{ padding: '6px 12px', borderRadius: '6px', background: 'rgba(0,0,0,0.5)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)' }}
             >
-              <option value="overall">Balanced (Overall)</option>
-              <option value="power">Power Focus</option>
-              <option value="contact">Contact Focus</option>
-              <option value="speed">Speed Focus</option>
-              <option value="defense">Defense Focus</option>
-              <option value="team_signature">Team Signature</option>
+              <option value="overall">{t('lineup.strategyOverall')}</option>
+              <option value="power">{t('lineup.strategyPower')}</option>
+              <option value="contact">{t('lineup.strategyContact')}</option>
+              <option value="speed">{t('lineup.strategySpeed')}</option>
+              <option value="defense">{t('lineup.strategyDefense')}</option>
+              <option value="team_signature">{t('lineup.strategyTeamSignature')}</option>
             </select>
           </div>
           <button 
@@ -330,7 +577,11 @@ const LineupBuilder: React.FC = () => {
           <h3 style={{ marginTop: 0, marginBottom: '16px', color: 'var(--primary-accent)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Users size={20} />
-              {selectingPosition ? `Select ${selectingPosition}` : (selectingBattingSlot !== null ? `Select Bat ${selectingBattingSlot + 1}` : (t('lineup.roster') || 'Player Pool'))}
+              {selectingPosition
+                ? t('lineup.selectFor').replace('{pos}', selectingPosition)
+                : (selectingBattingSlot !== null
+                  ? t('lineup.selectBat').replace('{n}', String(selectingBattingSlot + 1))
+                  : (t('lineup.roster') || 'Player Pool'))}
             </div>
             {(selectingPosition || selectingBattingSlot !== null) && (
               <button onClick={() => { setSelectingPosition(null); setSelectingBattingSlot(null); }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}>✕</button>
@@ -341,7 +592,7 @@ const LineupBuilder: React.FC = () => {
             <Search size={16} style={{ position: 'absolute', left: '12px', top: '10px', color: 'rgba(255,255,255,0.5)' }} />
             <input 
               type="text" 
-              placeholder={t('search') || "搜尋球員..."} 
+              placeholder={t('lineup.searchPlayer')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{ width: '100%', padding: '8px 12px 8px 36px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.4)', color: '#fff', outline: 'none' }}
@@ -392,21 +643,54 @@ const LineupBuilder: React.FC = () => {
                     <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>{p.team} | {p.rating}</div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-end' }}>
-                    {isAlreadyInLineup && <span style={{ fontSize: '9px', background: 'var(--primary-accent)', padding: '2px 4px', borderRadius: '4px' }}>Field</span>}
-                    {isAlreadyInBatting && <span style={{ fontSize: '9px', background: '#eab308', padding: '2px 4px', borderRadius: '4px' }}>Bat</span>}
+                    {isAlreadyInLineup && <span style={{ fontSize: '9px', background: 'var(--primary-accent)', padding: '2px 4px', borderRadius: '4px' }}>{t('lineup.tagField')}</span>}
+                    {isAlreadyInBatting && <span style={{ fontSize: '9px', background: '#eab308', padding: '2px 4px', borderRadius: '4px' }}>{t('lineup.tagBat')}</span>}
                   </div>
                 </div>
               );
             })}
             {filteredRosterPlayers.length === 0 && (
-              <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.3)', marginTop: '20px' }}>No players found</div>
+              <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.3)', marginTop: '20px' }}>{t('lineup.noPlayersFound')}</div>
             )}
           </div>
         </div>
 
         {/* Right Panel: Dashboard Area */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', paddingRight: '8px' }}>
-          
+
+          {/* Live lineup chemistry bar */}
+          <div className="glass-panel lineup-chem-panel">
+            <h3 className="lineup-chem-title">
+              <FlaskConical size={16} color="var(--primary-accent)" />
+              {t('lineup.chemistryBar')}
+              <span style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--text-muted)' }}>
+                {t('lineup.chemistryBarNote').replace('{n}', String(activeLineupPlayers.length))}
+              </span>
+            </h3>
+            <div className="lineup-chem-bar">
+              {CHEMISTRY_TYPES.map(chem => {
+                const count = chemCounts[chem];
+                const level = getChemistryLevel(count);
+                const color = CHEMISTRY_COLOR_VARS[chem];
+                return (
+                  <div key={chem} className="lineup-chem-item" style={{ borderColor: color }}>
+                    <div className="lineup-chem-item-top">
+                      <span className="chem-dot" style={{ background: color }} />
+                      <span className="lineup-chem-name" style={{ color }}>{t(`chemistry.${chem}`) || chem}</span>
+                      <span className="chem-level-badge" style={{ background: color }}>Lv{level}</span>
+                    </div>
+                    <div className="lineup-chem-item-bottom">
+                      <span className="lineup-chem-count" style={{ color }}>
+                        {count}<span className="chem-mini-count-unit">{t('dashboard.playersUnit')}</span>
+                      </span>
+                      <span className="lineup-chem-hint">{chemUpgradeHint(count)}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '20px' }}>
             {/* Batting Order Panel */}
             <div className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>

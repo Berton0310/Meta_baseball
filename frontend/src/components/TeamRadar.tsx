@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radar } from 'react-chartjs-2';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend } from 'recharts';
 import { useLanguage } from '../context/LanguageContext';
 import type { TeamStat } from '../utils/teamStats';
 import playersData from '../data/players.json';
@@ -72,71 +72,11 @@ const TeamRadar: React.FC<TeamRadarProps> = ({ team }) => {
     ];
   }, []);
 
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: team.team,
-        data: values,
-        backgroundColor: 'rgba(56, 189, 248, 0.4)',
-        borderColor: 'rgba(56, 189, 248, 1)',
-        pointBackgroundColor: 'rgba(56, 189, 248, 1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(56, 189, 248, 1)',
-        borderWidth: 2,
-      },
-      {
-        label: 'League Avg',
-        data: leagueAvg,
-        backgroundColor: 'rgba(160, 174, 192, 0.2)',
-        borderColor: 'rgba(160, 174, 192, 0.6)',
-        borderDash: [5, 5],
-        pointBackgroundColor: 'rgba(160, 174, 192, 1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(160, 174, 192, 1)',
-        borderWidth: 2,
-      }
-    ],
-  };
-
-  const options = {
-    scales: {
-      r: {
-        min: 0,
-        max: 100,
-        angleLines: {
-          color: 'rgba(255, 255, 255, 0.1)'
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)'
-        },
-        pointLabels: {
-          color: '#f8fafc',
-          font: {
-            size: 11,
-            weight: 'bold' as const
-          }
-        },
-        ticks: {
-          display: false,
-          stepSize: 20
-        }
-      }
-    },
-    plugins: {
-      legend: {
-        display: true,
-        position: 'bottom' as const,
-        labels: {
-          color: 'rgba(255, 255, 255, 0.7)',
-          font: { size: 12 }
-        }
-      }
-    },
-    maintainAspectRatio: false,
-  };
+  const radarData = labels.map((label, i) => ({
+    subject: label,
+    team: values[i],
+    league: leagueAvg[i]
+  }));
 
   const getChemColor = (chem: string) => {
     switch(chem) {
@@ -186,8 +126,17 @@ const TeamRadar: React.FC<TeamRadarProps> = ({ team }) => {
 
       {/* Radar Chart Container */}
       <div style={{ position: 'relative', width: '100%', minHeight: '300px', flex: '1', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ width: '100%', height: '100%', maxWidth: '350px', maxHeight: '350px' }}>
-          <Radar data={data} options={options} />
+        <div style={{ width: '100%', height: '300px', maxWidth: '350px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart cx="50%" cy="50%" outerRadius="72%" data={radarData}>
+              <PolarGrid stroke="rgba(255, 255, 255, 0.1)" />
+              <PolarAngleAxis dataKey="subject" tick={{ fill: '#f8fafc', fontSize: 11, fontWeight: 'bold' }} />
+              <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+              <Radar name={team.team} dataKey="team" stroke="rgba(56, 189, 248, 1)" fill="rgba(56, 189, 248, 1)" fillOpacity={0.4} strokeWidth={2} dot={{ r: 3, fill: 'rgba(56, 189, 248, 1)', stroke: '#fff', strokeWidth: 1 }} />
+              <Radar name="League Avg" dataKey="league" stroke="rgba(160, 174, 192, 0.6)" fill="rgba(160, 174, 192, 1)" fillOpacity={0.2} strokeWidth={2} strokeDasharray="5 5" dot={{ r: 3, fill: 'rgba(160, 174, 192, 1)', stroke: '#fff', strokeWidth: 1 }} />
+              <Legend wrapperStyle={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: 12 }} />
+            </RadarChart>
+          </ResponsiveContainer>
         </div>
       </div>
 

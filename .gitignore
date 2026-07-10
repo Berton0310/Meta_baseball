@@ -81,3 +81,8 @@ pnpm-debug.log*
 # TypeScript 建置快取
 # ========================
 *.tsbuildinfo
+
+# ========================
+# Claude Code local tooling (preview launch config, agent worktrees)
+# ========================
+.claude/
