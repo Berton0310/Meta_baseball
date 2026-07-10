@@ -4,12 +4,22 @@ import { ShoppingCart, UserPlus, UserMinus, CheckCircle, Settings, Play, ArrowLe
 import PlayerRadar from './PlayerRadar';
 import DraftFieldMap from './DraftFieldMap';
 import { renderPositionBadge } from './PlayerGrid';
+import type { Player } from '../types/player';
 
 interface DraftSimulatorProps {
-  players: any[];
+  players: Player[];
 }
 
-const parseSalary = (s: string) => {
+interface ArchetypeWeights {
+  off?: number;
+  def?: number;
+  spd?: number;
+  velo?: number;
+  junk?: number;
+  acc?: number;
+}
+
+const parseSalary = (s: string | number) => {
   if (!s) return 0;
   const clean = String(s).replace(/[^0-9.]/g, '');
   return parseFloat(clean) * 1000000 || 0;
@@ -95,7 +105,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
   const { t } = useLanguage();
   const [draftedRosterSlots, setDraftedRosterSlots] = useState<(any | null)[]>(Array(22).fill(null));
   const draftedPlayers = useMemo(() => draftedRosterSlots.filter(p => p !== null), [draftedRosterSlots]);
-  const [viewingPlayer, setViewingPlayer] = useState<{player: any, archetype?: any} | null>(null);
+  const [viewingPlayer, setViewingPlayer] = useState<{player: Player, player2?: Player, archetype?: ArchetypeWeights} | null>(null);
   const [rosterPlan, setRosterPlan] = useState<'planA' | 'planB' | 'planC' | 'planD'>('planA');
   const [customArchetypes, setCustomArchetypes] = useState<Record<number, any>>({});
   const [archetypeFilter, setArchetypeFilter] = useState<'all' | 'pitchers' | 'hitters'>('all');
@@ -133,7 +143,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
   const BLUEPRINT_SLOTS = wizardSequence;
   const [customBudgets, setCustomBudgets] = useState<number[]>([]);
   const [activeTargetSlot, setActiveTargetSlot] = useState<number | null>(null);
-  const [comparePlayer, setComparePlayer] = useState<any | null>(null);
+  const [comparePlayer, setComparePlayer] = useState<Player | null>(null);
   const [isFieldMapOpen, setIsFieldMapOpen] = useState<boolean>(false);
   const [isTraitsModalOpen, setIsTraitsModalOpen] = useState<boolean>(false);
 
@@ -487,7 +497,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
         const vW = w.velo / totalW;
         const jW = w.junk / totalW;
         const aW = w.acc / totalW;
-        baseScore = (p.stats.velocity * vW) + (p.stats.junk * jW) + (p.stats.accuracy * aW);
+        baseScore = ((p.stats.velocity || 0) * vW) + ((p.stats.junk || 0) * jW) + ((p.stats.accuracy || 0) * aW);
       } else {
         const w = customArchetypes[currentStepIndex] || { off: 33, def: 33, spd: 34 };
         const totalW = (w.off + w.def + w.spd) || 1;
@@ -518,7 +528,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
         } else if (p.age >= 34) {
           const isLateBench = activeTargetSlot !== null && activeTargetSlot >= 18;
           if (isLateBench && cost <= 3000000) {
-            ageBonusNotes.push(`No Penalty (Cheap Vet)`);
+            ageBonusNotes.push(t('draft.ageCheapVet'));
           } else {
             ageMod = 0.80;
             ageBonusNotes.push(`-20% ${t('draft.ageAging')}`);
@@ -530,28 +540,28 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
       // Secondary Position (Utility) Bonus
       if (!p.isPitcher && p.secondaryPositions && p.secondaryPositions.length > 0) {
         modifiedScore *= 1.10;
-        bonusNotes.push('+10% Utility');
+        bonusNotes.push(`+10% ${t('traits.Utility')}`);
       }
 
       if (rosterPlan === 'planC' && !p.isPitcher) {
         if (traits.includes('Durable')) {
           modifiedScore *= 1.20;
-          bonusNotes.push('+20% Durable');
+          bonusNotes.push(`+20% ${t('traits.Durable')}`);
         }
         if (traits.includes('Injury Prone')) {
           modifiedScore *= 0.70;
-          bonusNotes.push('-30% Injury Prone');
+          bonusNotes.push(`-30% ${t('traits.Injury Prone')}`);
         }
       }
       
       if (rosterPlan === 'planD') {
         if (currentStep.id === 'SP' && traits.includes('Workhorse')) {
           modifiedScore *= 1.20;
-          bonusNotes.push('+20% Workhorse');
+          bonusNotes.push(`+20% ${t('traits.Workhorse')}`);
         }
         if (!p.isPitcher && traits.some((tr: string) => tr.includes('Two Way'))) {
           modifiedScore *= 1.30;
-          bonusNotes.push('+30% Two Way');
+          bonusNotes.push(`+30% ${t('draft.bonusTwoWay')}`);
         }
       }
 
@@ -620,18 +630,18 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
           <ShoppingCart size={32} color="var(--primary-accent)" />
           <div>
             <h2 style={{ margin: 0 }}>{t('draft.title')}</h2>
-            <div style={{ color: 'var(--text-muted)' }}>{draftedPlayers.length} / 22 Players</div>
+            <div style={{ color: 'var(--text-muted)' }}>{draftedPlayers.length} / 22 {t('draft.playersUnit')}</div>
           </div>
         </div>
         
         <div style={{ display: 'flex', gap: '32px' }}>
           <div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 'bold' }}>球團總預算</div>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 'bold' }}>{t('draft.clubBudget')}</div>
             <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{formatMoney(MAX_BUDGET)}</div>
           </div>
           <div>
             <div style={{ fontSize: '0.85rem', color: '#10b981', textTransform: 'uppercase', fontWeight: 'bold' }}>
-              {wizardPhase === 'setup' ? t('draft.targetPayroll') : '目前團隊薪資'}
+              {wizardPhase === 'setup' ? t('draft.targetPayroll') : t('draft.currentPayroll')}
             </div>
             <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
               {formatMoney(wizardPhase === 'setup' ? targetPayroll : currentSpent)}
@@ -678,7 +688,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
           <div className="glass-panel" style={{ padding: '24px', flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary-accent)', fontSize: '1.5rem' }}>
-                <Settings size={28} /> {t('draft.setupPhase')} - Step {setupStep} of 2
+                <Settings size={28} /> {t('draft.setupPhase')} - {t('draft.step')} {setupStep} / 2
               </h3>
             </div>
             {setupStep === 1 && (
@@ -689,9 +699,9 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                       1. {t('draft.posArchetypes')}
                     </h4>
                     <div style={{ display: 'flex', gap: '8px' }}>
-                      <button onClick={() => setArchetypeFilter('all')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'all' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>全部</button>
-                      <button onClick={() => setArchetypeFilter('pitchers')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'pitchers' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>投手</button>
-                      <button onClick={() => setArchetypeFilter('hitters')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'hitters' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>野手</button>
+                      <button onClick={() => setArchetypeFilter('all')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'all' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>{t('draft.filterAll')}</button>
+                      <button onClick={() => setArchetypeFilter('pitchers')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'pitchers' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>{t('draft.filterPitchers')}</button>
+                      <button onClick={() => setArchetypeFilter('hitters')} style={{ padding: '6px 12px', fontSize: '0.8rem', background: archetypeFilter === 'hitters' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>{t('draft.filterHitters')}</button>
                     </div>
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -759,7 +769,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <button onClick={() => setSetupStep(2)} className="btn-primary" style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
-                    下一步：預算分配 <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
+                    {t('draft.nextBudgetAllocation')} <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
                   </button>
                 </div>
               </div>
@@ -779,7 +789,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                           onClick={() => setTargetPayroll(recommendedPayroll)}
                           style={{ background: 'rgba(16, 185, 129, 0.2)', border: '1px solid #10b981', color: '#10b981', padding: '6px 12px', borderRadius: '20px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                         >
-                          <Lightbulb size={14} /> Recommended: {formatMoney(recommendedPayroll)}
+                          <Lightbulb size={14} /> {t('draft.recommended')}: {formatMoney(recommendedPayroll)}
                         </button>
                       )}
                     </div>
@@ -813,8 +823,8 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                           <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '6px' }}>
                             <div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '8px', display: 'flex', justifyContent: 'space-between' }}>
-                              <span>大戰略：投打部門總資金池</span>
-                              <span style={{ color: '#10b981', fontWeight: 'bold' }}>總和 {formatMoney(targetPayroll)}</span>
+                              <span>{t('draft.macroStrategy')}</span>
+                              <span style={{ color: '#10b981', fontWeight: 'bold' }}>{t('draft.sumTotal')} {formatMoney(targetPayroll)}</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', marginBottom: '8px' }}>
                               <span style={{ color: '#3b82f6' }}>P: {formatMoney(pitcherBudgetCap)} ({(pitcherBudgetCap/targetPayroll*100).toFixed(0)}%)</span>
@@ -828,13 +838,13 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                               value={pitcherBudgetCap}
                               onChange={(e) => handleMacroBudgetChange(Number(e.target.value))}
                               style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6' }}
-                              title="拖拉調整投打部門總池大小"
+                              title={t('draft.macroSliderTitle')}
                             />
-                            <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', marginTop: '8px', textAlign: 'center' }}>拖拉滑桿可以一次性調整所有投打薪資水位</div>
+                            <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', marginTop: '8px', textAlign: 'center' }}>{t('draft.macroSliderHint')}</div>
                           </div>
                           
                           <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '6px' }}>
-                            <div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '4px' }}>Top 5 球員薪資佔比 (Stars & Scrubs)</div>
+                            <div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '4px' }}>{t('draft.top5Share')}</div>
                             <div style={{ fontWeight: 'bold', color: top5Pct > 55 ? '#f59e0b' : '#10b981' }}>
                               {formatMoney(top5Total)} ({top5Pct.toFixed(1)}%)
                             </div>
@@ -853,15 +863,15 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                       <button 
                         onClick={() => setBudgetFilter('all')} 
                         style={{ padding: '6px 12px', borderRadius: '20px', border: 'none', background: budgetFilter === 'all' ? '#10b981' : 'rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontSize: '0.85rem' }}
-                      >全部顯示</button>
+                      >{t('draft.showAll')}</button>
                       <button 
                         onClick={() => setBudgetFilter('pitchers')} 
                         style={{ padding: '6px 12px', borderRadius: '20px', border: 'none', background: budgetFilter === 'pitchers' ? '#3b82f6' : 'rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontSize: '0.85rem' }}
-                      >專注投手</button>
+                      >{t('draft.focusPitchersOnly')}</button>
                       <button 
                         onClick={() => setBudgetFilter('hitters')} 
                         style={{ padding: '6px 12px', borderRadius: '20px', border: 'none', background: budgetFilter === 'hitters' ? '#ef4444' : 'rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontSize: '0.85rem' }}
-                      >專注野手</button>
+                      >{t('draft.focusHittersOnly')}</button>
                     </div>
                     <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: totalAllocated > targetPayroll ? '#ef4444' : '#10b981' }}>
                       {formatMoney(totalAllocated)} / {formatMoney(targetPayroll)}
@@ -898,7 +908,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px' }}>
                     <button onClick={() => setSetupStep(2)} style={{ padding: '12px 24px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '6px', color: 'white', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                      <ArrowLeft size={16} /> 上一步
+                      <ArrowLeft size={16} /> {t('draft.prevStep')}
                     </button>
                     <button 
                       disabled={totalAllocated > targetPayroll}
@@ -926,13 +936,13 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                    onClick={() => setIsFieldMapOpen(true)}
                    style={{ background: 'var(--primary-color)', border: 'none', color: '#fff', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                  >
-                   <Map size={16}/> 查看球場
+                   <Map size={16}/> {t('draft.viewField')}
                  </button>
                  <button 
                    onClick={() => setIsTraitsModalOpen(true)}
                    style={{ background: 'var(--secondary-color)', border: 'none', color: '#fff', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '8px' }}
                  >
-                   <Activity size={16}/> 團隊屬性
+                   <Activity size={16}/> {t('draft.teamTraits')}
                  </button>
                </div>
              </div>
@@ -941,15 +951,15 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
              {activeTargetSlot !== null && BLUEPRINT_SLOTS[activeTargetSlot] && (
                <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #3b82f6', display: 'flex', gap: '16px' }}>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Target Role</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{t('draft.targetRole')}</div>
                     <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#3b82f6' }}>{BLUEPRINT_SLOTS[activeTargetSlot].id}</div>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Slot Budget</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{t('draft.slotBudget')}</div>
                     <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#f59e0b' }}>{formatMoney(customBudgets[activeTargetSlot] || 0)}</div>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Total Available</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{t('draft.totalAvailable')}</div>
                     <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#10b981' }}>{formatMoney(currentSuggestedBudget)}</div>
                   </div>
                </div>
@@ -1011,11 +1021,11 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
           
           {/* Right: Candidate List */}
           <div className="glass-panel" style={{ flex: '2', minWidth: '400px', display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px' }}>
-            <h3 style={{ margin: 0, color: 'var(--primary-accent)' }}>Candidates</h3>
+            <h3 style={{ margin: 0, color: 'var(--primary-accent)' }}>{t('draft.candidates')}</h3>
             
             {activeTargetSlot === null ? (
                <div style={{ padding: '48px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
-                 Select a slot on the left to view recommended candidates.
+                 {t('draft.selectSlotHint')}
                </div>
             ) : (
                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', maxHeight: '700px', paddingRight: '8px' }}>
@@ -1026,14 +1036,14 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                           <div className={`rating-badge rating-${p.rating?.replace('+', 'plus').replace('-', 'minus') || 'none'}`} style={{ minWidth: '40px', textAlign: 'center' }}>{p.rating}</div>
                           <div>
                             <div style={{ fontWeight: 'bold', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              {p.name} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{p.age} yrs</span>
+                              {p.name} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{p.age} {t('draft.yearsOld')}</span>
                               {p._bonusNotes.length > 0 && <span style={{ fontSize: '0.75rem', background: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', padding: '2px 6px', borderRadius: '4px' }}>{p._bonusNotes.join(', ')}</span>}
                             </div>
                             <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>
                               {p.salary} • <span style={{ color: '#f59e0b', fontWeight: 'bold' }}>{t('draft.cpValue')}: {p._cpValue.toFixed(1)}</span>
                             </div>
                             <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>
-                              Pos: {p.primaryPosition} {p.secondaryPositions?.length ? `(+ ${p.secondaryPositions.join(', ')})` : ''}
+                              {t('draft.posLabel')}: {p.primaryPosition} {p.secondaryPositions?.length ? `(+ ${p.secondaryPositions.join(', ')})` : ''}
                             </div>
                           </div>
                         </div>
@@ -1052,28 +1062,28 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                             }} 
                             style={{ padding: '4px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', background: comparePlayer?.name === p.name ? 'var(--primary-color)' : 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', width: '100%' }}
                           >
-                            <Scale size={12} /> {comparePlayer?.name === p.name ? '比較中...' : '比較 (Compare)'}
+                            <Scale size={12} /> {comparePlayer?.name === p.name ? `${t('draft.comparing')}...` : t('draft.compare')}
                           </button>
                         </div>
                       </div>
                       
                       <div style={{ background: 'rgba(0,0,0,0.3)', padding: '8px 12px', borderRadius: '6px', fontSize: '0.8rem', display: 'flex', flexWrap: 'wrap', gap: '12px', color: 'rgba(255,255,255,0.7)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                         <div style={{ color: 'var(--primary-accent)', fontWeight: 'bold' }}>{t('draft.cpBreakdown')}:</div>
-                        <div>🎯 Base Score: {p._baseScore}</div>
+                        <div>🎯 {t('draft.baseScore')}: {p._baseScore}</div>
                         {p._ageBonusNotes.map((note, i) => (
-                          <div key={`age-${i}`} style={{ color: note.includes('+') ? '#10b981' : note.includes('-') ? '#ef4444' : '#9ca3af' }}>👶 Age: {note}</div>
+                          <div key={`age-${i}`} style={{ color: note.includes('+') ? '#10b981' : note.includes('-') ? '#ef4444' : '#9ca3af' }}>👶 {t('draft.ageLabel')}: {note}</div>
                         ))}
                         {p._bonusNotes.map((note, i) => (
-                          <div key={`trait-${i}`} style={{ color: '#f59e0b' }}>✨ Trait: {note}</div>
+                          <div key={`trait-${i}`} style={{ color: '#f59e0b' }}>✨ {t('draft.traitLabel')}: {note}</div>
                         ))}
-                        <div>📈 Adj Score: {p._modifiedScore.toFixed(1)}</div>
+                        <div>📈 {t('draft.adjScore')}: {p._modifiedScore.toFixed(1)}</div>
                         <div style={{ color: p._savingsBonus >= 0 ? '#10b981' : '#ef4444' }}>
-                          {p._savingsBonus >= 0 ? '💰 省錢紅利 (Bonus)' : '🛑 超支懲罰 (Penalty)'}: {p._savingsBonus >= 0 ? '+' : ''}{p._savingsBonus.toFixed(1)} 
+                          {p._savingsBonus >= 0 ? `💰 ${t('draft.savingsBonus')}` : `🛑 ${t('draft.overspendPenalty')}`}: {p._savingsBonus >= 0 ? '+' : ''}{p._savingsBonus.toFixed(1)}
                         </div>
                       </div>
                     </div>
                   ))}
-                  {wizardCandidates.length === 0 && <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No suitable players found for this role.</p>}
+                  {wizardCandidates.length === 0 && <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>{t('draft.noSuitablePlayers')}</p>}
                </div>
             )}
           </div>
@@ -1097,9 +1107,9 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
         <div style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(245, 158, 11, 0.95)', color: '#fff', padding: '12px 24px', borderRadius: '30px', display: 'flex', alignItems: 'center', gap: '16px', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', zIndex: 900, backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.2)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Scale size={18} />
-            <span style={{ fontWeight: 'bold' }}>Comparing: {comparePlayer.name}</span>
+            <span style={{ fontWeight: 'bold' }}>{t('draft.comparing')}: {comparePlayer.name}</span>
           </div>
-          <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>Select another player to compare.</div>
+          <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>{t('draft.selectAnotherHint')}</div>
           <button onClick={() => setComparePlayer(null)} style={{ background: 'rgba(0,0,0,0.3)', border: 'none', color: '#fff', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
             <X size={14}/>
           </button>
@@ -1116,13 +1126,13 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
               style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}
             ><X size={20}/></button>
             <h2 style={{ marginTop: 0, marginBottom: '24px', color: 'var(--primary-accent)', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <Activity size={24}/> 團隊屬性數量統整 (Team Traits Summary)
+              <Activity size={24}/> {t('draft.teamTraitsSummary')}
             </h2>
             
             <div style={{ display: 'flex', gap: '24px', flex: 1, overflow: 'hidden' }}>
               {/* Chemistry Column */}
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(0,0,0,0.2)', padding: '20px', borderRadius: '12px', overflowY: 'auto' }}>
-                <h3 style={{ margin: 0, color: '#3b82f6', borderBottom: '1px solid rgba(59,130,246,0.3)', paddingBottom: '8px' }}>🧪 球隊化學效應 (Chemistry)</h3>
+                <h3 style={{ margin: 0, color: '#3b82f6', borderBottom: '1px solid rgba(59,130,246,0.3)', paddingBottom: '8px' }}>🧪 {t('draft.chemistryColumn')}</h3>
                 {teamChemistryCount.length > 0 ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {teamChemistryCount.map(([chem, count]) => (
@@ -1133,13 +1143,13 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                     ))}
                   </div>
                 ) : (
-                  <div style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '20px' }}>尚未選入任何球員</div>
+                  <div style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '20px' }}>{t('draft.noPlayersDrafted')}</div>
                 )}
               </div>
               
               {/* Traits Column */}
               <div style={{ flex: 1.5, display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(0,0,0,0.2)', padding: '20px', borderRadius: '12px', overflowY: 'auto' }}>
-                <h3 style={{ margin: 0, color: '#f59e0b', borderBottom: '1px solid rgba(245,158,11,0.3)', paddingBottom: '8px' }}>✨ 球員特殊能力 (Traits)</h3>
+                <h3 style={{ margin: 0, color: '#f59e0b', borderBottom: '1px solid rgba(245,158,11,0.3)', paddingBottom: '8px' }}>✨ {t('draft.traitsColumn')}</h3>
                 {teamTraitsCount.length > 0 ? (
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     {teamTraitsCount.map(([trait, count]) => (
@@ -1150,7 +1160,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
                     ))}
                   </div>
                 ) : (
-                  <div style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '20px' }}>尚未選入具有特殊能力的球員</div>
+                  <div style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '20px' }}>{t('draft.noTraitsDrafted')}</div>
                 )}
               </div>
             </div>
@@ -1167,7 +1177,7 @@ const DraftSimulator: React.FC<DraftSimulatorProps> = ({ players }) => {
               onClick={() => setIsFieldMapOpen(false)}
               style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', cursor: 'pointer', padding: '4px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}
             ><X size={20}/></button>
-            <h2 style={{ marginTop: 0, marginBottom: '24px', color: 'var(--primary-accent)', textAlign: 'center' }}>球場陣容分佈圖 (Field Roster)</h2>
+            <h2 style={{ marginTop: 0, marginBottom: '24px', color: 'var(--primary-accent)', textAlign: 'center' }}>{t('draft.fieldRoster')}</h2>
             <DraftFieldMap 
               draftedRosterSlots={draftedRosterSlots}
               blueprintSlots={BLUEPRINT_SLOTS}

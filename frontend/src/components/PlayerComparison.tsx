@@ -104,7 +104,7 @@ const PlayerComparison: React.FC<PlayerComparisonProps> = ({ players }) => {
         <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', flexWrap: 'wrap', padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
           <input 
             type="text" 
-            placeholder={t('search') || "搜尋球員..."} 
+            placeholder={t('app.search')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ padding: '8px 12px', borderRadius: '6px', background: 'rgba(0,0,0,0.5)', color: 'white', border: '1px solid rgba(255,255,255,0.2)', flex: 1, minWidth: '200px' }}
@@ -114,7 +114,7 @@ const PlayerComparison: React.FC<PlayerComparisonProps> = ({ players }) => {
             onChange={(e) => setFilterPos(e.target.value)} 
             style={{ padding: '8px 12px', borderRadius: '6px', background: 'rgba(0,0,0,0.5)', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }}
           >
-            <option value="">{t('all') || '全部'} 位置</option>
+            <option value="">{t('compare.allPositions')}</option>
             {positions.map(pos => <option key={pos} value={pos}>{pos}</option>)}
           </select>
           <select 
@@ -122,7 +122,7 @@ const PlayerComparison: React.FC<PlayerComparisonProps> = ({ players }) => {
             onChange={(e) => setFilterTeam(e.target.value)} 
             style={{ padding: '8px 12px', borderRadius: '6px', background: 'rgba(0,0,0,0.5)', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }}
           >
-            <option value="">{t('all') || '全部'} 球隊</option>
+            <option value="">{t('compare.allTeams')}</option>
             {uniqueTeams.map((tStr) => <option key={String(tStr)} value={String(tStr)}>{String(tStr)}</option>)}
           </select>
         </div>
@@ -171,7 +171,7 @@ const PlayerComparison: React.FC<PlayerComparisonProps> = ({ players }) => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '24px' }}>
         {/* Radar Chart Panel */}
         <div className="glass-panel" style={{ padding: '24px', minHeight: '400px', display: 'flex', flexDirection: 'column' }}>
-          <h3 style={{ marginBottom: '16px', textAlign: 'center' }}>能力雷達圖 (Attribute Radar)</h3>
+          <h3 style={{ marginBottom: '16px', textAlign: 'center' }}>{t('compare.attrRadar')}</h3>
           <div style={{ flex: 1, minHeight: '350px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
@@ -189,22 +189,22 @@ const PlayerComparison: React.FC<PlayerComparisonProps> = ({ players }) => {
 
         {/* Stats Comparison Panel */}
         <div className="glass-panel" style={{ padding: '24px' }}>
-          <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>核心數據對比 (Core Stats)</h3>
+          <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>{t('compare.coreStats')}</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Basic Info */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', textAlign: 'center', alignItems: 'center', padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
               <div style={{ color: 'var(--primary-accent)', fontWeight: 'bold', fontSize: '1.2em' }}>{playerA.rating}</div>
-              <div style={{ fontSize: '0.9em', color: 'rgba(255,255,255,0.6)' }}>Rating</div>
+              <div style={{ fontSize: '0.9em', color: 'rgba(255,255,255,0.6)' }}>{t('info.rating')}</div>
               <div style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '1.2em' }}>{playerB.rating}</div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', textAlign: 'center', alignItems: 'center', padding: '8px' }}>
               <div style={{ color: 'var(--primary-accent)' }}>{playerA.age}</div>
-              <div style={{ fontSize: '0.9em', color: 'rgba(255,255,255,0.6)' }}>Age</div>
+              <div style={{ fontSize: '0.9em', color: 'rgba(255,255,255,0.6)' }}>{t('info.age')}</div>
               <div style={{ color: '#ff6b6b' }}>{playerB.age}</div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', textAlign: 'center', alignItems: 'center', padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
               <div style={{ color: 'var(--primary-accent)' }}>{playerA.salary}</div>
-              <div style={{ fontSize: '0.9em', color: 'rgba(255,255,255,0.6)' }}>Salary</div>
+              <div style={{ fontSize: '0.9em', color: 'rgba(255,255,255,0.6)' }}>{t('info.salary')}</div>
               <div style={{ color: '#ff6b6b' }}>{playerB.salary}</div>
             </div>
 
@@ -253,8 +253,8 @@ const PlayerComparison: React.FC<PlayerComparisonProps> = ({ players }) => {
               {analysisA.isFuture && <li>{t('compare.descFutureA') || 'High long-term development value.'}</li>}
               {analysisA.isVeteran && <li>{t('compare.descVeteranA') || 'Veteran player, monitor for regression.'}</li>}
               {analysisA.cpValue > analysisB.cpValue && <li>{t('compare.descBetterCP_A') || 'Better overall value for salary.'}</li>}
-              <li><strong>Chemistry:</strong> {playerA.chemistry}</li>
-              <li><strong>Traits:</strong> {playerA.traits.join(', ') || 'None'}</li>
+              <li><strong>{t('info.chemistry')}:</strong> {t('chemistry.' + (playerA.chemistry || ''))}</li>
+              <li><strong>{t('info.traits')}:</strong> {playerA.traits.map((tr: string) => t('traits.' + tr)).join(', ') || t('compare.none')}</li>
             </ul>
           </div>
 
@@ -281,8 +281,8 @@ const PlayerComparison: React.FC<PlayerComparisonProps> = ({ players }) => {
               {analysisB.isFuture && <li>{t('compare.descFutureB') || 'High long-term development value.'}</li>}
               {analysisB.isVeteran && <li>{t('compare.descVeteranB') || 'Veteran player, monitor for regression.'}</li>}
               {analysisB.cpValue > analysisA.cpValue && <li>{t('compare.descBetterCP_B') || 'Better overall value for salary.'}</li>}
-              <li><strong>Chemistry:</strong> {playerB.chemistry}</li>
-              <li><strong>Traits:</strong> {playerB.traits.join(', ') || 'None'}</li>
+              <li><strong>{t('info.chemistry')}:</strong> {t('chemistry.' + (playerB.chemistry || ''))}</li>
+              <li><strong>{t('info.traits')}:</strong> {playerB.traits.map((tr: string) => t('traits.' + tr)).join(', ') || t('compare.none')}</li>
             </ul>
           </div>
 

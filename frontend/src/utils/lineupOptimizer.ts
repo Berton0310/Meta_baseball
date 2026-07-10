@@ -6,6 +6,8 @@ export interface Lineup {
   [position: string]: any | null; // Returns player object or null
 }
 
+// Sentinel value stored in state and compared with === ; do NOT translate this constant.
+// UI code maps it to t('lineup.allTeams') at display time.
 export const ALL_TEAMS = 'All Teams (不限隊伍)';
 
 

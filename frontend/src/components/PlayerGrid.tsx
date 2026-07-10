@@ -122,18 +122,18 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
   }, []);
 
   const allColumns = [
-    { id: 'rating', label: 'Rating' },
-    { id: 'pos', label: 'Pos' },
-    { id: 'age', label: t('info.age') || 'Age' },
-    { id: 'salary', label: t('info.salary') || 'Salary' },
-    { id: 'power', label: t('stats.power') || 'Power' },
-    { id: 'contact', label: t('stats.contact') || 'Contact' },
-    { id: 'speed', label: t('stats.speed') || 'Speed' },
-    { id: 'fielding', label: t('stats.fielding') || 'Fielding' },
-    { id: 'arm', label: t('stats.arm') || 'Arm' },
-    { id: 'velocity', label: t('stats.velocity') || 'Velocity' },
-    { id: 'junk', label: t('stats.junk') || 'Junk' },
-    { id: 'accuracy', label: t('stats.accuracy') || 'Accuracy' }
+    { id: 'rating', label: t('info.rating') },
+    { id: 'pos', label: t('info.position') },
+    { id: 'age', label: t('info.age') },
+    { id: 'salary', label: t('info.salary') },
+    { id: 'power', label: t('stats.power') },
+    { id: 'contact', label: t('stats.contact') },
+    { id: 'speed', label: t('stats.speed') },
+    { id: 'fielding', label: t('stats.fielding') },
+    { id: 'arm', label: t('stats.arm') },
+    { id: 'velocity', label: t('stats.velocity') },
+    { id: 'junk', label: t('stats.junk') },
+    { id: 'accuracy', label: t('stats.accuracy') }
   ];
   const [visibleCols, setVisibleCols] = useState<string[]>(allColumns.map(c => c.id));
 
@@ -150,7 +150,7 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
           <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }} />
           <input 
             type="text" 
-            placeholder={t('search') || '搜尋球員...'} 
+            placeholder={t('app.search')}
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             style={{ width: '100%', padding: '10px 10px 10px 36px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.1)', background: 'var(--bg-dark)', color: 'white', outline: 'none' }}
@@ -162,7 +162,7 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
           onChange={(e) => setFilterConf(e.target.value)}
           className="filter-select"
         >
-          <option value="">全部聯盟</option>
+          <option value="">{t('grid.allConferences')}</option>
           {uniqueConfs.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
 
@@ -171,7 +171,7 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
           onChange={(e) => setFilterDiv(e.target.value)}
           className="filter-select"
         >
-          <option value="">全部分區</option>
+          <option value="">{t('grid.allDivisions')}</option>
           {uniqueDivs.map(d => <option key={d} value={d}>{d}</option>)}
         </select>
 
@@ -180,7 +180,7 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
           onChange={(e) => setFilterTeam(e.target.value)}
           className="filter-select"
         >
-          <option value="">全部球隊</option>
+          <option value="">{t('grid.allTeams')}</option>
           {teams.map(t => <option key={t} value={t}>{t}</option>)}
         </select>
 
@@ -189,7 +189,7 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
           onChange={(e) => setFilterPos(e.target.value)}
           className="filter-select"
         >
-          <option value="">全部守備位置</option>
+          <option value="">{t('grid.allPositions')}</option>
           {positions.map(p => <option key={p} value={p}>{p}</option>)}
         </select>
 
@@ -199,7 +199,7 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
             className="filter-select"
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', background: showColPicker ? 'rgba(30, 41, 59, 1)' : 'var(--bg-dark)', padding: '10px 16px', minWidth: 'auto', backgroundImage: 'none' }}
           >
-            <Columns size={16} /> 欄位顯示
+            <Columns size={16} /> {t('grid.columns')}
           </button>
           {showColPicker && (
             <div className="glass-panel" style={{ position: 'absolute', top: '100%', right: 0, marginTop: '8px', zIndex: 100, padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '160px', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -220,12 +220,12 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
 
       {/* Legend */}
       <div style={{ display: 'flex', gap: '16px', padding: '10px 24px', background: 'rgba(0,0,0,0.1)', fontSize: '0.85rem', alignItems: 'center', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', flexWrap: 'wrap' }}>
-        <span style={{ color: 'rgba(255,255,255,0.7)' }}>Color Legend (Stats):</span>
+        <span style={{ color: 'rgba(255,255,255,0.7)' }}>{t('grid.colorLegend')}</span>
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(239, 68, 68, 0.6)', borderRadius: 2 }}></div> 90+ (Elite)</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(249, 115, 22, 0.6)', borderRadius: 2 }}></div> 80-89 (Great)</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(234, 179, 8, 0.6)', borderRadius: 2 }}></div> 70-79 (Good)</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(34, 197, 94, 0.5)', borderRadius: 2 }}></div> 50-69 (Average)</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(239, 68, 68, 0.6)', borderRadius: 2 }}></div> 90+ ({t('grid.elite')})</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(249, 115, 22, 0.6)', borderRadius: 2 }}></div> 80-89 ({t('grid.great')})</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(234, 179, 8, 0.6)', borderRadius: 2 }}></div> 70-79 ({t('grid.good')})</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(34, 197, 94, 0.5)', borderRadius: 2 }}></div> 50-69 ({t('grid.average')})</span>
         </div>
       </div>
 
@@ -234,9 +234,9 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
         <table className="data-table">
           <thead>
             <tr>
-              <th style={{ width: '18%' }} onClick={() => onSort('name')}>{t('info.player') || '球員'} {getSortIndicator('name')}</th>
-              {visibleCols.includes('rating') && <th style={{ width: '8%' }} onClick={() => onSort('rating')}>{t('info.rating') || '評級'} {getSortIndicator('rating')}</th>}
-              {visibleCols.includes('pos') && <th style={{ width: '6%' }} onClick={() => onSort('primaryPosition')}>{t('info.pos') || '守備位置'} {getSortIndicator('primaryPosition')}</th>}
+              <th style={{ width: '18%' }} onClick={() => onSort('name')}>{t('grid.player')} {getSortIndicator('name')}</th>
+              {visibleCols.includes('rating') && <th style={{ width: '8%' }} onClick={() => onSort('rating')}>{t('info.rating')} {getSortIndicator('rating')}</th>}
+              {visibleCols.includes('pos') && <th style={{ width: '6%' }} onClick={() => onSort('primaryPosition')}>{t('info.position')} {getSortIndicator('primaryPosition')}</th>}
               {visibleCols.includes('age') && <th style={{ width: '6%' }} onClick={() => onSort('age')}>{t('info.age')} {getSortIndicator('age')}</th>}
               {visibleCols.includes('salary') && <th style={{ width: '8%' }} onClick={() => onSort('salary')}>{t('info.salary')} {getSortIndicator('salary')}</th>}
               {visibleCols.includes('power') && <th style={{ width: '6%' }} onClick={() => onSort('stats.power')}>{t('stats.power')} {getSortIndicator('stats.power')}</th>}
@@ -264,21 +264,21 @@ const PlayerGrid: React.FC<PlayerGridProps> = ({
                 {visibleCols.includes('pos') && <td>{renderPositionBadge(player.primaryPosition)}</td>}
                 {visibleCols.includes('age') && <td>{player.age}</td>}
                 {visibleCols.includes('salary') && <td>{player.salary}</td>}
-                {visibleCols.includes('power') && <td title="Power: Indicates hitting distance and home run probability">{renderStat(player.stats.power)}</td>}
-                {visibleCols.includes('contact') && <td title="Contact: Ability to consistently make solid contact">{renderStat(player.stats.contact)}</td>}
-                {visibleCols.includes('speed') && <td title="Speed: Base running and fielding range">{renderStat(player.stats.speed)}</td>}
-                {visibleCols.includes('fielding') && <td title="Fielding: Catching, diving and error prevention">{renderStat(player.stats.fielding)}</td>}
-                {visibleCols.includes('arm') && <td title="Arm: Throwing speed and accuracy (Fielders)">{renderStat(player.stats.arm)}</td>}
-                {visibleCols.includes('velocity') && <td title="Velocity: Pitching speed (Pitchers only)">{renderStat(player.stats.velocity)}</td>}
-                {visibleCols.includes('junk') && <td title="Junk: Pitch movement and break (Pitchers only)">{renderStat(player.stats.junk)}</td>}
-                {visibleCols.includes('accuracy') && <td title="Accuracy: Pitch control (Pitchers only)">{renderStat(player.stats.accuracy)}</td>}
+                {visibleCols.includes('power') && <td title={t('grid.powerDesc')}>{renderStat(player.stats.power)}</td>}
+                {visibleCols.includes('contact') && <td title={t('grid.contactDesc')}>{renderStat(player.stats.contact)}</td>}
+                {visibleCols.includes('speed') && <td title={t('grid.speedDesc')}>{renderStat(player.stats.speed)}</td>}
+                {visibleCols.includes('fielding') && <td title={t('grid.fieldingDesc')}>{renderStat(player.stats.fielding)}</td>}
+                {visibleCols.includes('arm') && <td title={t('grid.armDesc')}>{renderStat(player.stats.arm)}</td>}
+                {visibleCols.includes('velocity') && <td title={t('grid.velocityDesc')}>{renderStat(player.stats.velocity)}</td>}
+                {visibleCols.includes('junk') && <td title={t('grid.junkDesc')}>{renderStat(player.stats.junk)}</td>}
+                {visibleCols.includes('accuracy') && <td title={t('grid.accuracyDesc')}>{renderStat(player.stats.accuracy)}</td>}
               </tr>
             ))}
           </tbody>
         </table>
         {players.length > 100 && (
           <div style={{ padding: '16px', textAlign: 'center', color: 'var(--text-muted)' }}>
-            Showing 100 of {players.length} results. Please use filters to narrow down.
+            {t('grid.showingLimit')} {players.length} {t('grid.showingHint')}
           </div>
         )}
       </div>

@@ -1,9 +1,11 @@
 import React from 'react';
 import { UserPlus } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import type { Player } from '../types/player';
 
 interface DraftFieldMapProps {
-  draftedRosterSlots: (any | null)[];
-  blueprintSlots: any[];
+  draftedRosterSlots: (Player | null)[];
+  blueprintSlots: { id: string; weight: number }[];
   onPositionClick: (pos: string) => void;
   activeFilter?: string;
 }
@@ -23,6 +25,7 @@ const FIELD_POSITIONS: Record<string, { top: string, left: string }> = {
 const EXTRA_POSITIONS = ['RP', 'CP', 'DH', 'Utility_IF', 'Utility_OF', 'Super_Utility', 'Backup_C'];
 
 const DraftFieldMap: React.FC<DraftFieldMapProps> = ({ draftedRosterSlots, blueprintSlots, onPositionClick, activeFilter }) => {
+  const { t } = useLanguage();
   const draftedPlayers = draftedRosterSlots.filter(p => p !== null);
   // Aggregate players by position
   const getPlayersForPos = (pos: string) => {
@@ -82,7 +85,7 @@ const DraftFieldMap: React.FC<DraftFieldMapProps> = ({ draftedRosterSlots, bluep
                       padding: '2px',
                       borderRadius: '2px'
                     }}>
-                      {p.name.split(' ')[1] || p.name} {!isPrimary && '(副)'}
+                      {p.name.split(' ')[1] || p.name} {!isPrimary && t('draft.secondaryTag')}
                     </div>
                   );
                 })}
@@ -98,7 +101,7 @@ const DraftFieldMap: React.FC<DraftFieldMapProps> = ({ draftedRosterSlots, bluep
 
       {/* Bullpen & Bench */}
       <div className="glass-panel" style={{ flex: '0.8', display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px', overflowY: 'auto' }}>
-        <h3 style={{ margin: 0, color: 'var(--primary-accent)' }}>Bullpen & Bench</h3>
+        <h3 style={{ margin: 0, color: 'var(--primary-accent)' }}>{t('draft.bullpenBench')}</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {EXTRA_POSITIONS.map(pos => {
             const slotIndices = blueprintSlots.reduce((acc, slot, idx) => {
@@ -132,12 +135,12 @@ const DraftFieldMap: React.FC<DraftFieldMapProps> = ({ draftedRosterSlots, bluep
                         color: isPrimary ? '#93c5fd' : 'rgba(255,255,255,0.6)',
                         borderRadius: '4px'
                       }}>
-                        {p.name.split(' ')[1] || p.name} {!isPrimary && '(副)'}
+                        {p.name.split(' ')[1] || p.name} {!isPrimary && t('draft.secondaryTag')}
                       </span>
                     )
                   })}
                   {playersInTheseSlots.length === 0 && (
-                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Empty</span>
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{t('lineup.emptySlot')}</span>
                   )}
                 </div>
               </div>

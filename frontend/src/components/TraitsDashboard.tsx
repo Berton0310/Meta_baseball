@@ -106,7 +106,7 @@ const TraitsDashboard: React.FC<TraitsDashboardProps> = ({ traits }) => {
           </span>
           <input 
             type="text" 
-            placeholder={t('app.searchTraits') || 'Search traits...'} 
+            placeholder={t('app.searchTraits')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ width: '100%', padding: '10px 10px 10px 36px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.1)', background: 'rgba(0, 0, 0, 0.2)', color: 'white', outline: 'none' }}
@@ -118,7 +118,7 @@ const TraitsDashboard: React.FC<TraitsDashboardProps> = ({ traits }) => {
           onChange={(e) => setFilterChemistry(e.target.value)}
           className="filter-select"
         >
-          <option value="">{t('info.chemistry') || 'Chemistry'} (All)</option>
+          <option value="">{t('grid.allChemistry')}</option>
           {chemistries.map(c => <option key={c} value={c}>{t(`chemistry.${c}`) || c}</option>)}
         </select>
       </div>
@@ -129,9 +129,9 @@ const TraitsDashboard: React.FC<TraitsDashboardProps> = ({ traits }) => {
           <thead style={{ position: 'sticky', top: 0, background: 'var(--panel-bg)', zIndex: 10 }}>
             <tr>
               <th style={{ width: '10%' }} onClick={() => handleSort('id')}>ID {getSortIndicator('id')}</th>
-              <th style={{ width: '35%' }} onClick={() => handleSort('nameEn')}>{t('info.traitNameEn') || 'Trait Name (English)'} {getSortIndicator('nameEn')}</th>
-              <th style={{ width: '35%' }} onClick={() => handleSort('nameZh')}>{t('info.traitNameZh') || 'Trait Name (Chinese)'} {getSortIndicator('nameZh')}</th>
-              <th style={{ width: '20%' }} onClick={() => handleSort('chemistry')}>{t('info.chemistry') || 'Chemistry'} {getSortIndicator('chemistry')}</th>
+              <th style={{ width: '35%' }} onClick={() => handleSort('nameEn')}>{t('info.traitNameEn')} {getSortIndicator('nameEn')}</th>
+              <th style={{ width: '35%' }} onClick={() => handleSort('nameZh')}>{t('info.traitNameZh')} {getSortIndicator('nameZh')}</th>
+              <th style={{ width: '20%' }} onClick={() => handleSort('chemistry')}>{t('info.chemistry')} {getSortIndicator('chemistry')}</th>
             </tr>
           </thead>
           <tbody>
@@ -145,8 +145,8 @@ const TraitsDashboard: React.FC<TraitsDashboardProps> = ({ traits }) => {
                   <td style={{ opacity: 0.7 }}>{trait.id}</td>
                   <td style={{ fontWeight: 600 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      {trait.goodBad === 'Good' ? <span style={{ color: '#4ade80', fontSize: '1.1rem', fontWeight: 'bold' }} title="Positive Trait">+</span> : 
-                       trait.goodBad === 'Bad' ? <span style={{ color: '#f87171', fontSize: '1.1rem', fontWeight: 'bold' }} title="Negative Trait">-</span> : null}
+                      {trait.goodBad === 'Good' ? <span style={{ color: '#4ade80', fontSize: '1.1rem', fontWeight: 'bold' }} title={t('grid.positiveTrait')}>+</span> :
+                       trait.goodBad === 'Bad' ? <span style={{ color: '#f87171', fontSize: '1.1rem', fontWeight: 'bold' }} title={t('grid.negativeTrait')}>-</span> : null}
                       {trait.nameEn}
                     </div>
                   </td>
@@ -161,7 +161,7 @@ const TraitsDashboard: React.FC<TraitsDashboardProps> = ({ traits }) => {
                       fontSize: '0.85rem',
                       fontWeight: 500
                     }}>
-                      {t(`chemistry.${trait.chemistry}`) || trait.chemistry}
+                      {trait.chemistry === 'None' ? t('grid.none') : (t(`chemistry.${trait.chemistry}`) || trait.chemistry)}
                     </span>
                   </td>
                 </tr>
@@ -170,20 +170,20 @@ const TraitsDashboard: React.FC<TraitsDashboardProps> = ({ traits }) => {
                     <td colSpan={4} style={{ padding: '16px 24px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                         <div style={{ display: 'flex', gap: '16px', opacity: 0.8, fontSize: '0.9rem' }}>
-                          <span><strong>{t('info.appliesTo') || 'Applies to:'}</strong> {trait.isHitter && trait.isPitcher ? (t('info.hittersAndPitchers') || 'Hitters & Pitchers') : trait.isHitter ? (t('info.hitters') || 'Hitters') : trait.isPitcher ? (t('info.pitchers') || 'Pitchers') : (t('info.unknown') || 'Unknown')}</span>
+                          <span><strong>{t('info.appliesTo')}</strong> {trait.isHitter && trait.isPitcher ? t('info.hittersAndPitchers') : trait.isHitter ? t('info.hitters') : trait.isPitcher ? t('info.pitchers') : t('info.unknown')}</span>
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                           <div className="glass-panel" style={{ padding: '12px', background: 'rgba(255,255,255,0.03)' }}>
-                            <div style={{ color: 'var(--primary-accent)', fontWeight: 'bold', marginBottom: '8px' }}>{t('info.level1') || 'Level 1'}</div>
-                            <div style={{ fontSize: '0.9rem', lineHeight: '1.4' }}>{(language === 'zh-TW' && trait.level1Zh) ? trait.level1Zh : (trait.level1 || 'N/A')}</div>
+                            <div style={{ color: 'var(--primary-accent)', fontWeight: 'bold', marginBottom: '8px' }}>{t('info.level1')}</div>
+                            <div style={{ fontSize: '0.9rem', lineHeight: '1.4' }}>{(language === 'zh-TW' && trait.level1Zh) ? trait.level1Zh : (trait.level1 || t('grid.notAvailable'))}</div>
                           </div>
                           <div className="glass-panel" style={{ padding: '12px', background: 'rgba(255,255,255,0.03)' }}>
-                            <div style={{ color: 'var(--primary-accent)', fontWeight: 'bold', marginBottom: '8px' }}>{t('info.level2') || 'Level 2'}</div>
-                            <div style={{ fontSize: '0.9rem', lineHeight: '1.4' }}>{(language === 'zh-TW' && trait.level2Zh) ? trait.level2Zh : (trait.level2 || 'N/A')}</div>
+                            <div style={{ color: 'var(--primary-accent)', fontWeight: 'bold', marginBottom: '8px' }}>{t('info.level2')}</div>
+                            <div style={{ fontSize: '0.9rem', lineHeight: '1.4' }}>{(language === 'zh-TW' && trait.level2Zh) ? trait.level2Zh : (trait.level2 || t('grid.notAvailable'))}</div>
                           </div>
                           <div className="glass-panel" style={{ padding: '12px', background: 'rgba(255,255,255,0.03)' }}>
-                            <div style={{ color: 'var(--primary-accent)', fontWeight: 'bold', marginBottom: '8px' }}>{t('info.level3') || 'Level 3'}</div>
-                            <div style={{ fontSize: '0.9rem', lineHeight: '1.4' }}>{(language === 'zh-TW' && trait.level3Zh) ? trait.level3Zh : (trait.level3 || 'N/A')}</div>
+                            <div style={{ color: 'var(--primary-accent)', fontWeight: 'bold', marginBottom: '8px' }}>{t('info.level3')}</div>
+                            <div style={{ fontSize: '0.9rem', lineHeight: '1.4' }}>{(language === 'zh-TW' && trait.level3Zh) ? trait.level3Zh : (trait.level3 || t('grid.notAvailable'))}</div>
                           </div>
                         </div>
                       </div>
@@ -195,7 +195,7 @@ const TraitsDashboard: React.FC<TraitsDashboardProps> = ({ traits }) => {
             {processedTraits.length === 0 && (
               <tr>
                 <td colSpan={4} style={{ textAlign: 'center', padding: '40px', opacity: 0.5 }}>
-                  {t('app.noTraitsFound') || 'No traits found matching your criteria.'}
+                  {t('app.noTraitsFound')}
                 </td>
               </tr>
             )}
