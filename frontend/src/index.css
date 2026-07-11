@@ -49,6 +49,103 @@ body {
   padding: 24px;
 }
 
+/* --- Player detail modal (Tactical Dashboard player pool) ------------------ */
+.player-info-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.player-info-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--primary-accent);
+}
+
+/* Compact variant for the dense My Team rows (current roster + player pool). */
+.myteam-info-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+}
+
+.player-detail-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.player-detail-modal {
+  position: relative;
+  box-sizing: border-box;
+  width: min(560px, 92vw);
+  max-width: 92vw;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 20px 24px 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+}
+
+.player-detail-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.player-detail-modal-title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--primary-accent);
+  overflow-wrap: anywhere;
+}
+.player-detail-modal-close {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.player-detail-modal-close:hover {
+  color: var(--text-main);
+  background: rgba(239, 68, 68, 0.2);
+  border-color: var(--danger-color);
+}
+
+@media (max-width: 640px) {
+  .player-detail-modal {
+    width: 96vw;
+    max-height: 92vh;
+    padding: 16px;
+  }
+  .player-detail-modal-title {
+    font-size: 1rem;
+  }
+}
+
 /* Navbar */
 .navbar {
   display: flex;
@@ -710,6 +807,37 @@ body {
   flex-wrap: wrap;
 }
 
+/* Quiet secondary note: "N slotted into the lineup" (roster vs. fielded concept). */
+.lineup-chem-fielded-note {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  opacity: 0.75;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Cross-page handoff button in the LineupBuilder header (source = My Team). */
+.lineup-edit-roster-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85em;
+  cursor: pointer;
+  color: var(--primary-accent);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--primary-accent);
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.lineup-edit-roster-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
 .lineup-chem-bar {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -998,6 +1126,17 @@ body {
   background: rgba(239, 68, 68, 0.12);
 }
 
+/* Primary handoff action: "Build Lineup →" jumps to the Tactical Dashboard. */
+.myteam-icon-btn-primary {
+  color: var(--primary-accent);
+  border-color: var(--primary-accent);
+  background: rgba(255, 255, 255, 0.06);
+}
+.myteam-icon-btn-primary:hover {
+  color: var(--primary-accent);
+  background: rgba(255, 255, 255, 0.14);
+}
+
 .myteam-empty-hint,
 .myteam-select-hint {
   color: var(--text-muted);
@@ -1020,6 +1159,24 @@ body {
 
 .myteam-editor > * {
   min-width: 0;
+}
+
+/* Pool collapsed: current roster spans the full width */
+.myteam-editor-collapsed {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Card title row with a trailing toggle/close button */
+.myteam-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.myteam-card-header .dashboard-card-title {
+  margin: 0;
 }
 
 .myteam-summary {
@@ -1088,6 +1245,65 @@ body {
   white-space: nowrap;
   font-size: 0.85rem;
   font-weight: 600;
+}
+
+/* Positions cell: primary badge + muted secondary badges + multi-pos marker.
+   Wraps so players with many secondary positions don't squash the name/salary/
+   buttons, and stays within the 380px mobile width. */
+.myteam-pos-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Secondary positions read as "also plays here": dimmer and slightly smaller. */
+.myteam-pos-2nd {
+  display: inline-flex;
+  opacity: 0.6;
+  transform: scale(0.82);
+  transform-origin: center;
+}
+
+.myteam-multipos-marker {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Rating badge in the roster / player-pool rows. Scoped to MyTeamManager so it
+   reads clearly as "rating", not a third position badge. A tiny Star icon marks
+   it, a left divider + margin separates it from the position group, and the
+   fully-rounded pill shape distinguishes it from the sharper position badges. */
+.myteam-rating {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  padding: 2px 7px;
+  border-radius: 999px;
+  /* Pull away from the position group and hang a thin divider in the gap so the
+     row visually splits into "positions | rating". */
+  margin-left: 13px;
+}
+
+.myteam-rating::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.myteam-rating-icon {
+  flex-shrink: 0;
+  opacity: 0.9;
 }
 
 .myteam-salary {

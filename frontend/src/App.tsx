@@ -16,9 +16,11 @@ import { calculateTeamStats } from './utils/teamStats';
 import type { TeamStat } from './utils/teamStats';
 import { Languages, Activity, Users, Shield, ListStart, Star, Target, ShoppingCart, LayoutDashboard, UserCog } from 'lucide-react';
 
+export type ViewMode = 'dashboard' | 'myteam' | 'players' | 'teams' | 'lineup' | 'traits' | 'compare' | 'draft';
+
 function App() {
   const { t, toggleLanguage, language } = useLanguage();
-  const [viewMode, setViewMode] = useState<'dashboard' | 'myteam' | 'players' | 'teams' | 'lineup' | 'traits' | 'compare' | 'draft'>('dashboard');
+  const [viewMode, setViewMode] = useState<ViewMode>('dashboard');
   
   const [selectedPlayer, setSelectedPlayer] = useState<any>(playersData[0]);
   
@@ -210,7 +212,7 @@ function App() {
           {viewMode === 'dashboard' ? (
             <TeamDashboard players={playersData} />
           ) : viewMode === 'myteam' ? (
-            <MyTeamManager />
+            <MyTeamManager onNavigate={(mode) => setViewMode(mode)} />
           ) : viewMode === 'players' ? (
             <PlayerGrid 
               players={filteredAndSortedPlayers}
@@ -248,7 +250,7 @@ function App() {
           ) : viewMode === 'draft' ? (
             <DraftSimulator players={playersData} />
           ) : (
-            <LineupBuilder />
+            <LineupBuilder onNavigate={(mode) => setViewMode(mode)} />
           )}
         </section>
 

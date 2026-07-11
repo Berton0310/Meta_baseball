@@ -3,7 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import playersData from '../data/players.json';
 import { autoPickLineup, optimizeBattingOrder, ALL_TEAMS, FULL_ROSTER_POSITIONS } from '../utils/lineupOptimizer';
 import type { OptimizationStrategy, Lineup, BattingStrategy } from '../utils/lineupOptimizer';
-import { listRosters, getRosterPlayers, encodeTeamSource, decodeTeamSource } from '../utils/myTeamStorage';
+import { listRosters, getRosterPlayers, encodeTeamSource, decodeTeamSource, setActiveRosterId } from '../utils/myTeamStorage';
 import { calculateTeamStats } from '../utils/teamStats';
 import { CHEMISTRY_TYPES, CHEMISTRY_COLOR_VARS, normalizeChemistry, getChemistryLevel, nextThreshold } from '../utils/chemistryUtils';
 import type { ChemistryType } from '../utils/chemistryUtils';
@@ -11,8 +11,9 @@ import {
   TRAIT_BATTING_FIT, NEGATIVE_HITTER_TRAITS, getTraitByName, hasTrait,
   getEffectiveTraitDesc, formatSlotRanges, canPlayPosition, positionWeightedScore
 } from '../utils/traitFitUtils';
-import { Settings2, RefreshCw, UserPlus, Search, Trash2, Shield, Swords, Users, Target, FlaskConical, AlertTriangle } from 'lucide-react';
+import { Settings2, RefreshCw, UserPlus, Search, Trash2, Shield, Swords, Users, Target, FlaskConical, AlertTriangle, Info, Pencil } from 'lucide-react';
 import playerImageMap from '../data/playerImageMap.json';
+import PlayerDetailModal from './PlayerDetailModal';
 
 const LEAGUE_TEAMS = Array.from(new Set(playersData.map(p => p.team))).filter(Boolean).sort();
 const DEFAULT_SOURCE_KEY = encodeTeamSource({ kind: 'static', team: ALL_TEAMS });
@@ -99,7 +100,11 @@ const loadSavedLineup = (sourceKey: string) => {
   return result;
 };
 
-const LineupBuilder: React.FC = () => {
+interface LineupBuilderProps {
+  onNavigate?: (mode: 'myteam') => void;
+}
+
+const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
   const { t, language } = useLanguage();
   // Lazy initializer：首次 render 就讀取上次的來源（省去多餘的重渲染）
   const [sourceKey, setSourceKey] = useState<string>(resolveInitialSourceKey);
@@ -121,6 +126,10 @@ const LineupBuilder: React.FC = () => {
   const [draggedPlayer, setDraggedPlayer] = useState<any | null>(null);
   const [hoveredPosition, setHoveredPosition] = useState<string | null>(null);
   const [hoveredBattingSlot, setHoveredBattingSlot] = useState<number | null>(null);
+
+  // Player detail modal: null = closed. Opened only via the per-card info button,
+  // never via the card onClick (which keeps its existing selecting-mode assign behavior).
+  const [selectedDetailPlayer, setSelectedDetailPlayer] = useState<any | null>(null);
 
   const teamPlayers = useMemo(() => playersForSource(sourceKey), [sourceKey]);
 
@@ -188,6 +197,19 @@ const LineupBuilder: React.FC = () => {
     } catch {
       // Storage 不可用：略過
     }
+  };
+
+  // Hand back to My Teams to edit the current roster. Only meaningful when the
+  // active source is a saved My Team; sets it active so MyTeamManager opens on it.
+  const handleEditRoster = () => {
+    const source = decodeTeamSource(sourceKey);
+    if (source.kind !== 'myteam') return;
+    try {
+      setActiveRosterId(source.rosterId);
+    } catch {
+      // Storage unavailable: navigation still works.
+    }
+    onNavigate?.('myteam');
   };
 
   const filteredRosterPlayers = useMemo(() => {
@@ -292,6 +314,32 @@ const LineupBuilder: React.FC = () => {
     return counts;
   }, [activeLineupPlayers]);
 
+  // Is the current source a "real" roster (a specific team or a saved My Team),
+  // as opposed to the All-Teams sandbox? SMB4 chemistry is computed over the
+  // *whole roster*, so for real rosters the effective trait levels come from the
+  // full player pool — not just who happens to be slotted into the lineup.
+  const isRealRoster = useMemo(() => {
+    const source = decodeTeamSource(sourceKey);
+    return source.kind === 'myteam' || (source.kind === 'static' && source.team !== ALL_TEAMS);
+  }, [sourceKey]);
+
+  // Chemistry counts across the entire roster pool (myteam = the 22-man roster,
+  // static team = the whole team). This is the SMB4-accurate basis for trait levels.
+  const rosterChemCounts = useMemo(() => {
+    const counts: Record<ChemistryType, number> = {
+      Competitive: 0, Spirited: 0, Disciplined: 0, Scholarly: 0, Crafty: 0
+    };
+    teamPlayers.forEach(p => {
+      const chem = normalizeChemistry(p.chemistry);
+      if (chem) counts[chem]++;
+    });
+    return counts;
+  }, [teamPlayers]);
+
+  // The counts that decide *effective trait levels*. Real rosters use the whole
+  // roster; the All-Teams sandbox falls back to the slotted-lineup counts.
+  const effectiveChemCounts = isRealRoster ? rosterChemCounts : chemCounts;
+
   const chemUpgradeHint = (count: number): string => {
     const threshold = nextThreshold(count);
     if (threshold === null) return t('dashboard.maxLevel');
@@ -308,7 +356,7 @@ const LineupBuilder: React.FC = () => {
       const trait = getTraitByName(traitName);
       if (!trait) return;
       const displayName = language === 'zh-TW' ? (trait.nameZh || trait.nameEn) : trait.nameEn;
-      const { level, desc } = getEffectiveTraitDesc(trait, chemCounts, language);
+      const { level, desc } = getEffectiveTraitDesc(trait, effectiveChemCounts, language);
       const descPart = desc ? ` | Lv${level}: ${desc}` : '';
       if (NEGATIVE_HITTER_TRAITS.has(trait.nameEn)) {
         badges.push({ kind: 'bad', label: displayName, title: `${t('lineup.negativeTraitWarn')}${descPart}` });
@@ -416,7 +464,7 @@ const LineupBuilder: React.FC = () => {
             {pinchPerfectTrait && (
               <span
                 className="trait-fit-badge trait-fit-good"
-                title={`${t('lineup.benchFitGood')} | Lv${getEffectiveTraitDesc(pinchPerfectTrait, chemCounts, language).level}: ${getEffectiveTraitDesc(pinchPerfectTrait, chemCounts, language).desc}`}
+                title={`${t('lineup.benchFitGood')} | Lv${getEffectiveTraitDesc(pinchPerfectTrait, effectiveChemCounts, language).level}: ${getEffectiveTraitDesc(pinchPerfectTrait, effectiveChemCounts, language).desc}`}
               >
                 ✓ {language === 'zh-TW' ? pinchPerfectTrait.nameZh : pinchPerfectTrait.nameEn}
               </span>
@@ -538,6 +586,16 @@ const LineupBuilder: React.FC = () => {
                 ))}
               </optgroup>
             </select>
+            {decodeTeamSource(sourceKey).kind === 'myteam' && (
+              <button
+                type="button"
+                onClick={handleEditRoster}
+                className="lineup-edit-roster-btn"
+                title={t('lineup.editRoster')}
+              >
+                <Pencil size={13} /> {t('lineup.editRoster')}
+              </button>
+            )}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>{t('lineup.strategy') || 'Strategy'}:</span>
@@ -646,6 +704,20 @@ const LineupBuilder: React.FC = () => {
                     {isAlreadyInLineup && <span style={{ fontSize: '9px', background: 'var(--primary-accent)', padding: '2px 4px', borderRadius: '4px' }}>{t('lineup.tagField')}</span>}
                     {isAlreadyInBatting && <span style={{ fontSize: '9px', background: '#eab308', padding: '2px 4px', borderRadius: '4px' }}>{t('lineup.tagBat')}</span>}
                   </div>
+                  {/* Info button: opens the detail modal without touching the card's
+                      drag or selecting-mode assign behavior. stopPropagation on click
+                      avoids the card onClick; draggable=false + stopPropagation on
+                      dragStart avoids starting a card drag from the button. */}
+                  <button
+                    className="player-info-btn"
+                    draggable={false}
+                    onClick={(e) => { e.stopPropagation(); setSelectedDetailPlayer(p); }}
+                    onDragStart={(e) => { e.stopPropagation(); e.preventDefault(); }}
+                    title={t('lineup.viewDetail')}
+                    aria-label={t('lineup.viewDetail')}
+                  >
+                    <Info size={16} />
+                  </button>
                 </div>
               );
             })}
@@ -658,18 +730,28 @@ const LineupBuilder: React.FC = () => {
         {/* Right Panel: Dashboard Area */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', paddingRight: '8px' }}>
 
-          {/* Live lineup chemistry bar */}
+          {/* Chemistry bar. For a real roster the effective levels are driven by
+              the *whole roster* (rosterChemCounts), so we show those and label the
+              panel as "in effect"; the slotted-lineup count is shown as a quiet
+              secondary note. The All-Teams sandbox keeps the slotted-lineup view. */}
           <div className="glass-panel lineup-chem-panel">
             <h3 className="lineup-chem-title">
               <FlaskConical size={16} color="var(--primary-accent)" />
-              {t('lineup.chemistryBar')}
+              {isRealRoster ? t('lineup.chemistryBarRoster') : t('lineup.chemistryBar')}
               <span style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--text-muted)' }}>
-                {t('lineup.chemistryBarNote').replace('{n}', String(activeLineupPlayers.length))}
+                {isRealRoster
+                  ? t('lineup.chemistryBarRosterNote').replace('{n}', String(teamPlayers.length))
+                  : t('lineup.chemistryBarNote').replace('{n}', String(activeLineupPlayers.length))}
               </span>
+              {isRealRoster && (
+                <span className="lineup-chem-fielded-note">
+                  {t('lineup.chemistryFieldedNote').replace('{n}', String(activeLineupPlayers.length))}
+                </span>
+              )}
             </h3>
             <div className="lineup-chem-bar">
               {CHEMISTRY_TYPES.map(chem => {
-                const count = chemCounts[chem];
+                const count = isRealRoster ? rosterChemCounts[chem] : chemCounts[chem];
                 const level = getChemistryLevel(count);
                 const color = CHEMISTRY_COLOR_VARS[chem];
                 return (
@@ -753,6 +835,9 @@ const LineupBuilder: React.FC = () => {
         </div>
 
       </div>
+
+      {/* Player detail modal (shared component). Backdrop click, ✕, and Esc all close it. */}
+      <PlayerDetailModal player={selectedDetailPlayer} onClose={() => setSelectedDetailPlayer(null)} />
     </div>
   );
 };

@@ -4,20 +4,29 @@ import playersData from '../data/players.json';
 import {
   listRosters, createRoster, updateRoster, deleteRoster, duplicateRoster,
   getActiveRosterId, setActiveRosterId, createFromTeam, exportRoster, importRoster,
+  encodeTeamSource,
 } from '../utils/myTeamStorage';
 import type { MyTeamRoster, Player } from '../utils/myTeamStorage';
 import { CHEMISTRY_TYPES, CHEMISTRY_COLOR_VARS, normalizeChemistry, getChemistryLevel, nextThreshold } from '../utils/chemistryUtils';
 import type { ChemistryType } from '../utils/chemistryUtils';
 import { renderPositionBadge } from './PlayerGrid';
+import PlayerDetailModal from './PlayerDetailModal';
+import RosterAnalytics from './RosterAnalytics';
 import {
   UserCog, Plus, Copy, Pencil, Trash2, Download, Upload, Check, Search,
-  FlaskConical, Users, ClipboardList, X
+  FlaskConical, Users, ClipboardList, X, Info, ListStart, Shuffle, Star
 } from 'lucide-react';
 
 const ALL_PLAYERS = playersData as unknown as Player[];
 const LEAGUE_TEAMS = Array.from(new Set(ALL_PLAYERS.map(p => p.team))).filter(Boolean).sort();
 const POSITION_GROUPS = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'SP', 'RP', 'CP'];
 const STANDARD_ROSTER_SIZE = 22;
+// Shared handoff key: LineupBuilder reads this on mount to restore the last source.
+const LAST_SOURCE_KEY = 'smb4.lineup.lastSource';
+
+interface MyTeamManagerProps {
+  onNavigate?: (mode: 'lineup') => void;
+}
 
 const parseSalary = (s: string | number | undefined | null): number => {
   if (!s) return 0;
@@ -28,12 +37,16 @@ const parseSalary = (s: string | number | undefined | null): number => {
 
 type Message = { kind: 'success' | 'error'; text: string } | null;
 
-const MyTeamManager: React.FC = () => {
+const MyTeamManager: React.FC<MyTeamManagerProps> = ({ onNavigate }) => {
   const { t } = useLanguage();
 
   const [rosters, setRosters] = useState<MyTeamRoster[]>(() => listRosters());
   const [activeId, setActiveId] = useState<string | null>(() => getActiveRosterId());
   const [message, setMessage] = useState<Message>(null);
+
+  // Player detail modal: null = closed. Opened only via the per-row info button,
+  // never via the pool row onClick (which keeps its add/remove toggle behavior).
+  const [detailPlayer, setDetailPlayer] = useState<Player | null>(null);
 
   // Creation controls
   const [newName, setNewName] = useState('');
@@ -47,6 +60,15 @@ const MyTeamManager: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [poolTeam, setPoolTeam] = useState('');
   const [poolPos, setPoolPos] = useState('');
+
+  // Player pool is collapsed by default so the screen focuses on the main team
+  // info (chemistry bar + current roster + analytics). It opens automatically
+  // when the active roster starts out empty, since an empty roster needs adding.
+  const [poolOpen, setPoolOpen] = useState(() => {
+    const id = getActiveRosterId();
+    const active = listRosters().find(r => r.id === id);
+    return !active || active.playerIds.length === 0;
+  });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -123,6 +145,18 @@ const MyTeamManager: React.FC = () => {
   const selectRoster = (id: string) => {
     setActiveRosterId(id);
     setActiveId(id);
+  };
+
+  // Hand off to the Tactical Dashboard with this roster pre-selected. Persist the
+  // source key so LineupBuilder restores it when it (re)mounts after the view switch.
+  const handleBuildLineup = (roster: MyTeamRoster) => {
+    selectRoster(roster.id);
+    try {
+      localStorage.setItem(LAST_SOURCE_KEY, encodeTeamSource({ kind: 'myteam', rosterId: roster.id }));
+    } catch {
+      // Storage unavailable: navigation still works, source just won't be pre-restored.
+    }
+    onNavigate?.('lineup');
   };
 
   const handleCreate = () => {
@@ -242,10 +276,40 @@ const MyTeamManager: React.FC = () => {
   };
 
   const ratingBadge = (p: Player) => p.rating ? (
-    <span className={`rating-badge rating-${String(p.rating).replace('+', 'plus').replace('-', 'minus')}`} style={{ fontSize: '0.72rem', padding: '2px 6px' }}>
+    <span className={`myteam-rating rating-badge rating-${String(p.rating).replace('+', 'plus').replace('-', 'minus')}`}>
+      <Star size={9} strokeWidth={2.5} className="myteam-rating-icon" />
       {p.rating}
     </span>
   ) : null;
+
+  // Renders the player's positions for the current-roster row: the primary
+  // position as a solid badge, plus any secondary positions as muted/smaller
+  // badges (.myteam-pos-2nd). Multi-position players (>=1 distinct secondary)
+  // get a Shuffle marker + tooltip so they read differently from single-pos ones.
+  const renderPositions = (p: Player) => {
+    const primary = p.primaryPosition;
+    // Dedupe: drop any secondary that equals the primary, and dedupe among themselves.
+    const secondary = Array.from(new Set(p.secondaryPositions || []))
+      .filter(pos => pos && pos !== primary);
+    const isMulti = secondary.length > 0;
+    const allPositions = [primary, ...secondary].filter(Boolean).join(' / ');
+    return (
+      <span className="myteam-pos-cell">
+        {isMulti && (
+          <span
+            className="myteam-multipos-marker"
+            title={t('myteam.multiPosTooltip').replace('{list}', allPositions)}
+          >
+            <Shuffle size={12} color="var(--text-muted)" />
+          </span>
+        )}
+        {renderPositionBadge(primary)}
+        {secondary.map(pos => (
+          <span key={pos} className="myteam-pos-2nd">{renderPositionBadge(pos)}</span>
+        ))}
+      </span>
+    );
+  };
 
   const formatDate = (iso: string): string => {
     const d = new Date(iso);
@@ -350,6 +414,13 @@ const MyTeamManager: React.FC = () => {
                   {t('myteam.updatedAt').replace('{date}', formatDate(roster.updatedAt))}
                 </div>
                 <div className="myteam-roster-actions" onClick={e => e.stopPropagation()}>
+                  <button
+                    className="myteam-icon-btn myteam-icon-btn-primary"
+                    onClick={(e) => { e.stopPropagation(); handleBuildLineup(roster); }}
+                    title={t('myteam.buildLineup')}
+                  >
+                    <ListStart size={13} /> {t('myteam.buildLineup')}
+                  </button>
                   <button className="myteam-icon-btn" onClick={() => startRename(roster)}>
                     <Pencil size={13} /> {t('myteam.rename')}
                   </button>
@@ -408,12 +479,23 @@ const MyTeamManager: React.FC = () => {
           </div>
 
           {/* ===== Editor: current roster (left) + player pool (right) ===== */}
-          <div className="myteam-editor">
+          <div className={`myteam-editor${poolOpen ? '' : ' myteam-editor-collapsed'}`}>
             {/* Current roster */}
             <div className="glass-panel dashboard-card">
-              <h3 className="dashboard-card-title">
-                <ClipboardList size={18} color="var(--primary-accent)" /> {t('myteam.currentRoster')}
-              </h3>
+              <div className="myteam-card-header">
+                <h3 className="dashboard-card-title">
+                  <ClipboardList size={18} color="var(--primary-accent)" /> {t('myteam.currentRoster')}
+                </h3>
+                <button
+                  className="myteam-icon-btn"
+                  onClick={() => setPoolOpen(o => !o)}
+                  title={poolOpen ? t('myteam.closePool') : t('myteam.openPool')}
+                >
+                  {poolOpen
+                    ? <><X size={14} /> {t('myteam.closePool')}</>
+                    : <><Plus size={14} /> {t('myteam.openPool')}</>}
+                </button>
+              </div>
               <div className="myteam-summary">
                 <span title={t('myteam.standardSizeNote')}>
                   {t('myteam.rosterCount')}{' '}
@@ -437,9 +519,17 @@ const MyTeamManager: React.FC = () => {
                       <div key={p.id} className="myteam-player-row">
                         {chemDot(p)}
                         <span className="myteam-player-name">{p.name}</span>
-                        {renderPositionBadge(p.primaryPosition)}
+                        {renderPositions(p)}
                         {ratingBadge(p)}
                         <span className="myteam-salary">{p.salary}</span>
+                        <button
+                          className="player-info-btn myteam-info-btn"
+                          onClick={(e) => { e.stopPropagation(); setDetailPlayer(p); }}
+                          title={t('myteam.viewDetail')}
+                          aria-label={t('myteam.viewDetail')}
+                        >
+                          <Info size={14} />
+                        </button>
                         <button
                           className="myteam-remove-btn"
                           onClick={() => removePlayer(p)}
@@ -455,11 +545,22 @@ const MyTeamManager: React.FC = () => {
               </div>
             </div>
 
-            {/* Player pool */}
+            {/* Player pool (only rendered when opened) */}
+            {poolOpen && (
             <div className="glass-panel dashboard-card">
-              <h3 className="dashboard-card-title">
-                <Users size={18} color="var(--primary-accent)" /> {t('myteam.playerPool')}
-              </h3>
+              <div className="myteam-card-header">
+                <h3 className="dashboard-card-title">
+                  <Users size={18} color="var(--primary-accent)" /> {t('myteam.playerPool')}
+                </h3>
+                <button
+                  className="myteam-icon-btn"
+                  onClick={() => setPoolOpen(false)}
+                  title={t('myteam.closePool')}
+                  aria-label={t('myteam.closePool')}
+                >
+                  <X size={14} />
+                </button>
+              </div>
               <div className="myteam-pool-filters">
                 <div className="myteam-pool-search">
                   <Search size={15} className="myteam-pool-search-icon" />
@@ -503,6 +604,17 @@ const MyTeamManager: React.FC = () => {
                       ) : (
                         <Plus size={14} color="var(--text-muted)" />
                       )}
+                      {/* stopPropagation is required: the whole row's onClick toggles
+                          add/remove, so without it the info button would also
+                          add or remove the player from the roster. */}
+                      <button
+                        className="player-info-btn myteam-info-btn"
+                        onClick={(e) => { e.stopPropagation(); setDetailPlayer(p); }}
+                        title={t('myteam.viewDetail')}
+                        aria-label={t('myteam.viewDetail')}
+                      >
+                        <Info size={14} />
+                      </button>
                     </div>
                   );
                 })}
@@ -511,13 +623,21 @@ const MyTeamManager: React.FC = () => {
                 )}
               </div>
             </div>
+            )}
           </div>
+
+          {/* ===== Roster analytics (shared with Team Dashboard) ===== */}
+          {rosterPlayers.length > 0 && (
+            <RosterAnalytics players={rosterPlayers} teamLabel={activeRoster.name} />
+          )}
         </>
       ) : (
         <div className="glass-panel myteam-select-hint">
           {t('myteam.selectRosterHint')}
         </div>
       )}
+
+      <PlayerDetailModal player={detailPlayer} onClose={() => setDetailPlayer(null)} />
     </div>
   );
 };
