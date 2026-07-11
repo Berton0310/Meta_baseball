@@ -13,18 +13,18 @@ const TeamRadar: React.FC<TeamRadarProps> = ({ team }) => {
   const { t } = useLanguage();
 
   if (!team) {
-    return <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>Select a team to view stats</div>;
+    return <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>{t('grid.selectTeamPrompt')}</div>;
   }
 
   const labels = [
-    t('stats.power') || 'POW',
-    t('stats.contact') || 'CON',
-    t('stats.speed') || 'SPD',
-    t('stats.fielding') || 'FLD',
-    t('stats.arm') || 'ARM',
-    t('stats.velocity') || 'VEL',
-    t('stats.junk') || 'JNK',
-    t('stats.accuracy') || 'ACC'
+    t('stats.power'),
+    t('stats.contact'),
+    t('stats.speed'),
+    t('stats.fielding'),
+    t('stats.arm'),
+    t('stats.velocity'),
+    t('stats.junk'),
+    t('stats.accuracy')
   ];
 
   const values = [
@@ -89,17 +89,6 @@ const TeamRadar: React.FC<TeamRadarProps> = ({ team }) => {
     }
   };
 
-  const getChemZh = (chem: string) => {
-    switch(chem) {
-      case 'Crafty': return '狡猾'; 
-      case 'Scholarly': return '學術'; 
-      case 'Competitive': return '競爭'; 
-      case 'Disciplined': return '紀律'; 
-      case 'Spirited': return '精神'; 
-      default: return ''; 
-    }
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
       {/* Team Header */}
@@ -143,11 +132,11 @@ const TeamRadar: React.FC<TeamRadarProps> = ({ team }) => {
       {/* Chemistry Bonuses */}
       <div style={{ padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px' }}>
         <h3 style={{ margin: '0 0 12px 0', fontSize: '1.1rem', color: 'rgba(255,255,255,0.9)' }}>
-          團隊化學反應 (Chemistry)
+          {t('app.chemistryBonuses')}
         </h3>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
           {Object.entries(team.chemistryCounts).sort((a,b) => b[1] - a[1]).map(([chem, count]) => {
-            const tier = count >= 7 ? 'Tier 3' : count >= 5 ? 'Tier 2' : count >= 3 ? 'Tier 1' : 'No Tier';
+            const tier = count >= 7 ? `${t('grid.tier')} 3` : count >= 5 ? `${t('grid.tier')} 2` : count >= 3 ? `${t('grid.tier')} 1` : t('grid.noTier');
             const isActive = count >= 3;
             
             return (
@@ -161,7 +150,7 @@ const TeamRadar: React.FC<TeamRadarProps> = ({ team }) => {
                 gap: '8px',
                 opacity: isActive ? 1 : 0.5
               }}>
-                <span style={{ fontWeight: 600, color: isActive ? getChemColor(chem) : '#fff' }}>{chem} ({getChemZh(chem)})</span>
+                <span style={{ fontWeight: 600, color: isActive ? getChemColor(chem) : '#fff' }}>{t(`chemistry.${chem}`)}</span>
                 <span style={{ background: isActive ? getChemColor(chem) : 'rgba(255,255,255,0.2)', padding: '2px 6px', borderRadius: '10px', fontSize: '0.75rem', color: isActive ? '#000' : '#fff' }}>
                   {count}
                 </span>

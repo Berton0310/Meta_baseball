@@ -16,7 +16,7 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
   const { t } = useLanguage();
 
   if (!player) {
-    return <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>Select a player to view stats</div>;
+    return <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>{t('radar.selectPlayer')}</div>;
   }
 
   // Force usage to prevent esbuild from stripping it
@@ -54,7 +54,7 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
         {targetArchetype && (
           <div style={{ background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: '8px', borderLeft: `4px solid ${colorHex}`, marginBottom: '0px' }}>
             <div style={{ fontWeight: 'bold', color: colorHex, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              🎯 期望達標狀況 (Archetype Match)
+              🎯 {t('radar.archetypeMatch')}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {isP ? (
@@ -71,7 +71,7 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
                     <>
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                          <span>🔥 球威 (目標: {Math.round(vW*100)}%)</span>
+                          <span>🔥 {t('radar.velo')} ({t('radar.target')}: {Math.round(vW*100)}%)</span>
                           <span>{(velVal * vW).toFixed(1)} / {Math.round(vW*100)}</span>
                         </div>
                         <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}>
@@ -80,7 +80,7 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
                       </div>
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                          <span>🌪️ 變化球 (目標: {Math.round(jW*100)}%)</span>
+                          <span>🌪️ {t('radar.junk')} ({t('radar.target')}: {Math.round(jW*100)}%)</span>
                           <span>{(jnkVal * jW).toFixed(1)} / {Math.round(jW*100)}</span>
                         </div>
                         <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}>
@@ -89,7 +89,7 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
                       </div>
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                          <span>🎯 控球 (目標: {Math.round(aW*100)}%)</span>
+                          <span>🎯 {t('radar.acc')} ({t('radar.target')}: {Math.round(aW*100)}%)</span>
                           <span>{(accVal * aW).toFixed(1)} / {Math.round(aW*100)}</span>
                         </div>
                         <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}>
@@ -99,19 +99,19 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
                       <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '8px', marginTop: '4px', textAlign: 'right', fontWeight: 'bold', color: '#f59e0b' }}>
                         {p._baseScore !== undefined ? (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.8rem', textAlign: 'left' }}>
-                            <div style={{ color: 'var(--primary-accent)' }}>🎯 綜合分數 (Base Score): {p._baseScore}</div>
+                            <div style={{ color: 'var(--primary-accent)' }}>🎯 {t('radar.baseScore')}: {p._baseScore}</div>
                             {p._ageBonusNotes?.map((note: string, i: number) => (
-                              <div key={`age-${i}`} style={{ color: note.includes('+') ? '#10b981' : note.includes('-') ? '#ef4444' : '#9ca3af' }}>👶 年齡加成: {note}</div>
+                              <div key={`age-${i}`} style={{ color: note.includes('+') ? '#10b981' : note.includes('-') ? '#ef4444' : '#9ca3af' }}>👶 {t('radar.ageBonus')}: {note}</div>
                             ))}
                             {p._bonusNotes?.map((note: string, i: number) => (
-                              <div key={`trait-${i}`} style={{ color: '#f59e0b' }}>✨ 屬性/特性: {note}</div>
+                              <div key={`trait-${i}`} style={{ color: '#f59e0b' }}>✨ {t('radar.traitBonus')}: {note}</div>
                             ))}
                             <div style={{ marginTop: '4px', paddingTop: '4px', borderTop: '1px dashed rgba(255,255,255,0.2)' }}>
-                              📈 最終評分 (Adj Score): {p._modifiedScore?.toFixed(1)}
+                              📈 {t('radar.adjScore')}: {p._modifiedScore?.toFixed(1)}
                             </div>
                           </div>
                         ) : (
-                          `綜合達標分數: ${score} / 100`
+                          `${t('radar.matchScore')}: ${score} / 100`
                         )}
                       </div>
                     </>
@@ -131,7 +131,7 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
                     <>
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                          <span>💪 攻擊 (目標: {Math.round(oW*100)}%)</span>
+                          <span>💪 {t('radar.off')} ({t('radar.target')}: {Math.round(oW*100)}%)</span>
                           <span>{(offVal * oW).toFixed(1)} / {Math.round(oW*100)}</span>
                         </div>
                         <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}>
@@ -140,7 +140,7 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
                       </div>
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                          <span>🧤 守備 (目標: {Math.round(dW*100)}%)</span>
+                          <span>🧤 {t('radar.def')} ({t('radar.target')}: {Math.round(dW*100)}%)</span>
                           <span>{(defVal * dW).toFixed(1)} / {Math.round(dW*100)}</span>
                         </div>
                         <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}>
@@ -149,7 +149,7 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
                       </div>
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                          <span>👟 速度 (目標: {Math.round(sW*100)}%)</span>
+                          <span>👟 {t('radar.spd')} ({t('radar.target')}: {Math.round(sW*100)}%)</span>
                           <span>{(spdVal * sW).toFixed(1)} / {Math.round(sW*100)}</span>
                         </div>
                         <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}>
@@ -159,19 +159,19 @@ const PlayerRadar: React.FC<PlayerRadarProps> = ({ player, targetArchetype, play
                       <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '8px', marginTop: '4px', textAlign: 'right', fontWeight: 'bold', color: '#f59e0b' }}>
                         {p._baseScore !== undefined ? (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.8rem', textAlign: 'left' }}>
-                            <div style={{ color: 'var(--primary-accent)' }}>🎯 綜合分數 (Base Score): {p._baseScore}</div>
+                            <div style={{ color: 'var(--primary-accent)' }}>🎯 {t('radar.baseScore')}: {p._baseScore}</div>
                             {p._ageBonusNotes?.map((note: string, i: number) => (
-                              <div key={`age-${i}`} style={{ color: note.includes('+') ? '#10b981' : note.includes('-') ? '#ef4444' : '#9ca3af' }}>👶 年齡加成: {note}</div>
+                              <div key={`age-${i}`} style={{ color: note.includes('+') ? '#10b981' : note.includes('-') ? '#ef4444' : '#9ca3af' }}>👶 {t('radar.ageBonus')}: {note}</div>
                             ))}
                             {p._bonusNotes?.map((note: string, i: number) => (
-                              <div key={`trait-${i}`} style={{ color: '#f59e0b' }}>✨ 屬性/特性: {note}</div>
+                              <div key={`trait-${i}`} style={{ color: '#f59e0b' }}>✨ {t('radar.traitBonus')}: {note}</div>
                             ))}
                             <div style={{ marginTop: '4px', paddingTop: '4px', borderTop: '1px dashed rgba(255,255,255,0.2)' }}>
-                              📈 最終評分 (Adj Score): {p._modifiedScore?.toFixed(1)}
+                              📈 {t('radar.adjScore')}: {p._modifiedScore?.toFixed(1)}
                             </div>
                           </div>
                         ) : (
-                          `綜合達標分數: ${score} / 100`
+                          `${t('radar.matchScore')}: ${score} / 100`
                         )}
                       </div>
                     </>

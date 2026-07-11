@@ -14,6 +14,7 @@ import TeamDashboard from './components/TeamDashboard';
 import MyTeamManager from './components/MyTeamManager';
 import { calculateTeamStats } from './utils/teamStats';
 import type { TeamStat } from './utils/teamStats';
+import type { Player } from './types/player';
 import { Languages, Activity, Users, Shield, ListStart, Star, Target, ShoppingCart, LayoutDashboard, UserCog } from 'lucide-react';
 
 export type ViewMode = 'dashboard' | 'myteam' | 'players' | 'teams' | 'lineup' | 'traits' | 'compare' | 'draft';
@@ -44,7 +45,7 @@ function App() {
   };
 
   const filteredAndSortedPlayers = useMemo(() => {
-    let result = [...playersData];
+    let result: Player[] = [...playersData];
 
     // Filter
     if (searchTerm) {
@@ -147,7 +148,7 @@ function App() {
                 color: viewMode === 'players' ? '#fff' : 'rgba(255,255,255,0.6)'
               }}
             >
-              <Users size={16} /> {t('app.viewPlayers') || 'Players View'}
+              <Users size={16} /> {t('app.viewPlayers')}
             </button>
             <button 
               onClick={() => setViewMode('teams')}
@@ -157,7 +158,7 @@ function App() {
                 color: viewMode === 'teams' ? '#fff' : 'rgba(255,255,255,0.6)'
               }}
             >
-              <Shield size={16} /> {t('app.viewTeams') || 'Teams View'}
+              <Shield size={16} /> {t('app.viewTeams')}
             </button>
             <button 
               onClick={() => setViewMode('lineup')}
@@ -167,7 +168,7 @@ function App() {
                 color: viewMode === 'lineup' ? '#fff' : 'rgba(255,255,255,0.6)'
               }}
             >
-              <ListStart size={16} /> {t('app.viewLineup') || 'Tactical Dashboard'}
+              <ListStart size={16} /> {t('app.viewLineup')}
             </button>
             <button 
               onClick={() => setViewMode('traits')}
@@ -177,7 +178,7 @@ function App() {
                 color: viewMode === 'traits' ? '#fff' : 'rgba(255,255,255,0.6)'
               }}
             >
-              <Star size={16} /> {t('app.viewTraits') || 'Traits View'}
+              <Star size={16} /> {t('app.viewTraits')}
             </button>
             <button 
               onClick={() => setViewMode('compare')}
@@ -187,7 +188,7 @@ function App() {
                 color: viewMode === 'compare' ? '#fff' : 'rgba(255,255,255,0.6)'
               }}
             >
-              <Activity size={16} /> {t('app.viewCompare') || 'Compare'}
+              <Activity size={16} /> {t('app.viewCompare')}
             </button>
             <button 
               onClick={() => setViewMode('draft')}
@@ -197,13 +198,13 @@ function App() {
                 color: viewMode === 'draft' ? '#fff' : 'rgba(255,255,255,0.6)'
               }}
             >
-              <ShoppingCart size={16} /> {t('draft.title') || 'Draft Simulator'}
+              <ShoppingCart size={16} /> {t('draft.title')}
             </button>
           </div>
         </div>
 
         <button className="btn-icon" onClick={toggleLanguage}>
-          <Languages size={18} /> {language === 'zh-TW' ? 'English' : '中文'}
+          <Languages size={18} /> {language === 'zh-TW' ? t('app.langEnglish') : t('app.langChinese')}
         </button>
       </header>
 

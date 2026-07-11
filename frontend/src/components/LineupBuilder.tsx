@@ -11,6 +11,7 @@ import {
   TRAIT_BATTING_FIT, NEGATIVE_HITTER_TRAITS, getTraitByName, hasTrait,
   getEffectiveTraitDesc, formatSlotRanges, canPlayPosition, positionWeightedScore
 } from '../utils/traitFitUtils';
+import type { Player } from '../types/player';
 import { Settings2, RefreshCw, UserPlus, Search, Trash2, Shield, Swords, Users, Target, FlaskConical, AlertTriangle, Info, Pencil } from 'lucide-react';
 import playerImageMap from '../data/playerImageMap.json';
 import PlayerDetailModal from './PlayerDetailModal';
@@ -127,6 +128,7 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
   const [hoveredPosition, setHoveredPosition] = useState<string | null>(null);
   const [hoveredBattingSlot, setHoveredBattingSlot] = useState<number | null>(null);
 
+<<<<<<< HEAD
   // Player detail modal: null = closed. Opened only via the per-card info button,
   // never via the card onClick (which keeps its existing selecting-mode assign behavior).
   const [selectedDetailPlayer, setSelectedDetailPlayer] = useState<any | null>(null);
@@ -152,6 +154,12 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
       // Storage unavailable / quota exceeded: skip persistence.
     }
   }, [lineup, battingOrder, battingStrategy, sourceKey]);
+=======
+  const teamPlayers = useMemo<Player[]>(() => {
+    if (selectedTeam === ALL_TEAMS) return playersData;
+    return playersData.filter(p => p.team === selectedTeam);
+  }, [selectedTeam]);
+>>>>>>> 90b73e0c797bb496e2f835370ee980336f08c7e3
 
   const handleAutoPick = () => {
     // Pass the resolved pool with the ALL_TEAMS sentinel so custom rosters
@@ -562,10 +570,11 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
       <div className="glass-panel" style={{ padding: '16px 24px', display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'space-between', alignItems: 'center' }}>
         <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
           <Settings2 size={24} color="var(--primary-accent)" />
-          {t('lineup.title') || 'Tactical Dashboard'}
+          {t('lineup.title')}
         </h2>
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+<<<<<<< HEAD
             <span style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>{t('lineup.selectTeam') || 'Base Team'}:</span>
             <select
               value={sourceKey}
@@ -585,6 +594,15 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
                   <option key={team} value={encodeTeamSource({ kind: 'static', team })}>{team}</option>
                 ))}
               </optgroup>
+=======
+            <span style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>{t('lineup.selectTeam')}:</span>
+            <select 
+              value={selectedTeam} 
+              onChange={handleTeamChange}
+              style={{ padding: '6px 12px', borderRadius: '6px', background: 'rgba(0,0,0,0.5)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
+              {TEAM_NAMES.map(tStr => <option key={tStr} value={tStr}>{tStr === ALL_TEAMS ? t('lineup.allTeams') : tStr}</option>)}
+>>>>>>> 90b73e0c797bb496e2f835370ee980336f08c7e3
             </select>
             {decodeTeamSource(sourceKey).kind === 'myteam' && (
               <button
@@ -598,7 +616,7 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
             )}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>{t('lineup.strategy') || 'Strategy'}:</span>
+            <span style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>{t('lineup.strategy')}:</span>
             <select 
               value={strategy} 
               onChange={(e) => setStrategy(e.target.value as OptimizationStrategy)}
@@ -617,13 +635,13 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
             className="btn-primary"
             style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '6px' }}
           >
-            <RefreshCw size={16} /> {t('lineup.autoPick') || 'Auto Pick'}
+            <RefreshCw size={16} /> {t('lineup.autoPick')}
           </button>
           <button 
             onClick={handleClearAll}
             style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: '1px solid #ef4444', cursor: 'pointer' }}
           >
-            <Trash2 size={16} /> {t('lineup.clearAll') || 'Clear All'}
+            <Trash2 size={16} /> {t('lineup.clearAll')}
           </button>
         </div>
       </div>
@@ -635,11 +653,15 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
           <h3 style={{ marginTop: 0, marginBottom: '16px', color: 'var(--primary-accent)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Users size={20} />
+<<<<<<< HEAD
               {selectingPosition
                 ? t('lineup.selectFor').replace('{pos}', selectingPosition)
                 : (selectingBattingSlot !== null
                   ? t('lineup.selectBat').replace('{n}', String(selectingBattingSlot + 1))
                   : (t('lineup.roster') || 'Player Pool'))}
+=======
+              {selectingPosition ? `${t('lineup.selectSlot')} ${selectingPosition}` : (selectingBattingSlot !== null ? `${t('lineup.selectBatSlot')} ${selectingBattingSlot + 1}` : t('lineup.roster'))}
+>>>>>>> 90b73e0c797bb496e2f835370ee980336f08c7e3
             </div>
             {(selectingPosition || selectingBattingSlot !== null) && (
               <button onClick={() => { setSelectingPosition(null); setSelectingBattingSlot(null); }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}>✕</button>
@@ -650,7 +672,11 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
             <Search size={16} style={{ position: 'absolute', left: '12px', top: '10px', color: 'rgba(255,255,255,0.5)' }} />
             <input 
               type="text" 
+<<<<<<< HEAD
               placeholder={t('lineup.searchPlayer')}
+=======
+              placeholder={t('app.search')}
+>>>>>>> 90b73e0c797bb496e2f835370ee980336f08c7e3
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{ width: '100%', padding: '8px 12px 8px 36px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.4)', color: '#fff', outline: 'none' }}
@@ -701,8 +727,13 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
                     <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>{p.team} | {p.rating}</div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-end' }}>
+<<<<<<< HEAD
                     {isAlreadyInLineup && <span style={{ fontSize: '9px', background: 'var(--primary-accent)', padding: '2px 4px', borderRadius: '4px' }}>{t('lineup.tagField')}</span>}
                     {isAlreadyInBatting && <span style={{ fontSize: '9px', background: '#eab308', padding: '2px 4px', borderRadius: '4px' }}>{t('lineup.tagBat')}</span>}
+=======
+                    {isAlreadyInLineup && <span style={{ fontSize: '9px', background: 'var(--primary-accent)', padding: '2px 4px', borderRadius: '4px' }}>{t('lineup.badgeField')}</span>}
+                    {isAlreadyInBatting && <span style={{ fontSize: '9px', background: '#eab308', padding: '2px 4px', borderRadius: '4px' }}>{t('lineup.badgeBat')}</span>}
+>>>>>>> 90b73e0c797bb496e2f835370ee980336f08c7e3
                   </div>
                   {/* Info button: opens the detail modal without touching the card's
                       drag or selecting-mode assign behavior. stopPropagation on click
@@ -778,7 +809,7 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
             <div className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
               <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0, marginBottom: '16px', color: '#eab308' }}>
                 <Swords size={20} />
-                {t('lineup.battingOrder') || 'Batting Order'}
+                {t('lineup.battingOrder')}
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
                 {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(renderBattingSlot)}
@@ -789,7 +820,7 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
             <div className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
               <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0, marginBottom: '16px', color: '#4ade80' }}>
                 <Shield size={20} />
-                {t('lineup.starters') || 'Starting Lineup'}
+                {t('lineup.starters')}
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
                 {ROSTER_GROUPS.starters.map(pos => renderSlot(pos, false))}
@@ -802,7 +833,7 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
             <div className="glass-panel" style={{ padding: '16px' }}>
               <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0, marginBottom: '16px', color: '#38bdf8' }}>
                 <Target size={20} />
-                {t('lineup.rotation') || 'Starting Rotation'}
+                {t('lineup.rotation')}
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '12px' }}>
                 {ROSTER_GROUPS.rotation.map(pos => renderSlot(pos, true))}
@@ -813,7 +844,7 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
             <div className="glass-panel" style={{ padding: '16px' }}>
               <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0, marginBottom: '16px', color: '#a78bfa' }}>
                 <Users size={20} />
-                {t('lineup.bench') || 'Bench'}
+                {t('lineup.bench')}
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '12px' }}>
                 {ROSTER_GROUPS.bench.map(pos => renderSlot(pos, false))}
@@ -825,7 +856,7 @@ const LineupBuilder: React.FC<LineupBuilderProps> = ({ onNavigate }) => {
           <div className="glass-panel" style={{ padding: '16px', marginBottom: '40px' }}>
             <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0, marginBottom: '16px', color: '#f472b6' }}>
               <Target size={20} />
-              {t('lineup.bullpen') || 'Bullpen (RP/CP)'}
+              {t('lineup.bullpen')}
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '12px' }}>
               {ROSTER_GROUPS.bullpen.map(pos => renderSlot(pos, true))}

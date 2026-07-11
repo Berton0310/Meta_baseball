@@ -133,18 +133,18 @@ const TeamGrid: React.FC<TeamGridProps> = ({
   }, []);
 
   const allColumns = [
-    { id: 'teamStrength', label: t('info.teamStrength') || 'Strength' },
-    { id: 'totalSalary', label: t('app.totalSalary') || 'Total Salary' },
-    { id: 'avgSalary', label: t('app.avgSalary') || 'Avg Salary' },
-    { id: 'avgAge', label: t('info.age') || 'Avg Age' },
-    { id: 'power', label: t('stats.power') || '力量' },
-    { id: 'contact', label: t('stats.contact') || '擊球' },
-    { id: 'speed', label: t('stats.speed') || '跑速' },
-    { id: 'fielding', label: t('stats.fielding') || '守備' },
-    { id: 'arm', label: t('stats.arm') || '傳球' },
-    { id: 'velocity', label: t('stats.velocity') || '球速' },
-    { id: 'junk', label: t('stats.junk') || '變化' },
-    { id: 'accuracy', label: t('stats.accuracy') || '控球' }
+    { id: 'teamStrength', label: t('info.teamStrength') },
+    { id: 'totalSalary', label: t('app.totalSalary') },
+    { id: 'avgSalary', label: t('app.avgSalary') },
+    { id: 'avgAge', label: t('info.age') },
+    { id: 'power', label: t('stats.power') },
+    { id: 'contact', label: t('stats.contact') },
+    { id: 'speed', label: t('stats.speed') },
+    { id: 'fielding', label: t('stats.fielding') },
+    { id: 'arm', label: t('stats.arm') },
+    { id: 'velocity', label: t('stats.velocity') },
+    { id: 'junk', label: t('stats.junk') },
+    { id: 'accuracy', label: t('stats.accuracy') }
   ];
   const [visibleCols, setVisibleCols] = useState<string[]>(allColumns.map(c => c.id).filter(id => id !== 'totalSalary' && id !== 'avgSalary'));
 
@@ -161,7 +161,7 @@ const TeamGrid: React.FC<TeamGridProps> = ({
           <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }}>🔍</span>
           <input 
             type="text" 
-            placeholder={t('search') || 'Search...'} 
+            placeholder={t('app.search')}
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             style={{ width: '100%', padding: '10px 10px 10px 36px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.1)', background: 'rgba(0, 0, 0, 0.2)', color: 'white', outline: 'none' }}
@@ -173,7 +173,7 @@ const TeamGrid: React.FC<TeamGridProps> = ({
           onChange={(e) => setFilterConf(e.target.value)}
           className="filter-select"
         >
-          <option value="">{t('info.conference') || 'Conference'} (All)</option>
+          <option value="">{t('grid.allConferences')}</option>
           {uniqueConfs.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
 
@@ -182,7 +182,7 @@ const TeamGrid: React.FC<TeamGridProps> = ({
           onChange={(e) => setFilterDiv(e.target.value)}
           className="filter-select"
         >
-          <option value="">{t('info.division') || 'Division'} (All)</option>
+          <option value="">{t('grid.allDivisions')}</option>
           {uniqueDivs.map(d => <option key={d} value={d}>{d}</option>)}
         </select>
 
@@ -192,7 +192,7 @@ const TeamGrid: React.FC<TeamGridProps> = ({
             className="filter-select"
             style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', background: showColPicker ? 'rgba(255,255,255,0.2)' : '' }}
           >
-            <Columns size={16} /> Columns
+            <Columns size={16} /> {t('grid.columns')}
           </button>
           {showColPicker && (
             <div className="glass-panel" style={{ position: 'absolute', top: '100%', right: 0, marginTop: '8px', zIndex: 100, padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '160px', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -213,12 +213,12 @@ const TeamGrid: React.FC<TeamGridProps> = ({
 
       {/* Legend */}
       <div style={{ display: 'flex', gap: '16px', padding: '10px 24px', background: 'rgba(0,0,0,0.1)', fontSize: '0.85rem', alignItems: 'center', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', flexWrap: 'wrap' }}>
-        <span style={{ color: 'rgba(255,255,255,0.7)' }}>Color Legend (Avg Stats):</span>
+        <span style={{ color: 'rgba(255,255,255,0.7)' }}>{t('grid.colorLegendAvg')}</span>
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(239, 68, 68, 0.6)', borderRadius: 2 }}></div> 80+ (Elite)</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(249, 115, 22, 0.6)', borderRadius: 2 }}></div> 70-79 (Great)</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(234, 179, 8, 0.6)', borderRadius: 2 }}></div> 60-69 (Good)</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(34, 197, 94, 0.5)', borderRadius: 2 }}></div> 50-59 (Average)</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(239, 68, 68, 0.6)', borderRadius: 2 }}></div> 80+ ({t('grid.elite')})</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(249, 115, 22, 0.6)', borderRadius: 2 }}></div> 70-79 ({t('grid.great')})</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(234, 179, 8, 0.6)', borderRadius: 2 }}></div> 60-69 ({t('grid.good')})</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: 12, height: 12, background: 'rgba(34, 197, 94, 0.5)', borderRadius: 2 }}></div> 50-59 ({t('grid.average')})</span>
         </div>
       </div>
 
@@ -227,19 +227,19 @@ const TeamGrid: React.FC<TeamGridProps> = ({
         <table className="data-table">
           <thead style={{ position: 'sticky', top: 0, background: 'var(--panel-bg)' }}>
             <tr>
-              <th style={{ width: '18%' }} onClick={() => handleSort('team')}>{t('info.team') || '隊伍'} {getSortIndicator('team')}</th>
-              {visibleCols.includes('teamStrength') && <th style={{ width: '18%' }} onClick={() => handleSort('teamStrength')}>{t('info.teamStrength') || 'Strength'} {getSortIndicator('teamStrength')}</th>}
-              {visibleCols.includes('totalSalary') && <th style={{ width: '10%' }} onClick={() => handleSort('totalSalary')}>{t('app.totalSalary') || 'Total Salary'} {getSortIndicator('totalSalary')}</th>}
-              {visibleCols.includes('avgSalary') && <th style={{ width: '8%' }} onClick={() => handleSort('avgSalary')}>{t('app.avgSalary') || 'Avg Salary'} {getSortIndicator('avgSalary')}</th>}
-              {visibleCols.includes('avgAge') && <th style={{ width: '6%' }} onClick={() => handleSort('avgAge')}>{t('info.age') || 'Avg Age'} {getSortIndicator('avgAge')}</th>}
-              {visibleCols.includes('power') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.power')}>{t('stats.power') || '力量'} {getSortIndicator('avgStats.power')}</th>}
-              {visibleCols.includes('contact') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.contact')}>{t('stats.contact') || '擊球'} {getSortIndicator('avgStats.contact')}</th>}
-              {visibleCols.includes('speed') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.speed')}>{t('stats.speed') || '跑速'} {getSortIndicator('avgStats.speed')}</th>}
-              {visibleCols.includes('fielding') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.fielding')}>{t('stats.fielding') || '守備'} {getSortIndicator('avgStats.fielding')}</th>}
-              {visibleCols.includes('arm') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.arm')}>{t('stats.arm') || '傳球'} {getSortIndicator('avgStats.arm')}</th>}
-              {visibleCols.includes('velocity') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.velocity')}>{t('stats.velocity') || '球速'} {getSortIndicator('avgStats.velocity')}</th>}
-              {visibleCols.includes('junk') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.junk')}>{t('stats.junk') || '變化'} {getSortIndicator('avgStats.junk')}</th>}
-              {visibleCols.includes('accuracy') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.accuracy')}>{t('stats.accuracy') || '控球'} {getSortIndicator('avgStats.accuracy')}</th>}
+              <th style={{ width: '18%' }} onClick={() => handleSort('team')}>{t('info.team')} {getSortIndicator('team')}</th>
+              {visibleCols.includes('teamStrength') && <th style={{ width: '18%' }} onClick={() => handleSort('teamStrength')}>{t('info.teamStrength')} {getSortIndicator('teamStrength')}</th>}
+              {visibleCols.includes('totalSalary') && <th style={{ width: '10%' }} onClick={() => handleSort('totalSalary')}>{t('app.totalSalary')} {getSortIndicator('totalSalary')}</th>}
+              {visibleCols.includes('avgSalary') && <th style={{ width: '8%' }} onClick={() => handleSort('avgSalary')}>{t('app.avgSalary')} {getSortIndicator('avgSalary')}</th>}
+              {visibleCols.includes('avgAge') && <th style={{ width: '6%' }} onClick={() => handleSort('avgAge')}>{t('info.age')} {getSortIndicator('avgAge')}</th>}
+              {visibleCols.includes('power') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.power')}>{t('stats.power')} {getSortIndicator('avgStats.power')}</th>}
+              {visibleCols.includes('contact') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.contact')}>{t('stats.contact')} {getSortIndicator('avgStats.contact')}</th>}
+              {visibleCols.includes('speed') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.speed')}>{t('stats.speed')} {getSortIndicator('avgStats.speed')}</th>}
+              {visibleCols.includes('fielding') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.fielding')}>{t('stats.fielding')} {getSortIndicator('avgStats.fielding')}</th>}
+              {visibleCols.includes('arm') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.arm')}>{t('stats.arm')} {getSortIndicator('avgStats.arm')}</th>}
+              {visibleCols.includes('velocity') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.velocity')}>{t('stats.velocity')} {getSortIndicator('avgStats.velocity')}</th>}
+              {visibleCols.includes('junk') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.junk')}>{t('stats.junk')} {getSortIndicator('avgStats.junk')}</th>}
+              {visibleCols.includes('accuracy') && <th style={{ width: '5%' }} onClick={() => handleSort('avgStats.accuracy')}>{t('stats.accuracy')} {getSortIndicator('avgStats.accuracy')}</th>}
             </tr>
           </thead>
           <tbody>
@@ -273,22 +273,22 @@ const TeamGrid: React.FC<TeamGridProps> = ({
                 {visibleCols.includes('totalSalary') && <td style={{ color: 'var(--primary-color)' }}>${teamData.totalSalary.toFixed(1)}M</td>}
                 {visibleCols.includes('avgSalary') && <td>${teamData.avgSalary.toFixed(1)}M</td>}
                 {visibleCols.includes('avgAge') && <td>{teamData.avgAge}</td>}
-                {visibleCols.includes('power') && <td title="Average Power">{renderStat(teamData.avgStats.power)}</td>}
-                {visibleCols.includes('contact') && <td title="Average Contact">{renderStat(teamData.avgStats.contact)}</td>}
-                {visibleCols.includes('speed') && <td title="Average Speed">{renderStat(teamData.avgStats.speed)}</td>}
-                {visibleCols.includes('fielding') && <td title="Average Fielding">{renderStat(teamData.avgStats.fielding)}</td>}
-                {visibleCols.includes('arm') && <td title="Average Arm">{renderStat(teamData.avgStats.arm)}</td>}
-                {visibleCols.includes('velocity') && <td title="Average Velocity">{renderStat(teamData.avgStats.velocity)}</td>}
-                {visibleCols.includes('junk') && <td title="Average Junk">{renderStat(teamData.avgStats.junk)}</td>}
-                {visibleCols.includes('accuracy') && <td title="Average Accuracy">{renderStat(teamData.avgStats.accuracy)}</td>}
+                {visibleCols.includes('power') && <td title={`${t('grid.average')} ${t('stats.power')}`}>{renderStat(teamData.avgStats.power)}</td>}
+                {visibleCols.includes('contact') && <td title={`${t('grid.average')} ${t('stats.contact')}`}>{renderStat(teamData.avgStats.contact)}</td>}
+                {visibleCols.includes('speed') && <td title={`${t('grid.average')} ${t('stats.speed')}`}>{renderStat(teamData.avgStats.speed)}</td>}
+                {visibleCols.includes('fielding') && <td title={`${t('grid.average')} ${t('stats.fielding')}`}>{renderStat(teamData.avgStats.fielding)}</td>}
+                {visibleCols.includes('arm') && <td title={`${t('grid.average')} ${t('stats.arm')}`}>{renderStat(teamData.avgStats.arm)}</td>}
+                {visibleCols.includes('velocity') && <td title={`${t('grid.average')} ${t('stats.velocity')}`}>{renderStat(teamData.avgStats.velocity)}</td>}
+                {visibleCols.includes('junk') && <td title={`${t('grid.average')} ${t('stats.junk')}`}>{renderStat(teamData.avgStats.junk)}</td>}
+                {visibleCols.includes('accuracy') && <td title={`${t('grid.average')} ${t('stats.accuracy')}`}>{renderStat(teamData.avgStats.accuracy)}</td>}
               </tr>
             ))}
           </tbody>
           <tfoot style={{ position: 'sticky', bottom: 0, background: 'var(--panel-bg)', zIndex: 10, boxShadow: '0 -2px 10px rgba(0,0,0,0.5)' }}>
             <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
               <td style={{ padding: '12px 16px' }}>
-                <div style={{ fontWeight: 800, color: 'var(--primary-accent)' }}>{t('info.average') || '平均值'}</div>
-                <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>{processedTeams.length} {t('info.teamsCount') || '支隊伍'}</div>
+                <div style={{ fontWeight: 800, color: 'var(--primary-accent)' }}>{t('info.average')}</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>{processedTeams.length} {t('info.teamsCount')}</div>
               </td>
               {visibleCols.includes('teamStrength') && <td>-</td>}
               {visibleCols.includes('totalSalary') && <td>-</td>}
