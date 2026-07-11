@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const srcImagesDir = 'C:\\Users\\berto\\Desktop\\mega baseball\\data_extract\\SMB Player Cards (High Res)';
-const destImagesDir = 'C:\\Users\\berto\\Desktop\\mega baseball\\frontend\\public\\images\\players';
-const playersFile = 'C:\\Users\\berto\\Desktop\\mega baseball\\frontend\\src\\data\\players.json';
-const mapFile = 'C:\\Users\\berto\\Desktop\\mega baseball\\frontend\\src\\data\\playerImageMap.json';
+const srcImagesDir = path.join(__dirname, '..', 'data_extract', 'SMB Player Cards (High Res)');
+const destImagesDir = path.join(__dirname, '..', 'frontend', 'public', 'images', 'players');
+const playersFile = path.join(__dirname, '..', 'frontend', 'src', 'data', 'players.json');
+const mapFile = path.join(__dirname, '..', 'frontend', 'src', 'data', 'playerImageMap.json');
 
 if (!fs.existsSync(destImagesDir)) {
     fs.mkdirSync(destImagesDir, { recursive: true });

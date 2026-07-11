@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import math
 
-file_path = 'C:/Users/berto/Desktop/mega baseball/Super Mega Baseball 4 Rosters.xlsx'
+file_path = '../data/Super Mega Baseball 4 Rosters.xlsx'
 xls = pd.ExcelFile(file_path)
 
 # Extract League Outline
@@ -132,7 +132,7 @@ for sheet in xls.sheet_names:
                 
         players.append(player)
 
-with open('frontend/src/data/players.json', 'w', encoding='utf-8') as f:
+with open('../frontend/src/data/players.json', 'w', encoding='utf-8') as f:
     json.dump(players, f, ensure_ascii=False, indent=2)
 
 print(f"Successfully extracted {len(players)} players.")

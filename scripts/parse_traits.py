@@ -1,8 +1,8 @@
 import json
 import re
 
-input_file = "技能補充.txt"
-output_file = "frontend/src/data/traits_info.json"
+input_file = "../docs/技能補充.txt"
+output_file = "../frontend/src/data/traits_info.json"
 
 traits_map = {}
 

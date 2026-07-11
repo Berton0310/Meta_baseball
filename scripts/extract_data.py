@@ -2,8 +2,8 @@ import pandas as pd
 import json
 import os
 
-excel_path = "球員資料.xlsx"
-out_dir = "data_extract"
+excel_path = "../data/球員資料.xlsx"
+out_dir = "../data_extract"
 
 if not os.path.exists(out_dir):
     os.makedirs(out_dir)

@@ -1,5 +1,5 @@
 import pandas as pd
-file_path = 'C:/Users/berto/Desktop/mega baseball/Super Mega Baseball 4 Rosters.xlsx'
+file_path = '../data/Super Mega Baseball 4 Rosters.xlsx'
 df = pd.read_excel(file_path, sheet_name='Heaters')
 # Clean keys
 df.columns = [str(c).strip() for c in df.columns]
