@@ -90,18 +90,24 @@ const RosterAnalytics: React.FC<RosterAnalyticsProps> = ({ players, teamLabel })
 
   // --- Position depth (primary + secondary, expanding IF/OF) ---
   const positionDepth = useMemo(() => {
-    const depth: Record<string, number> = {};
-    DEPTH_POSITIONS.forEach(pos => { depth[pos] = 0; });
+    const depth: Record<string, { total: number; secondary: number }> = {};
+    DEPTH_POSITIONS.forEach(pos => { depth[pos] = { total: 0, secondary: 0 }; });
     players.forEach(p => {
-      const covered = new Set<string>();
-      if (p.primaryPosition) covered.add(p.primaryPosition);
+      const primary = p.primaryPosition;
+      if (primary && primary in depth) {
+        depth[primary].total++;
+      }
+      const secondaryCovered = new Set<string>();
       (p.secondaryPositions || []).forEach((sp: string) => {
-        if (sp === 'IF') IF_POSITIONS.forEach(pos => covered.add(pos));
-        else if (sp === 'OF') OF_POSITIONS.forEach(pos => covered.add(pos));
-        else covered.add(sp);
+        if (sp === 'IF') IF_POSITIONS.forEach(pos => secondaryCovered.add(pos));
+        else if (sp === 'OF') OF_POSITIONS.forEach(pos => secondaryCovered.add(pos));
+        else secondaryCovered.add(sp);
       });
-      covered.forEach(pos => {
-        if (pos in depth) depth[pos]++;
+      secondaryCovered.forEach(pos => {
+        if (pos !== primary && pos in depth) {
+          depth[pos].total++;
+          depth[pos].secondary++;
+        }
       });
     });
     return depth;
@@ -179,12 +185,15 @@ const RosterAnalytics: React.FC<RosterAnalyticsProps> = ({ players, teamLabel })
           </h3>
           <div className="depth-grid">
             {DEPTH_POSITIONS.map(pos => {
-              const count = positionDepth[pos];
-              const isThin = count < 2;
+              const { total, secondary } = positionDepth[pos];
+              const isThin = total < 2;
               return (
                 <div key={pos} className={`depth-item${isThin ? ' depth-item-thin' : ''}`}>
                   <span className="depth-pos">{pos}</span>
-                  <span className="depth-count">{count}</span>
+                  <span className="depth-count" style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                    {total}
+                    {secondary > 0 && <span style={{ fontSize: '0.7em', color: 'var(--text-muted)', fontWeight: 'normal' }}>({secondary}{t('dashboard.depthSecondary')})</span>}
+                  </span>
                   {isThin && <span className="depth-warning">{t('dashboard.depthShallow')}</span>}
                 </div>
               );

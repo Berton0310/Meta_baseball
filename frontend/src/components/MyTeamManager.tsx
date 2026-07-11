@@ -251,9 +251,14 @@ const MyTeamManager: React.FC<MyTeamManagerProps> = ({ onNavigate }) => {
 
   const togglePlayer = (player: Player) => {
     if (!activeRoster) return;
-    const next = rosterIdSet.has(player.id)
-      ? activeRoster.playerIds.filter(id => id !== player.id)
-      : [...activeRoster.playerIds, player.id];
+    const isAdding = !rosterIdSet.has(player.id);
+    if (isAdding && activeRoster.playerIds.length >= STANDARD_ROSTER_SIZE) {
+      setMessage({ kind: 'error', text: t('myteam.msgRosterFull').replace('{max}', String(STANDARD_ROSTER_SIZE)) });
+      return;
+    }
+    const next = isAdding
+      ? [...activeRoster.playerIds, player.id]
+      : activeRoster.playerIds.filter(id => id !== player.id);
     updateRoster(activeRoster.id, { playerIds: next });
     refresh();
   };
